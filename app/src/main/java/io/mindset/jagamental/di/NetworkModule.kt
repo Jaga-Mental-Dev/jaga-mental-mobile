@@ -20,6 +20,7 @@ val networkModule = module {
             .addInterceptor(loggingInterceptor)
             .build()
     }
+
     single {
         val retrofit = Retrofit.Builder()
             .baseUrl(apiUrl)
