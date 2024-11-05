@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import io.mindset.jagamental.R
+import io.mindset.jagamental.navigation.Route
 import io.mindset.jagamental.ui.components.FilledButton
 import io.mindset.jagamental.ui.components.OAuthButton
 import io.mindset.jagamental.ui.components.RoundedTextField
@@ -178,7 +179,9 @@ fun LoginScreen(navController: NavHostController) {
                         )
                     )
                     TextButton(
-                        onClick = {},
+                        onClick = {
+                            navController.navigate(Route.Register)
+                        },
                         colors = ButtonDefaults.textButtonColors(contentColor = tertiaryContainerLightHighContrast),
                         modifier = Modifier.offset(x = (-12).dp)
                     ) {
