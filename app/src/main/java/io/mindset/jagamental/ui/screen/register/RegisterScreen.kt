@@ -1,4 +1,4 @@
-package io.mindset.jagamental.ui.screen.login
+package io.mindset.jagamental.ui.screen.register
 
 import android.content.res.Configuration
 import android.util.Log
@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,11 +15,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,18 +36,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import io.mindset.jagamental.R
-import io.mindset.jagamental.navigation.Route
 import io.mindset.jagamental.ui.components.FilledButton
 import io.mindset.jagamental.ui.components.OAuthButton
 import io.mindset.jagamental.ui.components.RoundedTextField
 import io.mindset.jagamental.ui.components.TextDivider
-import io.mindset.jagamental.ui.theme.gray50
-import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
-
+fun RegisterScreen(navController: NavHostController) {
     val scrollState = rememberScrollState()
+    val fullName = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
 
@@ -121,6 +115,14 @@ fun LoginScreen(navController: NavHostController) {
                 ) {
                     RoundedTextField(
                         modifier = Modifier,
+                        value = fullName.value,
+                        onValueChange = { fullName.value = it },
+                        label = "Full Name",
+                        placeholder = "John Doe",
+                    )
+
+                    RoundedTextField(
+                        modifier = Modifier.padding(top = 16.dp),
                         value = email.value,
                         onValueChange = { email.value = it },
                         label = stringResource(id = R.string.login_email_label),
@@ -140,7 +142,7 @@ fun LoginScreen(navController: NavHostController) {
                         modifier = Modifier
                             .padding(top = 24.dp)
                             .height(48.dp),
-                        name = stringResource(id = R.string.login),
+                        name = "Daftar Sekarang",
                         onClick = {
                             Log.d("LoginScreen", "LoginScreen: ${email.value}, ${password.value}")
                         }
@@ -158,49 +160,12 @@ fun LoginScreen(navController: NavHostController) {
                     )
                 }
             }
-
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .background(gray50)
-                    .padding(bottom = 10.dp),
-            ) {
-                Row(
-                    Modifier
-                        .height(40.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Belum punya akun? ",
-                        style = TextStyle(
-                            fontWeight = FontWeight.Normal
-                        )
-                    )
-                    TextButton(
-                        onClick = {
-                            navController.navigate(Route.Register)
-                        },
-                        colors = ButtonDefaults.textButtonColors(contentColor = tertiaryContainerLightHighContrast),
-                        modifier = Modifier.offset(x = (-12).dp)
-                    ) {
-                        Text(
-                            text = "Daftar Sekarang",
-                            style = TextStyle(
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        )
-                    }
-                }
-            }
         }
     }
-
 }
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun LoginScreenPreview() {
-    LoginScreen(navController = rememberNavController())
+fun RegisterScreenPreview() {
+    RegisterScreen(navController = rememberNavController())
 }
