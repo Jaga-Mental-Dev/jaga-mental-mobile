@@ -53,7 +53,7 @@ fun GoogleSignInButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
                 text = "Sign in with Google",
                 style = TextStyle(
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Normal,
                     color = MaterialTheme.colorScheme.onBackground
                 ),
                 color = Color.Black,
