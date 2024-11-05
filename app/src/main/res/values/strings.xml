@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">Jaga Mental</string>
-    <string name="login_subtitle">Kami selalu siap dengerin kamu, gak usah takut sendirian</string>
+    <string name="login_subtitle">We’re always here to listen, you’re never alone</string>
     <string name="login_email_label">Email</string>
     <string name="login_password_label">Password</string>
     <string name="login_email_placeholder">name@example.com</string>
     <string name="login">Login</string>
+    <string name="google_sign_in">Sign in with Google</string>
+    <string name="no_account">"Don't have an account? "</string>
+    <string name="register_now">Create Account</string>
+    <string name="or_label">Or continue with</string>
 </resources>

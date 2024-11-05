@@ -147,7 +147,7 @@ fun LoginScreen(navController: NavHostController) {
 
                     TextDivider(
                         modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
-                        "Atau Masuk Dengan"
+                        stringResource(id = R.string.or_label),
                     )
 
                     GoogleSignInButton(
@@ -170,7 +170,7 @@ fun LoginScreen(navController: NavHostController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Belum punya akun? ",
+                        text = stringResource(R.string.no_account),
                         style = TextStyle(
                             fontWeight = FontWeight.Normal
                         )
@@ -178,10 +178,10 @@ fun LoginScreen(navController: NavHostController) {
                     TextButton(
                         onClick = {},
                         colors = ButtonDefaults.textButtonColors(contentColor = tertiaryContainerLightHighContrast),
-                        modifier = Modifier.offset(x = (-12).dp)
+                        modifier = Modifier.offset(x = (-8).dp)
                     ) {
                         Text(
-                            text = "Daftar Sekarang",
+                            text = stringResource(id = R.string.register_now),
                             style = TextStyle(
                                 fontWeight = FontWeight.SemiBold
                             )
