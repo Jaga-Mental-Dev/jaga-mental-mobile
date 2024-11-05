@@ -40,7 +40,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import io.mindset.jagamental.R
 import io.mindset.jagamental.ui.components.FilledButton
-import io.mindset.jagamental.ui.components.OAuthButton
+import io.mindset.jagamental.ui.components.GoogleSignInButton
 import io.mindset.jagamental.ui.components.RoundedTextField
 import io.mindset.jagamental.ui.components.TextDivider
 import io.mindset.jagamental.ui.theme.gray50
@@ -150,10 +150,8 @@ fun LoginScreen(navController: NavHostController) {
                         "Atau Masuk Dengan"
                     )
 
-                    OAuthButton(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally),
-                        onclick = {},
+                    GoogleSignInButton(
+                        onClick = {}
                     )
                 }
             }
