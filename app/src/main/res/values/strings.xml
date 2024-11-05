@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Jaga Mental</string>
+    <string name="login_subtitle">Kami selalu siap dengerin kamu, gak usah takut sendirian</string>
+    <string name="login_email_label">Email</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_email_placeholder">name@example.com</string>
+    <string name="login">Login</string>
 </resources>
