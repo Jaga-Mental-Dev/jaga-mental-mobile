@@ -3,7 +3,6 @@ package io.mindset.jagamental.di
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import io.mindset.jagamental.data.remote.ApiService
 import io.mindset.jagamental.data.remote.MainRepository
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module

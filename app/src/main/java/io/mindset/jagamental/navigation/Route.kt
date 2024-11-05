@@ -4,7 +4,6 @@ import kotlinx.serialization.Serializable
 
 object Route {
 
-
     @Serializable
     object Welcome
 
@@ -16,4 +15,7 @@ object Route {
 
     @Serializable
     object Login
+
+    @Serializable
+    object Dashboard
 }

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -53,6 +54,10 @@ android {
 }
 
 dependencies {
+
+    // Firebase & Gms
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
 
     // Navigation
     implementation(libs.androidx.navigation.compose)

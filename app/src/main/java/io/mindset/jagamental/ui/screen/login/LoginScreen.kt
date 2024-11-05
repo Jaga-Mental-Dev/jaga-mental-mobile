@@ -2,6 +2,8 @@ package io.mindset.jagamental.ui.screen.login
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +24,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,12 +37,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import io.mindset.jagamental.R
+import io.mindset.jagamental.data.model.OauthUiState
 import io.mindset.jagamental.navigation.Route
 import io.mindset.jagamental.ui.components.FilledButton
 import io.mindset.jagamental.ui.components.GoogleSignInButton
@@ -46,6 +49,7 @@ import io.mindset.jagamental.ui.components.RoundedTextField
 import io.mindset.jagamental.ui.components.TextDivider
 import io.mindset.jagamental.ui.theme.gray50
 import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
@@ -53,6 +57,20 @@ fun LoginScreen(navController: NavHostController) {
     val scrollState = rememberScrollState()
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+
+    val viewModel: LoginViewModel = koinViewModel()
+    val uiState = viewModel.uiState.collectAsState()
+
+    val signInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        viewModel.handleSignInResult(result)
+    }
+
+    val onGoogleSignInClick = {
+        val signInIntent = viewModel.signInIntent()
+        signInLauncher.launch(signInIntent)
+    }
 
     Scaffold { padding ->
         Box(
@@ -143,6 +161,7 @@ fun LoginScreen(navController: NavHostController) {
                         name = stringResource(id = R.string.login),
                         onClick = {
                             Log.d("LoginScreen", "LoginScreen: ${email.value}, ${password.value}")
+                            viewModel.signInWithEmailPassword(email.value, password.value)
                         }
                     )
 
@@ -152,7 +171,9 @@ fun LoginScreen(navController: NavHostController) {
                     )
 
                     GoogleSignInButton(
-                        onClick = {}
+                        onClick = {
+                            onGoogleSignInClick()
+                        }
                     )
                 }
             }
@@ -195,10 +216,23 @@ fun LoginScreen(navController: NavHostController) {
         }
     }
 
-}
+    when (val state = uiState.value) {
+        is OauthUiState.Success -> {
+            Log.d("LoginScreen", "Logged in as ${state.user?.email}")
+            LaunchedEffect(state) {
+                navController.navigate(Route.Dashboard) {
+                    popUpTo(Route.Login) { inclusive = true }
+                }
+            }
+        }
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen(navController = rememberNavController())
+        is OauthUiState.Error -> {
+            Log.e("LoginScreen", state.toString())
+        }
+
+        else -> {
+            Log.d("LoginScreen", "No state")
+        }
+    }
+
 }
