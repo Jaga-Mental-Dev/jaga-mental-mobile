@@ -44,6 +44,7 @@ import io.mindset.jagamental.ui.components.OAuthButton
 import io.mindset.jagamental.ui.components.RoundedTextField
 import io.mindset.jagamental.ui.components.TextDivider
 import io.mindset.jagamental.ui.theme.gray50
+import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
@@ -178,7 +179,7 @@ fun LoginScreen(navController: NavHostController) {
                     )
                     TextButton(
                         onClick = {},
-                        colors = ButtonDefaults.textButtonColors(contentColor = Color.Black),
+                        colors = ButtonDefaults.textButtonColors(contentColor = tertiaryContainerLightHighContrast),
                         modifier = Modifier.offset(x = (-12).dp)
                     ) {
                         Text(
