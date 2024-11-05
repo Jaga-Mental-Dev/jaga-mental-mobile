@@ -12,8 +12,8 @@ object Route {
     object Onboarding
 
     @Serializable
-    object SignUp
+    object Register
 
     @Serializable
-    object SignIn
+    object Login
 }
