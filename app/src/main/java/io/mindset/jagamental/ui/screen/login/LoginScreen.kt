@@ -41,7 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import io.mindset.jagamental.R
 import io.mindset.jagamental.navigation.Route
 import io.mindset.jagamental.ui.components.FilledButton
-import io.mindset.jagamental.ui.components.OAuthButton
+import io.mindset.jagamental.ui.components.GoogleSignInButton
 import io.mindset.jagamental.ui.components.RoundedTextField
 import io.mindset.jagamental.ui.components.TextDivider
 import io.mindset.jagamental.ui.theme.gray50
@@ -148,13 +148,11 @@ fun LoginScreen(navController: NavHostController) {
 
                     TextDivider(
                         modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
-                        "Atau Masuk Dengan"
+                        stringResource(id = R.string.or_label),
                     )
 
-                    OAuthButton(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally),
-                        onclick = {},
+                    GoogleSignInButton(
+                        onClick = {}
                     )
                 }
             }
@@ -173,7 +171,7 @@ fun LoginScreen(navController: NavHostController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Belum punya akun? ",
+                        text = stringResource(R.string.no_account),
                         style = TextStyle(
                             fontWeight = FontWeight.Normal
                         )
@@ -183,10 +181,10 @@ fun LoginScreen(navController: NavHostController) {
                             navController.navigate(Route.Register)
                         },
                         colors = ButtonDefaults.textButtonColors(contentColor = tertiaryContainerLightHighContrast),
-                        modifier = Modifier.offset(x = (-12).dp)
+                        modifier = Modifier.offset(x = (-8).dp)
                     ) {
                         Text(
-                            text = "Daftar Sekarang",
+                            text = stringResource(id = R.string.register_now),
                             style = TextStyle(
                                 fontWeight = FontWeight.SemiBold
                             )
