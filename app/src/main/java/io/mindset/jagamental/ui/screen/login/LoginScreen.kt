@@ -3,6 +3,7 @@ package io.mindset.jagamental.ui.screen.login
 import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,14 +16,17 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,6 +43,7 @@ import io.mindset.jagamental.ui.components.FilledButton
 import io.mindset.jagamental.ui.components.OAuthButton
 import io.mindset.jagamental.ui.components.RoundedTextField
 import io.mindset.jagamental.ui.components.TextDivider
+import io.mindset.jagamental.ui.theme.gray50
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
@@ -52,12 +57,12 @@ fun LoginScreen(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-
-
+                .background(Color.White)
         ) {
             val configuration = LocalConfiguration.current
             val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
             val screenWidth = configuration.screenWidthDp.dp
+
             Image(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
@@ -81,7 +86,6 @@ fun LoginScreen(navController: NavHostController) {
                     .verticalScroll(scrollState),
                 verticalArrangement = Arrangement.Center,
             ) {
-
                 Image(
                     painter = painterResource(id = R.mipmap.ic_launcher),
                     contentDescription = null,
@@ -113,7 +117,6 @@ fun LoginScreen(navController: NavHostController) {
                 Column(
                     modifier = Modifier.padding(top = 40.dp),
                 ) {
-
                     RoundedTextField(
                         modifier = Modifier,
                         value = email.value,
@@ -148,24 +151,36 @@ fun LoginScreen(navController: NavHostController) {
 
                     OAuthButton(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(48.dp),
+                            .align(Alignment.CenterHorizontally),
                         onclick = {},
                     )
+                }
+            }
 
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 30.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Belum punya akun? ",
-                            style = TextStyle(
-                                fontWeight = FontWeight.Normal
-                            )
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .background(gray50)
+                    .padding(bottom = 10.dp),
+            ) {
+                Row(
+                    Modifier
+                        .height(40.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Belum punya akun? ",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Normal
                         )
+                    )
+                    TextButton(
+                        onClick = {},
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color.Black),
+                        modifier = Modifier.offset(x = (-12).dp)
+                    ) {
                         Text(
                             text = "Daftar Sekarang",
                             style = TextStyle(
@@ -177,6 +192,7 @@ fun LoginScreen(navController: NavHostController) {
             }
         }
     }
+
 }
 
 @Preview(showSystemUi = true, showBackground = true)
