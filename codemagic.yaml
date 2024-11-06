@@ -1,0 +1,53 @@
+workflows:
+  native-android:
+    name: Jaga Mental
+#    triggering:
+#      events:
+#        - push
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    environment:
+      android_signing:
+        - keystore: keystore_reference
+          keystore_environment_variable: CM_KEYSTORE_PATH
+          keystore_password_environment_variable: CM_KEYSTORE_PASSWORD
+          key_alias_environment_variable: CM_KEY_ALIAS
+          key_password_environment_variable: CM_KEY_PASSWORD
+
+      groups:
+        - development
+      vars:
+        PACKAGE_NAME: "io.mindset.jagamental"
+    scripts:
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
+      - name: Set Build Number
+        script: |
+          export BUILD_NUMBER=$(($BUILD_NUMBER + 1))
+      - name: Grant Execute Permission for Gradlew
+        script: |
+          chmod +x ./gradlew
+      - name: Build Android release
+        script: |
+          ./gradlew assembleRelease -PversionCode=$BUILD_NUMBER -PversionName=1.0.$BUILD_NUMBER
+    artifacts:
+      - app/build/**/outputs/apk/**/*.apk
+      - app/build/outputs/**/*.aab
+    publishing:
+      email:
+        recipients:
+          - galihputroaji.gh@gmail.com
+          - haldiespasya@gmail.com
+          - rahmahdiandian@gmail.com
+          - yoerdanatan@gmail.com
+          - aminfaruk.fa@gmail.com
+          - marcelavind61@gmail.com
+
+        notify:
+          success: true
+          failure: false
+#      google_play:
+#        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+#        track: internal
+#        submit_as_draft: true
