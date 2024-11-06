@@ -1,14 +1,19 @@
 workflows:
   native-android:
     name: Jaga Mental
-    triggering:
-      events:
-        - push
+#    triggering:
+#      events:
+#        - push
     max_build_duration: 120
     instance_type: mac_mini_m2
     environment:
       android_signing:
-        - keystore_reference
+        - keystore: keystore_reference
+          keystore_environment_variable: CM_KEYSTORE_PATH
+          keystore_password_environment_variable: CM_KEYSTORE_PASSWORD
+          key_alias_environment_variable: CM_KEY_ALIAS
+          key_password_environment_variable: CM_KEY_PASSWORD
+
       groups:
         - development
       vars:
