@@ -22,19 +22,19 @@ workflows:
           chmod +x ./gradlew
       - name: Build Android release
         script: |
-          ./gradlew bundleRelease -PversionCode=$BUILD_NUMBER -PversionName=1.0.$BUILD_NUMBER
+          ./gradlew assembleRelease -PversionCode=$BUILD_NUMBER -PversionName=1.0.$BUILD_NUMBER
     artifacts:
-      - app/build/outputs/apk/release/*.apk
+      - app/build/**/outputs/apk/**/*.apk
       - app/build/outputs/**/*.aab
     publishing:
       email:
         recipients:
           - galihputroaji.gh@gmail.com
-        #          - haldiespasya@gmail.com
-        #          - rahmahdiandian@gmail.com
-        #          - yoerdanatan@gmail.com
-        #          - aminfaruk.fa@gmail.com
-        #          - marcelavind61@gmail.com
+          - haldiespasya@gmail.com
+          - rahmahdiandian@gmail.com
+          - yoerdanatan@gmail.com
+          - aminfaruk.fa@gmail.com
+          - marcelavind61@gmail.com
         notify:
           success: true
           failure: false
