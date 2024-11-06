@@ -1,6 +1,9 @@
 workflows:
   native-android:
     name: Jaga Mental
+    triggering:
+      events:
+        - push
     max_build_duration: 120
     instance_type: mac_mini_m2
     environment:
