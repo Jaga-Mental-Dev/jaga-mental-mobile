@@ -14,9 +14,15 @@ workflows:
       - name: Set Android SDK location
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
+      - name: Set Build Number
+        script: |
+          export BUILD_NUMBER=$(($BUILD_NUMBER + 1))
+      - name: Grant Execute Permission for Gradlew
+        script: |
+          chmod +x ./gradlew
       - name: Build Android release
         script: |
-          ./gradlew bundleRelease -PversionCode=$($BUILD_NUMBER + 1) -PversionName=1.0.$BUILD_NUMBER
+          ./gradlew bundleRelease -PversionCode=$BUILD_NUMBER -PversionName=1.0.$BUILD_NUMBER
     artifacts:
       - app/build/outputs/**/*.aab
       - app/build/outputs/**/*.apk
@@ -24,11 +30,11 @@ workflows:
       email:
         recipients:
           - galihputroaji.gh@gmail.com
-#          - haldiespasya@gmail.com
-#          - rahmahdiandian@gmail.com
-#          - yoerdanatan@gmail.com
-#          - aminfaruk.fa@gmail.com
-#          - marcelavind61@gmail.com
+        #          - haldiespasya@gmail.com
+        #          - rahmahdiandian@gmail.com
+        #          - yoerdanatan@gmail.com
+        #          - aminfaruk.fa@gmail.com
+        #          - marcelavind61@gmail.com
         notify:
           success: true
           failure: false
