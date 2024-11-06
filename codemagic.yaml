@@ -24,8 +24,8 @@ workflows:
         script: |
           ./gradlew bundleRelease -PversionCode=$BUILD_NUMBER -PversionName=1.0.$BUILD_NUMBER
     artifacts:
+      - app/build/outputs/apk/release/*.apk
       - app/build/outputs/**/*.aab
-      - app/build/outputs/**/*.apk
     publishing:
       email:
         recipients:
