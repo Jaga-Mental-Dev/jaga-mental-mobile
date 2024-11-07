@@ -41,3 +41,8 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: testers
           file: ${{steps.sign_app.outputs.signedReleaseFile}}
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Signed app bundle
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
