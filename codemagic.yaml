@@ -38,11 +38,11 @@ workflows:
       email:
         recipients:
           - galihputroaji.gh@gmail.com
-          - haldiespasya@gmail.com
-          - rahmahdiandian@gmail.com
-          - yoerdanatan@gmail.com
-          - aminfaruk.fa@gmail.com
-          - marcelavind61@gmail.com
+#          - haldiespasya@gmail.com
+#          - rahmahdiandian@gmail.com
+#          - yoerdanatan@gmail.com
+#          - aminfaruk.fa@gmail.com
+#          - marcelavind61@gmail.com
 
         notify:
           success: true
