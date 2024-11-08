@@ -1,8 +1,9 @@
 package io.mindset.jagamental.di
 
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import io.mindset.jagamental.data.domain.AuthRepository
+import io.mindset.jagamental.data.domain.MainRepository
 import io.mindset.jagamental.data.remote.ApiService
-import io.mindset.jagamental.data.remote.MainRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -43,4 +44,5 @@ val networkModule = module {
 
 val repositoryModule = module {
     single { MainRepository(apiService = get(), context = get()) }
+    single { AuthRepository(context = get()) }
 }
