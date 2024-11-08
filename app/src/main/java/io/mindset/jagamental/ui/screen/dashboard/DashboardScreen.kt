@@ -16,10 +16,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import io.mindset.jagamental.navigation.Route
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DashboardScreen(navController: NavController) {
 
+    val viewModel: DashboardViewModel = koinViewModel()
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     Scaffold { padding ->
@@ -41,7 +43,7 @@ fun DashboardScreen(navController: NavController) {
 
                 Button(
                     onClick = {
-                        auth.signOut()
+                        viewModel.signOut()
                         navController.navigate(Route.Login) {
                             popUpTo(Route.Dashboard) { inclusive = true }
                         }
