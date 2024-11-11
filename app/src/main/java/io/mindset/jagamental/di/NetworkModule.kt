@@ -21,6 +21,7 @@ val networkModule = module {
                 .build()
             chain.proceed(requestHeaders)
         }*/
+
         val loggingInterceptor =
             HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
