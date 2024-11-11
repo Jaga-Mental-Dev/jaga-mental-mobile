@@ -12,7 +12,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import io.mindset.jagamental.R
-import io.mindset.jagamental.data.model.OauthUiState
+import io.mindset.jagamental.data.model.AuthState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.tasks.await
@@ -22,7 +22,7 @@ class AuthRepository(context: Context) {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val googleSignInClient: GoogleSignInClient
 
-    private val _uiState = MutableStateFlow<OauthUiState>(OauthUiState.Idle)
+    private val _uiState = MutableStateFlow<AuthState>(AuthState.Idle)
     val uiState = _uiState.asStateFlow()
 
     init {
@@ -41,7 +41,7 @@ class AuthRepository(context: Context) {
             val account = task.getResult(ApiException::class.java)!!
             firebaseAuthWithGoogle(account.idToken!!)
         } catch (e: ApiException) {
-            _uiState.value = OauthUiState.Error("Google sign in failed: $e")
+            _uiState.value = AuthState.Error("Google sign in failed: $e")
         }
     }
 
@@ -49,24 +49,24 @@ class AuthRepository(context: Context) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         try {
             auth.signInWithCredential(credential).await()
-            _uiState.value = OauthUiState.Success(auth.currentUser)
+            _uiState.value = AuthState.Success(auth.currentUser)
         } catch (e: Exception) {
-            _uiState.value = OauthUiState.Error("Authentication failed: ${e.message}")
+            _uiState.value = AuthState.Error("Authentication failed: ${e.message}")
         }
     }
 
     suspend fun signInWithEmailPassword(email: String, password: String) {
         try {
             auth.signInWithEmailAndPassword(email, password).await()
-            _uiState.value = OauthUiState.Success(auth.currentUser)
+            _uiState.value = AuthState.Success(auth.currentUser)
         } catch (e: Exception) {
-            _uiState.value = OauthUiState.Error("Authentication failed: ${e.message}")
+            _uiState.value = AuthState.Error("Authentication failed: ${e.message}")
         }
     }
 
     fun signOut() {
         auth.signOut()
         googleSignInClient.signOut()
-        _uiState.value = OauthUiState.Idle
+        _uiState.value = AuthState.Idle
     }
 }

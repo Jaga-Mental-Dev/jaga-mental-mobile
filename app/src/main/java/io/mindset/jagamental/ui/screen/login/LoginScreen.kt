@@ -36,18 +36,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import io.mindset.jagamental.R
-import io.mindset.jagamental.data.model.OauthUiState
+import io.mindset.jagamental.data.model.AuthState
 import io.mindset.jagamental.navigation.Route
 import io.mindset.jagamental.ui.components.FilledButton
 import io.mindset.jagamental.ui.components.GoogleSignInButton
 import io.mindset.jagamental.ui.components.RoundedTextField
 import io.mindset.jagamental.ui.components.TextDivider
-import io.mindset.jagamental.ui.theme.gray50
 import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
 import org.koin.androidx.compose.koinViewModel
 
@@ -57,6 +57,11 @@ fun LoginScreen(navController: NavHostController) {
     val scrollState = rememberScrollState()
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val isEmailValid = remember { mutableStateOf(true) }
+    val isPasswordValid = remember { mutableStateOf(true) }
+    val emailError = remember { mutableStateOf("") }
+    val passwordError = remember { mutableStateOf("") }
+    val loginError = remember { mutableStateOf("") }
 
     val viewModel: LoginViewModel = koinViewModel()
     val uiState = viewModel.uiState.collectAsState()
@@ -140,19 +145,54 @@ fun LoginScreen(navController: NavHostController) {
                     RoundedTextField(
                         modifier = Modifier,
                         value = email.value,
-                        onValueChange = { email.value = it },
+                        onValueChange = {
+                            email.value = it
+                            isEmailValid.value = isValidEmail(it)
+                            emailError.value = if (isEmailValid.value) "" else "Invalid email address"
+                        },
                         label = stringResource(id = R.string.login_email_label),
                         placeholder = stringResource(id = R.string.login_email_placeholder),
+                        type = "email"
                     )
+                    if (emailError.value.isNotEmpty()) {
+                        Text(
+                            modifier = Modifier.padding(top = 4.dp, start = 12.dp),
+                            text = emailError.value,
+                            color = Color.Red,
+                            style = TextStyle(fontSize = 12.sp)
+                        )
+                    }
 
                     RoundedTextField(
                         modifier = Modifier.padding(top = 16.dp),
                         value = password.value,
-                        onValueChange = { password.value = it },
+                        onValueChange = {
+                            password.value = it
+                            isPasswordValid.value = isValidPassword(it)
+                            passwordError.value = if (isPasswordValid.value) "" else "Password must be at least 6 characters"
+                        },
                         label = stringResource(id = R.string.login_password_label),
                         placeholder = "",
-                        type = "password"
+                        type = "password",
+                        imeAction = ImeAction.Done
                     )
+                    if (passwordError.value.isNotEmpty()) {
+                        Text(
+                            modifier = Modifier.padding(top = 4.dp, start = 12.dp),
+                            text = passwordError.value,
+                            color = Color.Red,
+                            style = TextStyle(fontSize = 12.sp)
+                        )
+                    }
+
+                    if (loginError.value.isNotEmpty()) {
+                        Text(
+                            modifier = Modifier.padding(top = 4.dp, start = 12.dp),
+                            text = loginError.value,
+                            color = Color.Red,
+                            style = TextStyle(fontSize = 12.sp)
+                        )
+                    }
 
                     FilledButton(
                         modifier = Modifier
@@ -162,7 +202,8 @@ fun LoginScreen(navController: NavHostController) {
                         onClick = {
                             Log.d("LoginScreen", "LoginScreen: ${email.value}, ${password.value}")
                             viewModel.signInWithEmailPassword(email.value, password.value)
-                        }
+                        },
+                        enabled = isEmailValid.value && isPasswordValid.value
                     )
 
                     TextDivider(
@@ -181,7 +222,7 @@ fun LoginScreen(navController: NavHostController) {
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .background(gray50)
+                    .background(Color.White)
                     .padding(bottom = 10.dp),
             ) {
                 Row(
@@ -217,7 +258,7 @@ fun LoginScreen(navController: NavHostController) {
     }
 
     when (val state = uiState.value) {
-        is OauthUiState.Success -> {
+        is AuthState.Success -> {
             Log.d("LoginScreen", "Logged in as ${state.user?.email}")
             LaunchedEffect(state) {
                 navController.navigate(Route.Dashboard) {
@@ -226,13 +267,20 @@ fun LoginScreen(navController: NavHostController) {
             }
         }
 
-        is OauthUiState.Error -> {
-            Log.e("LoginScreen", state.toString())
+        is AuthState.Error -> {
+            loginError.value = state.message
         }
 
         else -> {
             Log.d("LoginScreen", "No state")
         }
     }
+}
 
+fun isValidEmail(email: String): Boolean {
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+}
+
+fun isValidPassword(password: String): Boolean {
+    return password.length >= 6
 }

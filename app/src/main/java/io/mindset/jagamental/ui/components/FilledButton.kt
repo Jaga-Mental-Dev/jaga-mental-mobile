@@ -15,13 +15,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun FilledButton(name: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun FilledButton(modifier: Modifier = Modifier,name: String, onClick: () -> Unit, enabled: Boolean = true) {
     Button(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(size = 16.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF194A47))
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF194A47)),
+        enabled = enabled
     ) {
         Text(
             text = name,
@@ -36,7 +37,7 @@ fun FilledButton(name: String, onClick: () -> Unit, modifier: Modifier = Modifie
 @Composable
 fun ButtonPreview() {
     Column {
-        FilledButton(name = "Login", onClick = {})
-        FilledButton(name = "Register", onClick = {})
+        FilledButton(name = "Login", onClick = {}, enabled = true)
+        FilledButton(name = "Register", onClick = {}, enabled = false)
     }
 }

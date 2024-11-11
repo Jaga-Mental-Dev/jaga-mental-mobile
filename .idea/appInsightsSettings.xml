@@ -22,10 +22,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="io.mindset.jagamental" />
+                  <option name="mobileSdkAppId" value="1:616607546235:android:ced0b679ed460ee2159bde" />
+                  <option name="projectId" value="jaga-mental-28a6b" />
+                  <option name="projectNumber" value="616607546235" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
