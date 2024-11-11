@@ -64,6 +64,15 @@ class AuthRepository(context: Context) {
         }
     }
 
+    suspend fun registerWithEmailPassword(email: String, password: String) {
+        try {
+            auth.createUserWithEmailAndPassword(email, password).await()
+            _uiState.value = AuthState.Success(auth.currentUser)
+        } catch (e: Exception) {
+            _uiState.value = AuthState.Error("Registration failed: ${e.message}")
+        }
+    }
+
     fun signOut() {
         auth.signOut()
         googleSignInClient.signOut()

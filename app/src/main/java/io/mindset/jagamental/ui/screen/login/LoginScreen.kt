@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -156,7 +157,7 @@ fun LoginScreen(navController: NavHostController) {
                     )
                     if (emailError.value.isNotEmpty()) {
                         Text(
-                            modifier = Modifier.padding(top = 4.dp, start = 12.dp),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                             text = emailError.value,
                             color = Color.Red,
                             style = TextStyle(fontSize = 12.sp)
@@ -178,7 +179,7 @@ fun LoginScreen(navController: NavHostController) {
                     )
                     if (passwordError.value.isNotEmpty()) {
                         Text(
-                            modifier = Modifier.padding(top = 4.dp, start = 12.dp),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                             text = passwordError.value,
                             color = Color.Red,
                             style = TextStyle(fontSize = 12.sp)
@@ -187,7 +188,7 @@ fun LoginScreen(navController: NavHostController) {
 
                     if (loginError.value.isNotEmpty()) {
                         Text(
-                            modifier = Modifier.padding(top = 4.dp, start = 12.dp),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                             text = loginError.value,
                             color = Color.Red,
                             style = TextStyle(fontSize = 12.sp)
@@ -212,45 +213,52 @@ fun LoginScreen(navController: NavHostController) {
                     )
 
                     GoogleSignInButton(
+                        modifier = Modifier
+                            .height(48.dp)
+                            .fillMaxWidth(),
                         onClick = {
                             onGoogleSignInClick()
                         }
                     )
-                }
-            }
 
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .background(Color.White)
-                    .padding(bottom = 10.dp),
-            ) {
-                Row(
-                    Modifier
-                        .height(40.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .background(Color.White)
+                        .padding(bottom = 10.dp),
                 ) {
-                    Text(
-                        text = stringResource(R.string.no_account),
-                        style = TextStyle(
-                            fontWeight = FontWeight.Normal
-                        )
-                    )
-                    TextButton(
-                        onClick = {
-                            navController.navigate(Route.Register)
-                        },
-                        colors = ButtonDefaults.textButtonColors(contentColor = tertiaryContainerLightHighContrast),
-                        modifier = Modifier.offset(x = (-8).dp)
+                    Row(
+                        Modifier
+                            .height(40.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(id = R.string.register_now),
+                            text = stringResource(R.string.no_account),
                             style = TextStyle(
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.Normal
                             )
                         )
+                        TextButton(
+                            onClick = {
+                                navController.navigate(Route.Register){
+                                    popUpTo(Route.Login) { inclusive = true }
+                                }
+                            },
+                            colors = ButtonDefaults.textButtonColors(contentColor = tertiaryContainerLightHighContrast),
+                            modifier = Modifier.offset(x = (-8).dp)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.register_now),
+                                style = TextStyle(
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            )
+                        }
                     }
                 }
             }
