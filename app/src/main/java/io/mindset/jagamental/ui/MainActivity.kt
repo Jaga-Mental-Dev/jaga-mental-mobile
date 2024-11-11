@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import io.mindset.jagamental.navigation.MainNavHost
 import io.mindset.jagamental.navigation.Route
+import io.mindset.jagamental.ui.components.BackActionHandler
 import io.mindset.jagamental.ui.theme.JagaMentalTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -35,5 +36,6 @@ fun AppContent() {
     val startDestination =
         if (auth.currentUser != null) Route.Dashboard::class else Route.Login::class
 
+    BackActionHandler(navController)
     MainNavHost(navController = navController, startDestination = startDestination)
 }
