@@ -276,6 +276,7 @@ fun LoginScreen(navController: NavHostController) {
         }
 
         is AuthState.Error -> {
+            Log.d("LoginScreen", "Error: ${state.message}")
             loginError.value = state.message
         }
 

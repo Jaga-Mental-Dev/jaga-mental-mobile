@@ -4,6 +4,7 @@ package io.mindset.jagamental.data.domain
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.activity.result.ActivityResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -31,6 +32,7 @@ class AuthRepository(context: Context) {
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(context, gso)
+        Log.d("AuthRepository", "init: ${auth.currentUser}")
     }
 
     fun signInIntent(): Intent = googleSignInClient.signInIntent
@@ -41,6 +43,7 @@ class AuthRepository(context: Context) {
             val account = task.getResult(ApiException::class.java)!!
             firebaseAuthWithGoogle(account.idToken!!)
         } catch (e: ApiException) {
+            Log.d("AuthRepository", "handleSignInResult: ${e.message}")
             _uiState.value = AuthState.Error("Google sign in failed: $e")
         }
     }
@@ -51,6 +54,7 @@ class AuthRepository(context: Context) {
             auth.signInWithCredential(credential).await()
             _uiState.value = AuthState.Success(auth.currentUser)
         } catch (e: Exception) {
+            Log.d("AuthRepository", "firebaseAuthWithGoogle: ${e.message}")
             _uiState.value = AuthState.Error("Authentication failed: ${e.message}")
         }
     }
