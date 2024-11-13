@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
-import io.mindset.jagamental.navigation.Route
+import io.mindset.jagamental.navigation.Screen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -44,8 +44,8 @@ fun DashboardScreen(navController: NavController) {
                 Button(
                     onClick = {
                         viewModel.signOut()
-                        navController.navigate(Route.Login) {
-                            popUpTo(Route.Dashboard) { inclusive = true }
+                        navController.navigate(Screen.Auth.Login) {
+                            popUpTo(Screen.App.Dashboard) { inclusive = true }
                         }
                     }
                 ) {

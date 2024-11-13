@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import io.mindset.jagamental.navigation.Route
 
 @Composable
 fun OnboardingScreen(navController: NavController) {
@@ -27,7 +26,7 @@ fun OnboardingScreen(navController: NavController) {
             Text(text = "Onboarding")
             Button(
                 onClick = {
-                    navController.navigate(Route.Login)
+
                 },
                 modifier = Modifier.padding(16.dp)
             ) {
