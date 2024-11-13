@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import io.mindset.jagamental.R
 import io.mindset.jagamental.data.model.AuthState
-import io.mindset.jagamental.navigation.Route
+import io.mindset.jagamental.navigation.Screen
 import io.mindset.jagamental.ui.components.FilledButton
 import io.mindset.jagamental.ui.components.GoogleSignInButton
 import io.mindset.jagamental.ui.components.RoundedTextField
@@ -245,8 +245,8 @@ fun LoginScreen(navController: NavHostController) {
                         )
                         TextButton(
                             onClick = {
-                                navController.navigate(Route.Register){
-                                    popUpTo(Route.Login) { inclusive = true }
+                                navController.navigate(Screen.Auth.Register) {
+                                    popUpTo(Screen.Auth.Login) { inclusive = true }
                                 }
                             },
                             colors = ButtonDefaults.textButtonColors(contentColor = tertiaryContainerLightHighContrast),
@@ -269,8 +269,8 @@ fun LoginScreen(navController: NavHostController) {
         is AuthState.Success -> {
             Log.d("LoginScreen", "Logged in as ${state.user?.email}")
             LaunchedEffect(state) {
-                navController.navigate(Route.Dashboard) {
-                    popUpTo(Route.Login) { inclusive = true }
+                navController.navigate(Screen.App.Dashboard) {
+                    popUpTo(Screen.Auth.Login) { inclusive = true }
                 }
             }
         }

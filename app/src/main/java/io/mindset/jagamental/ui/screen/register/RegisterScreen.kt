@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import io.mindset.jagamental.R
 import io.mindset.jagamental.data.model.AuthState
-import io.mindset.jagamental.navigation.Route
+import io.mindset.jagamental.navigation.Screen
 import io.mindset.jagamental.ui.components.FilledButton
 import io.mindset.jagamental.ui.components.OAuthButton
 import io.mindset.jagamental.ui.components.RoundedTextField
@@ -234,8 +234,8 @@ fun RegisterScreen(navController: NavHostController) {
                     )
                     TextButton(
                         onClick = {
-                            navController.navigate(Route.Login) {
-                                popUpTo(Route.Register) { inclusive = true }
+                            navController.navigate(Screen.Auth.Login) {
+                                popUpTo(Screen.Auth.Register) { inclusive = true }
                             }
                         },
                         colors = ButtonDefaults.textButtonColors(contentColor = tertiaryContainerLightHighContrast),
@@ -256,8 +256,8 @@ fun RegisterScreen(navController: NavHostController) {
     when (val state = uiState.value) {
         is AuthState.Success -> {
             LaunchedEffect(state) {
-                navController.navigate(Route.Dashboard) {
-                    popUpTo(Route.Register) { inclusive = true }
+                navController.navigate(Screen.App.Dashboard) {
+                    popUpTo(Screen.Auth.Register) { inclusive = true }
                 }
             }
         }
