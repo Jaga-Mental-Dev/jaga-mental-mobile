@@ -7,6 +7,11 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @SuppressLint("AutoboxingStateCreation")
@@ -22,7 +27,18 @@ fun BottomNavigationBar(navController: NavController) {
         mutableStateOf(0)
     }
 
-    NavigationBar() {
+    NavigationBar(
+        containerColor = Color.White,
+        modifier = Modifier.drawBehind {
+        val borderHeight = 2.dp.toPx()
+        drawLine(
+            color = Color(0xFFE9EAEB),
+            start = Offset(0f, 0f),
+            end = Offset(size.width, 0f),
+            strokeWidth = borderHeight
+        )
+    },
+    ) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
                 selected = selectedItemIndex.value == index,
