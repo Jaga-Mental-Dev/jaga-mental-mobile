@@ -2,11 +2,9 @@ package io.mindset.jagamental.ui.screen.root
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.mindset.jagamental.navigation.RootNavGraph
@@ -46,7 +44,7 @@ fun RootScreen() {
     ) { innerPadding ->
         RootNavGraph(
             navController = navController,
-            modifier = Modifier.padding(innerPadding)
+            paddingValues = innerPadding
         )
     }
 }
