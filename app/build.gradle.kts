@@ -7,14 +7,14 @@ plugins {
 }
 
 android {
-    signingConfigs {
-        create("release") {
-            storeFile = file("C:\\Users\\galih\\.android\\keystore\\release_keystore.jks")
-            storePassword = "android"
-            keyAlias = "release"
-            keyPassword = "android"
-        }
-    }
+//    signingConfigs {
+//        create("release") {
+//            storeFile = file("C:\\Users\\galih\\.android\\keystore\\release_keystore.jks")
+//            storePassword = "android"
+//            keyAlias = "release"
+//            keyPassword = "android"
+//        }
+//    }
     namespace = "io.mindset.jagamental"
     compileSdk = 34
 
@@ -39,7 +39,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
+//            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

@@ -3,7 +3,9 @@ package io.mindset.jagamental.ui.components.bottombar
 import android.annotation.SuppressLint
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -11,8 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
 
 @SuppressLint("AutoboxingStateCreation")
 @Composable
@@ -48,11 +52,16 @@ fun BottomNavigationBar(navController: NavController) {
                 },
                 icon = {
                     if (selectedItemIndex.value == index) {
-                        Icon(item.selectedIcon, contentDescription = item.title)
+                        Icon(painter = painterResource(item.selectedIcon), contentDescription = item.title )
                     } else {
-                        Icon(item.unselectedIcon, contentDescription = item.title)
+                        Icon(painter = painterResource(item.unselectedIcon), contentDescription = item.title)
                     }
-                }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = Color.Transparent,
+                    selectedIconColor = tertiaryContainerLightHighContrast,
+                    unselectedIconColor = Color.LightGray
+                )
             )
         }
     }

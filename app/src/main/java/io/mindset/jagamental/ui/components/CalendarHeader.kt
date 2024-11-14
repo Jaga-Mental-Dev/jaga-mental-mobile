@@ -107,7 +107,8 @@ fun CalendarHeader(
                                     modifier = Modifier.align(Alignment.CenterHorizontally),
                                     style = TextStyle(
                                         fontSize = 14.sp,
-                                        color = if (isSelected) Color.Black else Color.White
+                                        color = if (isSelected) Color.Black else Color.White,
+                                        fontWeight = FontWeight.Bold
                                     )
                                 )
                             }
