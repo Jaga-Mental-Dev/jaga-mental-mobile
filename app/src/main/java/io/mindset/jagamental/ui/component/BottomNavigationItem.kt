@@ -1,4 +1,4 @@
-package io.mindset.jagamental.ui.components.bottombar
+package io.mindset.jagamental.ui.component
 
 import io.mindset.jagamental.R
 import io.mindset.jagamental.navigation.Screen

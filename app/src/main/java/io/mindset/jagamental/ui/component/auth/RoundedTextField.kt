@@ -1,4 +1,4 @@
-package io.mindset.jagamental.ui.components
+package io.mindset.jagamental.ui.component.auth
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

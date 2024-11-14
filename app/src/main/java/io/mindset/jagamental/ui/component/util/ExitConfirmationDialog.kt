@@ -1,4 +1,4 @@
-package io.mindset.jagamental.ui.components
+package io.mindset.jagamental.ui.component.util
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

@@ -1,4 +1,4 @@
-package io.mindset.jagamental.ui.components
+package io.mindset.jagamental.ui.component.journal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
