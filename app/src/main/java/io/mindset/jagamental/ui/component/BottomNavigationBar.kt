@@ -1,9 +1,8 @@
-package io.mindset.jagamental.ui.components.bottombar
+package io.mindset.jagamental.ui.component
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
@@ -52,7 +51,7 @@ fun BottomNavigationBar(navController: NavController) {
                 },
                 icon = {
                     if (selectedItemIndex.value == index) {
-                        Icon(painter = painterResource(item.selectedIcon), contentDescription = item.title )
+                        Icon(painter = painterResource(item.selectedIcon), contentDescription = item.title)
                     } else {
                         Icon(painter = painterResource(item.unselectedIcon), contentDescription = item.title)
                     }

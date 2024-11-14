@@ -1,4 +1,4 @@
-package io.mindset.jagamental.ui.components
+package io.mindset.jagamental.ui.component.util
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable

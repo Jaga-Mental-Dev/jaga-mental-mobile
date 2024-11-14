@@ -64,6 +64,9 @@ android {
 
 dependencies {
 
+    //UI
+    implementation(libs.accompanist.systemuicontroller)
+
     // Firebase & Gms
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)

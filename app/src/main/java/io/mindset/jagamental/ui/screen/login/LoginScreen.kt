@@ -45,11 +45,12 @@ import androidx.navigation.NavHostController
 import io.mindset.jagamental.R
 import io.mindset.jagamental.data.model.AuthState
 import io.mindset.jagamental.navigation.Screen
-import io.mindset.jagamental.ui.components.FilledButton
-import io.mindset.jagamental.ui.components.GoogleSignInButton
-import io.mindset.jagamental.ui.components.RoundedTextField
-import io.mindset.jagamental.ui.components.TextDivider
+import io.mindset.jagamental.ui.component.auth.FilledButton
+import io.mindset.jagamental.ui.component.auth.GoogleSignInButton
+import io.mindset.jagamental.ui.component.auth.RoundedTextField
+import io.mindset.jagamental.ui.component.auth.TextDivider
 import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
+import io.mindset.jagamental.utils.StatusBarColorHelper
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -78,6 +79,7 @@ fun LoginScreen(navController: NavHostController) {
         signInLauncher.launch(signInIntent)
     }
 
+    StatusBarColorHelper()
     Scaffold { padding ->
         Box(
             modifier = Modifier

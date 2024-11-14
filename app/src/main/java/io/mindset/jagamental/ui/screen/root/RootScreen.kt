@@ -2,15 +2,18 @@ package io.mindset.jagamental.ui.screen.root
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.background
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.mindset.jagamental.navigation.RootNavGraph
 import io.mindset.jagamental.navigation.Screen
-import io.mindset.jagamental.ui.components.BackActionHandler
-import io.mindset.jagamental.ui.components.bottombar.BottomNavigationBar
+import io.mindset.jagamental.ui.component.BottomNavigationBar
+import io.mindset.jagamental.ui.component.util.BackActionHandler
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -29,8 +32,8 @@ fun RootScreen() {
     }
 
     BackActionHandler(navController = navController)
-
     Scaffold(
+        modifier = Modifier.background(color = Color.White),
         bottomBar = {
             AnimatedVisibility(
                 visible = isIncludeRoute,

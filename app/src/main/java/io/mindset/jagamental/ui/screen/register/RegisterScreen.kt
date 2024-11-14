@@ -42,13 +42,14 @@ import androidx.navigation.NavHostController
 import io.mindset.jagamental.R
 import io.mindset.jagamental.data.model.AuthState
 import io.mindset.jagamental.navigation.Screen
-import io.mindset.jagamental.ui.components.FilledButton
-import io.mindset.jagamental.ui.components.OAuthButton
-import io.mindset.jagamental.ui.components.RoundedTextField
-import io.mindset.jagamental.ui.components.TextDivider
+import io.mindset.jagamental.ui.component.auth.FilledButton
+import io.mindset.jagamental.ui.component.auth.OAuthButton
+import io.mindset.jagamental.ui.component.auth.RoundedTextField
+import io.mindset.jagamental.ui.component.auth.TextDivider
 import io.mindset.jagamental.ui.screen.login.isValidEmail
 import io.mindset.jagamental.ui.screen.login.isValidPassword
 import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
+import io.mindset.jagamental.utils.StatusBarColorHelper
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -66,6 +67,7 @@ fun RegisterScreen(navController: NavHostController) {
     val viewModel: RegisterViewModel = koinViewModel()
     val uiState = viewModel.uiState.collectAsState()
 
+    StatusBarColorHelper()
     Scaffold { padding ->
         Box(
             modifier = Modifier

@@ -1,4 +1,4 @@
-package io.mindset.jagamental.ui.components
+package io.mindset.jagamental.ui.component.auth
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
