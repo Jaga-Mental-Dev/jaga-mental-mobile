@@ -67,6 +67,9 @@ dependencies {
     //UI
     implementation(libs.accompanist.systemuicontroller)
 
+    //Chart
+    implementation (libs.compose.charts)
+
     // Firebase & Gms
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
@@ -80,10 +83,10 @@ dependencies {
 
     // Room + Paging
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.animation.core.android)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
-
 
     // Lifecycle
     implementation(libs.androidx.lifecycle.viewmodel.ktx)

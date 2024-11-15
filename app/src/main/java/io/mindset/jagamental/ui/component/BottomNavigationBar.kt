@@ -5,6 +5,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -14,6 +15,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
 
@@ -60,7 +62,14 @@ fun BottomNavigationBar(navController: NavController) {
                     indicatorColor = Color.Transparent,
                     selectedIconColor = tertiaryContainerLightHighContrast,
                     unselectedIconColor = Color.LightGray
-                )
+                ),
+                label = {
+                    Text(
+                        text = item.title,
+                        color = if (selectedItemIndex.value == index) tertiaryContainerLightHighContrast else Color.LightGray,
+                        fontSize = 12.sp
+                    )
+                }
             )
         }
     }

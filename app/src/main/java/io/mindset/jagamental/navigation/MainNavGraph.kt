@@ -25,7 +25,7 @@ fun NavGraphBuilder.mainNavGraph(
         }
 
         composable<Screen.App.Profile> {
-            ProfileScreen(navController)
+            ProfileScreen(navController, paddingValues)
         }
     }
 }
