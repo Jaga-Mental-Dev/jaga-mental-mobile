@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -48,6 +49,7 @@ fun PhotoResultScreen(
     val bitmap = remember(photoUri) {
         BitmapFactory.decodeFile(File(URI(photoUri)).path)
     }
+
     val capturedPhoto: ImageBitmap = bitmap.asImageBitmap()
     val pageBgColor = getBackGroundColorByEmotion(emotion)
 
@@ -60,22 +62,38 @@ fun PhotoResultScreen(
     ) {
         Column {
             TopBar(
-                title = "Photo Result",
+                title = stringResource(R.string.photo_result),
                 titleColor = Color.Black,
                 containerColor = pageBgColor,
                 onBack = { navController.popBackStack() }
             )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp, end = 16.dp),
+                horizontalArrangement = Arrangement.End,
+            ) {
+                Text(
+                    modifier = Modifier,
+                    text = stringResource(R.string.input_step_2_3),
+                    color = Color.Gray,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center
+                )
+            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.5f)
-                    .padding(horizontal = 16.dp, vertical = 50.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp, top = 8.dp)
                     .background(Color.Transparent)
                     .clip(RoundedCornerShape(16.dp)),
             ) {
                 Image(
                     bitmap = capturedPhoto,
-                    contentDescription = "Captured photo",
+                    contentDescription = stringResource(R.string.captured_photo),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
@@ -96,11 +114,10 @@ fun PhotoResultScreen(
                 ) {
                     Image(
                         painter = painterResource(R.drawable.smiling_face_with_smiling_eyes),
-                        contentDescription = "Emotion Result",
+                        contentDescription = stringResource(R.string.emotion_result),
                         modifier = Modifier.size(50.dp),
                         contentScale = ContentScale.Crop
                     )
-
                     Text(
                         modifier = Modifier.padding(top = 8.dp),
                         text = "Wow, you seem super happy! Let’s capture that energy in your journal!",
@@ -123,7 +140,7 @@ fun PhotoResultScreen(
                 ),
                 shape = MaterialTheme.shapes.medium
             ) { Text(
-                text = "Next",
+                text = stringResource(R.string.next),
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.White
             )}

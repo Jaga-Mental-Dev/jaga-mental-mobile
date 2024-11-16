@@ -33,7 +33,7 @@ fun NavGraphBuilder.mainNavGraph(
         }
 
         composable<Screen.App.AddCapture> {
-            CaptureScreen(navController, paddingValues)
+            CaptureScreen(navController)
         }
 
         composable<Screen.App.ResultPreviewScreen> { backStackEntry ->
