@@ -27,5 +27,22 @@ sealed class Screen {
         data object Journal : Screen(){
             val systemBarColor = Color(0xFF194A47)
         }
+
+        @Serializable
+        data object AddCapture: Screen()
+
+        @Serializable
+        data class ResultPreviewScreen(
+            val photoUri: String
+        ): Screen()
+
+        @Serializable
+        data object InputJournalScreen: Screen()
+
+        @Serializable
+        data class PhotoResultScreen(
+            val photoUri: String,
+            val emotion: String
+        ): Screen()
     }
 }

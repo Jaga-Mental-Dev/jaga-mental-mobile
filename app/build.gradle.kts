@@ -64,6 +64,13 @@ android {
 
 dependencies {
 
+    // Camera X
+    implementation (libs.androidx.camera.core)
+    implementation (libs.androidx.camera.camera2)
+    implementation (libs.androidx.camera.view)
+    implementation (libs.androidx.camera.lifecycle)
+    implementation(libs.accompanist.permissions)
+
     //UI
     implementation(libs.accompanist.systemuicontroller)
 
