@@ -1,5 +1,7 @@
 package io.mindset.jagamental.data.domain
 
+import io.mindset.jagamental.data.model.request.AnalyticRequest
+import io.mindset.jagamental.data.model.response.EmotionDataItem
 import io.mindset.jagamental.data.model.response.JournalDataItem
 import io.mindset.jagamental.data.remote.ApiService
 import io.mindset.jagamental.utils.UiState
@@ -112,4 +114,21 @@ class JournalRepository(private val apiService: ApiService) {
             emit(UiState.Error(e.localizedMessage ?: "Error fetching journals by date"))
         }
     }
+
+    fun postAnalyticData(request: AnalyticRequest): Flow<UiState<List<EmotionDataItem>>> = flow {
+        emit(UiState.Loading)
+        try {
+            val response = apiService.doPostAnalytic(request)
+            if (response.error == true) {
+                emit(UiState.Error(response.message ?: "Unknown error occurred"))
+            } else {
+                response.data?.let {
+                    emit(UiState.Success(it))
+                } ?: emit(UiState.Error("Failed to post analytic data"))
+            }
+        } catch (e: Exception) {
+            emit(UiState.Error(e.localizedMessage ?: "Error posting analytic data"))
+        }
+    }
+
 }

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class EmotionResponse(
 
 	@field:SerializedName("data")
-	val data: List<DataItem>,
+	val data: List<EmotionDataItem>,
 
 	@field:SerializedName("error")
 	val error: Boolean? = null,
@@ -14,7 +14,7 @@ data class EmotionResponse(
 	val message: String? = null
 )
 
-data class DataItem(
+data class EmotionDataItem(
 
 	@field:SerializedName("emotion_count")
 	val emotionCount: Int? = null,
