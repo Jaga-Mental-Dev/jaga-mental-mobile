@@ -1,4 +1,4 @@
-package io.mindset.jagamental.data.model
+package io.mindset.jagamental.data.model.response
 
 import com.google.gson.annotations.SerializedName
 
