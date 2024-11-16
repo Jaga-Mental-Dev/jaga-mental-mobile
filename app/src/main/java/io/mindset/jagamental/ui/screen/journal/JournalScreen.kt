@@ -76,7 +76,7 @@ fun JournalScreen(navController: NavController, paddingValues: PaddingValues) {
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    EmptyJournal(onClick = {})
+                    EmptyJournal(onClick = {navController.navigate(Screen.App.AddCapture)})
                 }
             } else {
                 LazyColumn(
@@ -104,7 +104,9 @@ fun JournalScreen(navController: NavController, paddingValues: PaddingValues) {
 
         if (showButton) {
             AddJournalButton(
-                onclick = {},
+                onclick = {
+                    navController.navigate(Screen.App.AddCapture)
+                },
                 modifier = Modifier.align(Alignment.BottomEnd),
                 isExpanded = !listState.isScrollingUp()
             )
