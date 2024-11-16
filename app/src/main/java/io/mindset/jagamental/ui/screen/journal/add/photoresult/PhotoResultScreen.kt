@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.mindset.jagamental.R
+import io.mindset.jagamental.ui.component.TopBar
 import io.mindset.jagamental.utils.StatusBarColorHelper
 import io.mindset.jagamental.utils.getBackGroundColorByEmotion
 import java.io.File
@@ -58,6 +59,12 @@ fun PhotoResultScreen(
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Column {
+            TopBar(
+                title = "Photo Result",
+                titleColor = Color.Black,
+                containerColor = pageBgColor,
+                onBack = { navController.popBackStack() }
+            )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

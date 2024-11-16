@@ -116,7 +116,7 @@ private fun CameraContent(
                         layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                         setBackgroundColor(Color.Black.toArgb())
                         implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-                        scaleType = PreviewView.ScaleType.FILL_START
+                        scaleType = PreviewView.ScaleType.FILL_CENTER
                     }.also { previewView ->
                         previewView.controller = cameraController
                         cameraController.bindToLifecycle(lifecycleOwner)
