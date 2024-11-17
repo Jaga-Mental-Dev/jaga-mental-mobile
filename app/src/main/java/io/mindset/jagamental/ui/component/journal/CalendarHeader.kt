@@ -9,8 +9,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,14 +37,14 @@ import java.time.format.DateTimeFormatter
 fun CalendarHeader(
     onDateClick: (formattedDate: String) -> Unit
 ) {
-    val currentDate = LocalDate.now()
-    val datesOfWeek = (-3..3).map { currentDate.plusDays(it.toLong()) }
-
+    var currentDate by remember { mutableStateOf(LocalDate.now()) }
     var selectedDate by remember { mutableStateOf(currentDate) }
-
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
-
     val formattedSelectedDate = selectedDate.format(dateFormatter)
+
+    val datesOfWeek = remember(currentDate) {
+        (-3..3).map { currentDate.plusDays(it.toLong()) }
+    }
 
     Box(
         modifier = Modifier
@@ -50,18 +55,50 @@ fun CalendarHeader(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(
-                modifier = Modifier.padding(
-                    horizontal = 20.dp,
-                    vertical = 24.dp
-                ),
-                text = "Journal Timeline",
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight(600)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 24.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Journal Timeline",
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight(600)
+                    )
                 )
-            )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+
+                    IconButton(onClick = { currentDate = currentDate.minusWeeks(1) }) {
+                        Icon(
+                            imageVector = Icons.Default.ChevronLeft,
+                            contentDescription = "Previous Week",
+                            tint = Color.White
+                        )
+                    }
+                    Text(
+                        text = currentDate.format(DateTimeFormatter.ofPattern("MMM")),
+                        style = TextStyle(
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(400)
+                        )
+                    )
+                    IconButton(onClick = { currentDate = currentDate.plusWeeks(1) }) {
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = "Next Week",
+                            tint = Color.White
+                        )
+                    }
+                }
+            }
 
             Row(
                 modifier = Modifier
