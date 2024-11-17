@@ -11,7 +11,7 @@ sealed class BottomNavigationItem(
     val route: Screen,
 ) {
     data object Home : BottomNavigationItem(
-        title = "Dashboard",
+        title = "Home",
         selectedIcon = R.drawable.home_selected ,
         unselectedIcon = R.drawable.home_unselected,
         route = Screen.App.Dashboard
