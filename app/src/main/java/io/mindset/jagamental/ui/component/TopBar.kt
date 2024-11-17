@@ -17,7 +17,8 @@ fun TopBar(
     title: String,
     titleColor: Color,
     containerColor: Color,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    action: @Composable () -> Unit = {}
 ) {
     TopAppBar(
         title = {
@@ -38,6 +39,9 @@ fun TopBar(
             ) {
                  Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back Action")
             }
+        },
+        actions = {
+            action()
         }
     )
 }
