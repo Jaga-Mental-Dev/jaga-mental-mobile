@@ -69,7 +69,7 @@ fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
                 .clip(RectangleShape)
                 .background(color = Color(0xFF194A47))
                 .padding(top = 40.dp)
-                .height(130.dp)
+                .height(150.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.people_nearby),
@@ -130,6 +130,13 @@ fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
                             )
                         }
                     }
+
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                            .padding(top = 16.dp),
+                        color = Color.LightGray,
+                        thickness = 0.5.dp
+                    )
 
                     Text(
                         text = "John Doe",
@@ -221,7 +228,6 @@ fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
                 .clickable(onClick = {
                     viewModel.logout()
                     navController.navigate(Screen.Auth) {
@@ -230,6 +236,7 @@ fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
                         }
                     }
                 })
+                .padding(horizontal = 16.dp)
                 .height(42.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
