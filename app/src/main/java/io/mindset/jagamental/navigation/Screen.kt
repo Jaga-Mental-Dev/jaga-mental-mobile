@@ -42,7 +42,9 @@ sealed class Screen {
         @Serializable
         data class PhotoResultScreen(
             val photoUri: String,
-            val emotion: String
+            val emotion: String,
+            val words: String,
+            val photoUrl: String
         ): Screen()
     }
 }

@@ -46,17 +46,17 @@ fun NavGraphBuilder.mainNavGraph(
         composable<Screen.App.ResultPreviewScreen> { backStackEntry ->
             val photoUri = backStackEntry.arguments?.getString("photoUri")
             photoUri?.let {
-                ResultPreviewScreen( it, navController)
+                ResultPreviewScreen(it, navController)
             }
         }
 
         composable<Screen.App.PhotoResultScreen> { backStackEntry ->
             val photoUri = backStackEntry.arguments?.getString("photoUri")
             val emotion = backStackEntry.arguments?.getString("emotion")
-            photoUri?.let { uri ->
-                emotion?.let { emo ->
-                    PhotoResultScreen(uri, emo, navController)
-                }
+            val words = backStackEntry.arguments?.getString("words")
+            val photoUrl = backStackEntry.arguments?.getString("photoUrl")
+            if (photoUri != null && emotion != null && words != null && photoUrl != null) {
+                PhotoResultScreen(photoUri, emotion, words, photoUrl, navController)
             }
         }
 
