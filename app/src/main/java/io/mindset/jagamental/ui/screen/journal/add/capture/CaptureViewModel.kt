@@ -1,3 +1,5 @@
+@file:Suppress("SameParameterValue")
+
 package io.mindset.jagamental.ui.screen.journal.add.capture
 
 import android.content.Context
@@ -12,10 +14,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.mindset.jagamental.R
 import io.mindset.jagamental.utils.rotateBitmap
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.Executor
@@ -25,8 +28,8 @@ class CaptureViewModel : ViewModel() {
     private val _fileUri = MutableStateFlow<String?>(null)
     val fileUri = _fileUri.asStateFlow()
 
-    private val _fileBinary = MutableStateFlow<ByteArray?>(null)
-    val fileBinary = _fileBinary.asStateFlow()
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
 
     fun capturePhoto(
         context: Context,
@@ -35,23 +38,30 @@ class CaptureViewModel : ViewModel() {
     ) {
         val mainExecutor: Executor = ContextCompat.getMainExecutor(context)
 
+        _isLoading.value = true
+
         cameraController.takePicture(mainExecutor, object : ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
-                val correctedBitmap: Bitmap = image
-                    .toBitmap()
-                    .rotateBitmap(image.imageInfo.rotationDegrees)
+                viewModelScope.launch(Dispatchers.IO) {
+                    val correctedBitmap: Bitmap = image
+                        .toBitmap()
+                        .rotateBitmap(image.imageInfo.rotationDegrees)
 
-                viewModelScope.launch {
-                    val photoUri = saveBitmapToUri(context, correctedBitmap)
+                    val resizedBitmap = resizeBitmap(correctedBitmap, 800, 800) // Resize the bitmap
+
+                    val photoUri = saveBitmapToUri(context, resizedBitmap)
                     _fileUri.value = photoUri
-                    _fileBinary.value = bitmapToByteArray(correctedBitmap)
-                    onPhotoCaptured(photoUri)
+                    withContext(Dispatchers.Main) {
+                        onPhotoCaptured(photoUri)
+                        _isLoading.value = false
+                    }
+                    image.close()
                 }
-                image.close()
             }
 
             override fun onError(exception: ImageCaptureException) {
                 Log.e("CaptureViewModel", "Error capturing image", exception)
+                _isLoading.value = false
             }
         })
     }
@@ -59,23 +69,28 @@ class CaptureViewModel : ViewModel() {
     private fun saveBitmapToUri(context: Context, bitmap: Bitmap): String {
         val file = File(context.cacheDir, context.getString(R.string.captured_photo_filename))
         val outputStream = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        resizeBitmap(bitmap, 800, 800)
+            .compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
         outputStream.flush()
         outputStream.close()
         return file.toURI().toString()
     }
 
-    private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        return stream.toByteArray()
+    private fun resizeBitmap(bitmap: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
+        val width = bitmap.width
+        val height = bitmap.height
+        val aspectRatio = width.toFloat() / height.toFloat()
+        val newWidth: Int
+        val newHeight: Int
+
+        if (width > height) {
+            newWidth = maxWidth
+            newHeight = (maxWidth / aspectRatio).toInt()
+        } else {
+            newHeight = maxHeight
+            newWidth = (maxHeight * aspectRatio).toInt()
+        }
+
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
     }
-
-    // TODO: Implement api call to upload image
-    /*
-    * Image file ada di variable fileBinary
-    * Image file uri ada di variable fileUri
-    * Tinggal pilih salah satu buat diupload
-    */
-
 }
