@@ -71,6 +71,10 @@ dependencies {
     implementation (libs.androidx.camera.lifecycle)
     implementation(libs.accompanist.permissions)
 
+    // Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
     //UI
     implementation(libs.accompanist.systemuicontroller)
 
