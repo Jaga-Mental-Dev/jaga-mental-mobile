@@ -71,6 +71,9 @@ dependencies {
     implementation (libs.androidx.camera.lifecycle)
     implementation(libs.accompanist.permissions)
 
+    // Lottie
+    implementation(libs.lottie.compose)
+
     // Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
