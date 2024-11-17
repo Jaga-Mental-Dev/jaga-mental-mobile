@@ -19,18 +19,20 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import io.mindset.jagamental.navigation.Screen
+import io.mindset.jagamental.ui.component.journal.AnalyzeMoodLoading
 import io.mindset.jagamental.utils.StatusBarColorHelper
+import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import java.net.URI
 
@@ -39,10 +41,16 @@ fun ResultPreviewScreen(
     photoUri: String,
     navController: NavController,
 ) {
+    val viewModel: ResultPreviewViewModel = koinViewModel()
     val bitmap = remember(photoUri) {
         BitmapFactory.decodeFile(File(URI(photoUri)).path)
     }
     val capturedPhoto: ImageBitmap = bitmap.asImageBitmap()
+
+    val isLoading = viewModel.isLoading.collectAsState()
+    val emotionResult = viewModel.emotionResult.collectAsState()
+    val words = viewModel.words.collectAsState()
+    val photoUrl = viewModel.photoUrl.collectAsState()
 
     StatusBarColorHelper(color = Color.Transparent, useDarkIcon = false)
     Box {
@@ -91,10 +99,7 @@ fun ResultPreviewScreen(
                     .weight(1f)
                     .padding(start = 10.dp),
                 onClick = {
-                    val emot = "Angry"
-                    navController.navigate(Screen.App.PhotoResultScreen(photoUri, emot.lowercase())) {
-                        popUpTo(Screen.App.AddCapture) { inclusive = false }
-                    }
+                    viewModel.convertToByteArray(photoUri)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF194A47).copy(alpha = 0.6f),
@@ -104,19 +109,36 @@ fun ResultPreviewScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Check,
-                    contentDescription = "Back",
+                    contentDescription = "Confirm",
                     tint = Color.White
                 )
             }
         }
-    }
-}
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun ResultPreviewScreenPreview() {
-    ResultPreviewScreen(
-        photoUri = "",
-        navController = rememberNavController()
-    )
+        if (isLoading.value) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f)),
+                contentAlignment = Alignment.Center
+            ) {
+                AnalyzeMoodLoading()
+            }
+        }
+
+        if (emotionResult.value != null && words.value != null && photoUrl.value != null) {
+            LaunchedEffect(key1 = emotionResult.value, key2 = words.value, key3 = photoUrl.value) {
+                navController.navigate(
+                    Screen.App.PhotoResultScreen(
+                        photoUri,
+                        emotionResult.value!!,
+                        words.value!!,
+                        photoUrl.value!!
+                    )
+                ) {
+                    popUpTo(Screen.App.AddCapture) { inclusive = false }
+                }
+            }
+        }
+    }
 }
