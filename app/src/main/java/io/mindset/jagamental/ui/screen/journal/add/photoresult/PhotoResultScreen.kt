@@ -1,6 +1,7 @@
 package io.mindset.jagamental.ui.screen.journal.add.photoresult
 
 import android.graphics.BitmapFactory
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,11 +28,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
 import io.mindset.jagamental.R
 import io.mindset.jagamental.ui.component.TopBar
 import io.mindset.jagamental.utils.StatusBarColorHelper
@@ -43,12 +46,15 @@ import java.net.URI
 fun PhotoResultScreen(
     photoUri: String,
     emotion: String,
+    words: String,
+    photoUrl: String,
     navController: NavController
 ) {
 
     val bitmap = remember(photoUri) {
         BitmapFactory.decodeFile(File(URI(photoUri)).path)
     }
+    val context = LocalContext.current
 
     val capturedPhoto: ImageBitmap = bitmap.asImageBitmap()
     val pageBgColor = getBackGroundColorByEmotion(emotion)
@@ -86,11 +92,16 @@ fun PhotoResultScreen(
                     .background(Color.Transparent)
                     .clip(RoundedCornerShape(16.dp)),
             ) {
-                Image(
-                    bitmap = capturedPhoto,
+                AsyncImage(
+                    model = photoUrl,
                     contentDescription = stringResource(R.string.captured_photo),
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
+                    placeholder = painterResource(R.drawable.placeholder_image),
+                    error = painterResource(R.drawable.image_error),
+                    onError = {
+                        Toast.makeText(context, "Failed to load image", Toast.LENGTH_SHORT).show()
+                    },
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
                 )
             }
 
@@ -115,7 +126,7 @@ fun PhotoResultScreen(
                     )
                     Text(
                         modifier = Modifier.padding(top = 8.dp),
-                        text = "Wow, you seem super happy! Let’s capture that energy in your journal!",
+                        text = words,
                         color = Color.Black,
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center
