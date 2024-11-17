@@ -15,4 +15,15 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="have_account">Already have an account?</string>
+    <string name="next">Next</string>
+    <string name="emotion_result">Emotion Result</string>
+    <string name="captured_photo">Captured photo</string>
+    <string name="photo_result">Photo Result</string>
+    <string name="back">Back</string>
+    <string name="input_step_1_3">1/3</string>
+    <string name="input_step_2_3">2/3</string>
+    <string name="camera_capture_icon">Camera capture icon</string>
+    <string name="stay_still_for_better_result">Stay still for better result</string>
+    <string name="captured_photo_filename">captured_photo.png</string>
+    <string name="place_your_face_inside_the_shape">Please center your face within the outline</string>
 </resources>

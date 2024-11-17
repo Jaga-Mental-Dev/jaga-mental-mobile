@@ -5,16 +5,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
 
 @SuppressLint("AutoboxingStateCreation")
@@ -26,41 +28,60 @@ fun BottomNavigationBar(navController: NavController) {
         BottomNavigationItem.Profile,
     )
 
-    val selectedItemIndex = rememberSaveable{
-        mutableStateOf(0)
-    }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route?.substringAfterLast('.')
+
 
     NavigationBar(
         containerColor = Color.White,
         modifier = Modifier.drawBehind {
-        val borderHeight = 2.dp.toPx()
-        drawLine(
-            color = Color(0xFFE9EAEB),
-            start = Offset(0f, 0f),
-            end = Offset(size.width, 0f),
-            strokeWidth = borderHeight
-        )
-    },
+            val borderHeight = 2.dp.toPx()
+            drawLine(
+                color = Color(0xFFE9EAEB),
+                start = Offset(0f, 0f),
+                end = Offset(size.width, 0f),
+                strokeWidth = borderHeight
+            )
+        },
     ) {
-        items.forEachIndexed { index, item ->
+
+        items.forEach { item ->
             NavigationBarItem(
-                selected = selectedItemIndex.value == index,
+                selected = currentRoute == item.route::class.simpleName,
                 onClick = {
-                    selectedItemIndex.value = index
-                    navController.navigate(item.route)
+                    navController.navigate(item.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 },
                 icon = {
-                    if (selectedItemIndex.value == index) {
-                        Icon(painter = painterResource(item.selectedIcon), contentDescription = item.title)
+                    if (currentRoute == item.route::class.simpleName) {
+                        Icon(
+                            painter = painterResource(item.selectedIcon),
+                            contentDescription = item.title
+                        )
                     } else {
-                        Icon(painter = painterResource(item.unselectedIcon), contentDescription = item.title)
+                        Icon(
+                            painter = painterResource(item.unselectedIcon),
+                            contentDescription = item.title
+                        )
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
                     indicatorColor = Color.Transparent,
                     selectedIconColor = tertiaryContainerLightHighContrast,
                     unselectedIconColor = Color.LightGray
-                )
+                ),
+                label = {
+                    Text(
+                        text = item.title,
+                        color = if (currentRoute == item.route::class.simpleName) tertiaryContainerLightHighContrast else Color.LightGray,
+                        fontSize = 12.sp
+                    )
+                }
             )
         }
     }
