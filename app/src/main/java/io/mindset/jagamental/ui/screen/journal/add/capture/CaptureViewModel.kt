@@ -72,4 +72,10 @@ class CaptureViewModel : ViewModel() {
     }
 
     // TODO: Implement api call to upload image
+    /*
+    * Image file ada di variable fileBinary
+    * Image file uri ada di variable fileUri
+    * Tinggal pilih salah satu buat diupload
+    */
+
 }
