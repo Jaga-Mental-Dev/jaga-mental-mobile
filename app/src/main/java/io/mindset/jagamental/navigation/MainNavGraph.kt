@@ -11,15 +11,22 @@ import io.mindset.jagamental.ui.screen.journal.add.capture.CaptureScreen
 import io.mindset.jagamental.ui.screen.journal.add.input.InputJournalScreen
 import io.mindset.jagamental.ui.screen.journal.add.photoresult.PhotoResultScreen
 import io.mindset.jagamental.ui.screen.journal.add.preview.ResultPreviewScreen
+import io.mindset.jagamental.ui.screen.login.LoginScreen
 import io.mindset.jagamental.ui.screen.profile.ProfileScreen
 
 fun NavGraphBuilder.mainNavGraph(
     navController: NavHostController,
     paddingValues: PaddingValues,
+    screen: Screen
 ) {
     navigation<Screen.App>(
-        startDestination = Screen.App.Dashboard::class
+        startDestination = screen
     ) {
+
+        composable<Screen.Auth> {
+            LoginScreen(navController)
+        }
+
         composable<Screen.App.Dashboard> {
             DashboardScreen(navController, paddingValues)
         }
