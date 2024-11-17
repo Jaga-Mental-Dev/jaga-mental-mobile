@@ -1,5 +1,6 @@
 package io.mindset.jagamental.ui.screen.profile
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,11 +12,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material3.Card
@@ -27,7 +31,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -39,6 +45,7 @@ import coil3.compose.AsyncImage
 import io.mindset.jagamental.R
 import io.mindset.jagamental.navigation.Screen
 import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
+import io.mindset.jagamental.utils.LockScreenOrientation
 import io.mindset.jagamental.utils.StatusBarColorHelper
 import org.koin.androidx.compose.koinViewModel
 
@@ -47,72 +54,109 @@ fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
 
     val viewModel: ProfileViewModel = koinViewModel()
 
-    StatusBarColorHelper(Color.White, useDarkIcon = true)
+    StatusBarColorHelper(Color.Transparent, useDarkIcon = false)
+    LockScreenOrientation()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues)
-            .background(color = Color.White),
+            .background(color = Color.White)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Card(
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .clip(RoundedCornerShape(16.dp)),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.LightGray.copy(alpha = 0.3f),
-            )
+                .clip(RectangleShape)
+                .background(color = Color(0xFF194A47))
+                .padding(top = 40.dp)
+                .height(130.dp)
         ) {
-            Column {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(60.dp)
-                            .clip(CircleShape)
-                            .border(1.dp, Color.LightGray, CircleShape)
-                    ) {
-                        AsyncImage(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            model = "https://i.pravatar.cc/300?img=53",
-                            contentDescription = "Profile Image",
-                            contentScale = ContentScale.Crop,
-                            placeholder = painterResource(id = R.drawable.solar__face_scan_circle_bold),
-                        )
-                    }
+            Image(
+                painter = painterResource(id = R.drawable.people_nearby),
+                contentDescription = "Mindset Logo",
+                modifier = Modifier
+                    .padding(end = 16.dp, top = 32.dp)
+                    .align(Alignment.CenterEnd)
+                    .scale(3f)
+                    .height(600.dp),
+                contentScale = ContentScale.Inside
+            )
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.Transparent,
+                ),
+                shape = RectangleShape
+            ) {
+                Column {
                     Row(
-                        modifier = Modifier.padding(start = 16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        HeaderItem(
-                            modifier = Modifier.weight(1f),
-                            title = "12",
-                            value = "Journal"
-                        )
+                        Box(
+                            modifier = Modifier
+                                .size(60.dp)
+                                .clip(CircleShape)
+                                .border(1.dp, Color.LightGray, CircleShape)
+                        ) {
+                            AsyncImage(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                model = "https://i.pravatar.cc/300?img=53",
+                                contentDescription = "Profile Image",
+                                contentScale = ContentScale.Crop,
+                                placeholder = painterResource(id = R.drawable.solar__face_scan_circle_bold),
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.padding(start = 16.dp),
+                        ) {
+                            HeaderItem(
+                                modifier = Modifier.weight(1f),
+                                title = "12",
+                                value = "Journal"
+                            )
 
-                        Spacer(modifier = Modifier.width(16.dp))
+                            Spacer(modifier = Modifier.width(16.dp))
 
-                        HeaderItem(
-                            modifier = Modifier.weight(1f),
-                            title = "Verified",
-                            value = "Status"
-                        )
+                            HeaderItem(
+                                modifier = Modifier.weight(1f),
+                                title = "Verified",
+                                value = "Status"
+                            )
+                        }
                     }
+
+                    Text(
+                        text = "John Doe",
+                        style = TextStyle(
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
+                            .padding(top = 16.dp)
+                    )
+
+                    Text(
+                        text = "johndoe@mail.com",
+                        style = TextStyle(
+                            color = Color.LightGray,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Normal
+                        ),
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
+                    )
                 }
             }
         }
 
         Column(
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.LightGray.copy(alpha = 0.3f))
         ) {
             Text(
                 text = "Account",
@@ -125,7 +169,8 @@ fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
             )
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                color = Color.LightGray
+                color = Color.LightGray,
+                thickness = 0.5.dp
             )
             ProfileListItem(
                 modifier = Modifier.padding(4.dp),
@@ -147,7 +192,8 @@ fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
             )
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                color = Color.LightGray
+                color = Color.LightGray,
+                thickness = 0.5.dp
             )
             ProfileListItem(
                 modifier = Modifier.padding(4.dp),
@@ -167,12 +213,15 @@ fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
             )
         }
 
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            color = Color.LightGray,
+            thickness = 0.5.dp
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.LightGray.copy(alpha = 0.3f))
+                .padding(horizontal = 16.dp)
                 .clickable(onClick = {
                     viewModel.logout()
                     navController.navigate(Screen.Auth) {
@@ -180,13 +229,13 @@ fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
                             inclusive = true
                         }
                     }
-                }),
+                })
+                .height(42.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 text = "Logout",
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Red
@@ -197,7 +246,6 @@ fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
                 contentDescription = "Profile",
                 tint = Color.Red,
                 modifier = Modifier
-                    .padding(end = 16.dp)
                     .size(20.dp)
             )
         }
@@ -208,7 +256,7 @@ fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
 private fun HeaderItem(
     modifier: Modifier,
     title: String,
-    value: String
+    value: String,
 ) {
     Column(
         modifier = modifier,
@@ -217,13 +265,14 @@ private fun HeaderItem(
         Text(
             text = title,
             fontSize = 16.sp,
-            color = Color.Black,
+            color = Color.White,
             fontWeight = FontWeight.Bold
         )
         Text(
             modifier = Modifier,
             text = value,
-            fontSize = 12.sp
+            fontSize = 12.sp,
+            color = Color.LightGray
         )
     }
 }
@@ -231,11 +280,16 @@ private fun HeaderItem(
 @Composable
 fun ProfileListItem(
     modifier: Modifier = Modifier,
-    label: String
+    label: String,
+    onClick: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .clickable(
+                onClick = { onClick() },
+            )
+            .clip(RoundedCornerShape(16.dp))
     ) {
         Row(
             modifier = Modifier
