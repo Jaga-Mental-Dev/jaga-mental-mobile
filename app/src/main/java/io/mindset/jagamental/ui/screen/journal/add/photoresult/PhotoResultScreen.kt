@@ -65,23 +65,18 @@ fun PhotoResultScreen(
                 title = stringResource(R.string.photo_result),
                 titleColor = Color.Black,
                 containerColor = pageBgColor,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                action = {
+                    Box(
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    ){
+                        Row {
+                            Text(stringResource(R.string.input_step_2_3))
+                        }
+                    }
+                }
             )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp, end = 16.dp),
-                horizontalArrangement = Arrangement.End,
-            ) {
-                Text(
-                    modifier = Modifier,
-                    text = stringResource(R.string.input_step_2_3),
-                    color = Color.Gray,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center
-                )
-            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

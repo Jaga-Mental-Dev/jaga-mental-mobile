@@ -24,8 +24,8 @@ fun RootNavGraph(
     ) {
         authNavGraph(
             navController,
-            screen = Screen.Auth.Login
+            screen = Screen.Auth.Login,
         )
-        mainNavGraph(navController, paddingValues)
+        mainNavGraph(navController, paddingValues, screen = Screen.App.Dashboard)
     }
 }

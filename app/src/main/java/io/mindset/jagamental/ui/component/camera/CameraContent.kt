@@ -3,6 +3,7 @@ package io.mindset.jagamental.ui.component.camera
 import android.annotation.SuppressLint
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
+import androidx.camera.core.CameraSelector
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,7 @@ fun CameraContent(
     cameraController: LifecycleCameraController,
     lifecycleOwner: LifecycleOwner
 ) {
+    cameraController.cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
     StatusBarColorHelper(Color.Transparent)
     Scaffold(
         modifier = Modifier.fillMaxSize(),

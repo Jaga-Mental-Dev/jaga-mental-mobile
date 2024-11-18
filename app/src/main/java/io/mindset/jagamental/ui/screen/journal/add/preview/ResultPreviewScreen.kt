@@ -91,7 +91,7 @@ fun ResultPreviewScreen(
                     .weight(1f)
                     .padding(start = 10.dp),
                 onClick = {
-                    val emot = "Happy"
+                    val emot = "Angry"
                     navController.navigate(Screen.App.PhotoResultScreen(photoUri, emot.lowercase())) {
                         popUpTo(Screen.App.AddCapture) { inclusive = false }
                     }
