@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +43,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import io.mindset.jagamental.R
 import io.mindset.jagamental.navigation.Screen
 import io.mindset.jagamental.ui.component.camera.CameraContent
+import io.mindset.jagamental.ui.component.camera.CameraLoadingLottie
 import io.mindset.jagamental.ui.component.journal.OverlayView
 import io.mindset.jagamental.ui.screen.others.nopermission.NoPermissionScreen
 import org.koin.androidx.compose.koinViewModel
@@ -63,6 +65,8 @@ fun CaptureScreen(navController: NavController) {
     val onPhotoCaptured: (String) -> Unit = { photoUrl ->
         navController.navigate(Screen.App.ResultPreviewScreen(photoUrl))
     }
+
+    val isLoading = viewModel.isLoading.collectAsState()
 
     if (cameraPermissionState.status.isGranted) {
         Box {
@@ -156,6 +160,10 @@ fun CaptureScreen(navController: NavController) {
                         contentDescription = stringResource(R.string.camera_capture_icon)
                     )
                 }
+            }
+
+            if (isLoading.value) {
+                CameraLoadingLottie()
             }
         }
     } else {

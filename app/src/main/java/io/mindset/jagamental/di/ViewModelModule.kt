@@ -4,6 +4,7 @@ import io.mindset.jagamental.ui.MainViewModel
 import io.mindset.jagamental.ui.screen.dashboard.DashboardViewModel
 import io.mindset.jagamental.ui.screen.journal.add.capture.CaptureViewModel
 import io.mindset.jagamental.ui.screen.journal.add.photoresult.PhotoResultViewModel
+import io.mindset.jagamental.ui.screen.journal.add.preview.ResultPreviewViewModel
 import io.mindset.jagamental.ui.screen.login.LoginViewModel
 import io.mindset.jagamental.ui.screen.profile.ProfileViewModel
 import io.mindset.jagamental.ui.screen.register.RegisterViewModel
@@ -20,4 +21,5 @@ val viewModelModule = module {
     viewModel { ProfileViewModel(get()) }
     viewModel { CaptureViewModel() }
     viewModel { PhotoResultViewModel() }
+    viewModel { ResultPreviewViewModel() }
 }
