@@ -3,6 +3,7 @@ package io.mindset.jagamental.di
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import io.mindset.jagamental.data.domain.AuthRepository
 import io.mindset.jagamental.data.domain.JournalRepository
+import io.mindset.jagamental.data.domain.LoginRepository
 import io.mindset.jagamental.data.domain.MainRepository
 import io.mindset.jagamental.data.remote.ApiService
 import okhttp3.OkHttpClient
@@ -48,4 +49,5 @@ val repositoryModule = module {
     single { MainRepository(apiService = get(), context = get()) }
     single { AuthRepository(context = get()) }
     single { JournalRepository(apiService = get()) }
+    single { LoginRepository(apiService = get()) }
 }
