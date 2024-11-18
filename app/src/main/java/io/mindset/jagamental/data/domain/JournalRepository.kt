@@ -70,7 +70,7 @@ class JournalRepository(private val apiService: ApiService) {
         title: String?,
         content: String?,
         emotion: String?,
-        selfie: String? // or MultipartBody.Part if it's a file
+        selfie: MultipartBody.Part // or MultipartBody.Part if it's a file
     ): Flow<UiState<JournalDataItem>> = flow {
         emit(UiState.Loading)
         try {
