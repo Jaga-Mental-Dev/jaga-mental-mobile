@@ -26,4 +26,15 @@
     <string name="stay_still_for_better_result">Stay still for better result</string>
     <string name="captured_photo_filename">captured_photo.png</string>
     <string name="place_your_face_inside_the_shape">Please center your face within the outline</string>
+    <string name="how_are_you_feeling">How are you feeling?</string>
+    <string name="welcome">Welcome,</string>
+    <string name="dummy_name">Ahmad Fauzan Wiratama Pratama Sujatmiko Rizky Saputro</string>
+    <string name="happy">Happy</string>
+    <string name="sad">Sad</string>
+    <string name="analize_your_emotion">Analize your emotion</string>
+    <string name="account_circle">Account Circle</string>
+    <string name="journal">Journal</string>
+    <string name="mindful_tracker">Mindful Tracker</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="chatbot">Chatbot</string>
 </resources>
