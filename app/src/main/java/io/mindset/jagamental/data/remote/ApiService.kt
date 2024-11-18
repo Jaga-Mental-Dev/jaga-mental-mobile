@@ -84,7 +84,7 @@ interface ApiService {
         @Part("title") title: String? = null,
         @Part("content") content: String? = null,
         @Part("emotion") emotion: String? = null,
-        @Part("selfie") selfie: String? = null
+        @Part("selfie") selfie: MultipartBody.Part
     ): JournalResponse
 
     @DELETE("/journal/{id}")
