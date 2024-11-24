@@ -20,6 +20,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -34,11 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import io.mindset.jagamental.R
-import io.mindset.jagamental.data.model.ChartData
+import io.mindset.jagamental.ui.component.chart.DashLineChart
 import io.mindset.jagamental.ui.component.dashboard.DashboardHeader
 import io.mindset.jagamental.ui.component.dashboard.EmotionCard
-import io.mindset.jagamental.ui.component.chart.DashLineChart
-import io.mindset.jagamental.utils.ColorHelper
 import io.mindset.jagamental.utils.StatusBarColorHelper
 import org.koin.androidx.compose.koinViewModel
 
@@ -56,9 +56,15 @@ fun DashboardScreen(
             bottom = paddingValues.calculateBottomPadding(),
         )
 
-    val graphData = remember { mutableStateOf<List<ChartData?>>(emptyList()) }
-    StatusBarColorHelper(Color.Transparent, useDarkIcon = false)
+    val graphData = viewModel.graphData.collectAsState()
+    val currentUser = remember { mutableStateOf(viewModel.user.value) }
+    val userName = currentUser.value?.displayName ?: ""
 
+    LaunchedEffect(Unit) {
+        viewModel.getGraphData()
+    }
+
+    StatusBarColorHelper(Color.Transparent, useDarkIcon = false)
     Column(
         modifier =
         Modifier
@@ -67,7 +73,7 @@ fun DashboardScreen(
             .fillMaxSize()
             .background(color = Color.White),
     ) {
-        DashboardHeader()
+        DashboardHeader(userName)
 
         Column(
             modifier =
@@ -187,6 +193,7 @@ fun DashboardScreen(
                 modifier =
                 Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
                     .height(200.dp),
             )
         }
