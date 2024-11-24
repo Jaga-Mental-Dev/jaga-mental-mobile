@@ -37,4 +37,5 @@
     <string name="mindful_tracker">Mindful Tracker</string>
     <string name="dashboard">Dashboard</string>
     <string name="chatbot">Chatbot</string>
+    <string name="logging_in">Logging in...</string>
 </resources>
