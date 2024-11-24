@@ -35,6 +35,9 @@ interface ApiService {
     @FormUrlEncoded
     suspend fun doOauth(): AuthResponse
 
+    @POST("/local")
+    suspend fun doLocal(): AuthResponse
+
     @GET("/user/{id}")
     suspend fun doGetUserById(
         @Path("id") id: String
@@ -48,6 +51,7 @@ interface ApiService {
 
     @PUT("/user/{id}")
     suspend fun doUpdateUser(
+        @Path("id") id: String,
         @Body userRequest: UserRequest
     ): AuthResponse
 
