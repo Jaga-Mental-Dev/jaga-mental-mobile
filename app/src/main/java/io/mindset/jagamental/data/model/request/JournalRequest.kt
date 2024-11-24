@@ -1,8 +1,10 @@
 package io.mindset.jagamental.data.model.request
 
+import com.google.gson.annotations.SerializedName
+
 data class JournalRequest (
-    val title: String? = null,
-    val content: String? = null,
-    val emotion: String? = null,
-    val selfie: String? = null,
+    @field:SerializedName("title")
+    val title: String,
+    @field:SerializedName("content")
+    val content: String,
 )
