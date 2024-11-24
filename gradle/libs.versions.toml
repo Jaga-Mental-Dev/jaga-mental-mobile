@@ -31,6 +31,7 @@ uiTextGoogleFonts = "1.7.5"
 googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
 animationCoreAndroid = "1.7.0-alpha08"
+firebaseConfig = "22.0.1"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -80,6 +81,7 @@ library = { module = "com.github.chuckerteam.chucker:library", version.ref = "li
 library-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "library" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 androidx-animation-core-android = { group = "androidx.compose.animation", name = "animation-core-android", version.ref = "animationCoreAndroid" }
+firebase-config = { group = "com.google.firebase", name = "firebase-config", version.ref = "firebaseConfig" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

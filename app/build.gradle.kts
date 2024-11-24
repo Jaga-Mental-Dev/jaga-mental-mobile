@@ -98,6 +98,7 @@ dependencies {
     // Room + Paging
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.animation.core.android)
+    implementation(libs.firebase.config)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
