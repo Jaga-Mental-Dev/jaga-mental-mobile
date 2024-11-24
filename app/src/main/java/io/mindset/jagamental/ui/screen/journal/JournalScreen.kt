@@ -44,7 +44,7 @@ fun JournalScreen(navController: NavController, paddingValues: PaddingValues) {
         return Random.nextInt(1, 10)
     }
 
-    val systemUiColor = Screen.App.Journal.systemBarColor
+    val systemUiColor = Color(0xFF194A47)
     val randomJournalCount = remember { mutableIntStateOf(0) }
     val listState = rememberLazyListState()
     val journalsMock = List(randomJournalCount.intValue) { index ->

@@ -1,260 +1,120 @@
 package io.mindset.jagamental.ui.screen.profile
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronRight
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil3.compose.AsyncImage
 import io.mindset.jagamental.R
 import io.mindset.jagamental.navigation.Screen
-import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
+import io.mindset.jagamental.ui.component.profile.ProfileHeader
 import io.mindset.jagamental.utils.LockScreenOrientation
 import io.mindset.jagamental.utils.StatusBarColorHelper
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
+fun ProfileScreen(navController: NavController) {
 
     val viewModel: ProfileViewModel = koinViewModel()
+    val user = remember { mutableStateOf(viewModel.currentUser.value) }
+    val firstMenus = viewModel.firstMenuItems
+    val secondMenus = viewModel.secondMenuItems
+
 
     StatusBarColorHelper(Color.Transparent, useDarkIcon = false)
     LockScreenOrientation()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White)
-            .verticalScroll(rememberScrollState()),
+            .background(color = Color.White),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .clip(RectangleShape)
-                .background(color = Color(0xFF194A47))
-                .padding(top = 40.dp)
-                .height(150.dp)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.people_nearby),
-                contentDescription = "Mindset Logo",
-                modifier = Modifier
-                    .padding(end = 16.dp, top = 32.dp)
-                    .align(Alignment.CenterEnd)
-                    .scale(3f)
-                    .height(600.dp),
-                contentScale = ContentScale.Inside
-            )
-
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.Transparent,
-                ),
-                shape = RectangleShape
-            ) {
-                Column {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(60.dp)
-                                .clip(CircleShape)
-                                .border(1.dp, Color.LightGray, CircleShape)
-                        ) {
-                            AsyncImage(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                model = "https://i.pravatar.cc/300?img=53",
-                                contentDescription = "Profile Image",
-                                contentScale = ContentScale.Crop,
-                                placeholder = painterResource(id = R.drawable.solar__face_scan_circle_bold),
-                            )
-                        }
-                        Row(
-                            modifier = Modifier.padding(start = 16.dp),
-                        ) {
-                            HeaderItem(
-                                modifier = Modifier.weight(1f),
-                                title = "12",
-                                value = "Journal"
-                            )
-
-                            Spacer(modifier = Modifier.width(16.dp))
-
-                            HeaderItem(
-                                modifier = Modifier.weight(1f),
-                                title = "Verified",
-                                value = "Status"
-                            )
-                        }
-                    }
-
-                    HorizontalDivider(
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                            .padding(top = 16.dp),
-                        color = Color.LightGray,
-                        thickness = 0.5.dp
-                    )
-
-                    Text(
-                        text = "John Doe",
-                        style = TextStyle(
-                            color = Color.White,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium
-                        ),
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
-                            .padding(top = 16.dp)
-                    )
-
-                    Text(
-                        text = "johndoe@mail.com",
-                        style = TextStyle(
-                            color = Color.LightGray,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Normal
-                        ),
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
-                    )
-                }
-            }
-        }
+        ProfileHeader(
+            userName = user.value?.displayName,
+            userEmail = user.value?.email,
+            userPhotoUrl = user.value?.photoUrl?.toString()
+        )
 
         Column(
             modifier = Modifier
+                .verticalScroll(rememberScrollState())
         ) {
-            Text(
-                text = "Account",
-                style = TextStyle(
-                    color = Color.Black,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                color = Color.LightGray,
-                thickness = 0.5.dp
-            )
-            ProfileListItem(
-                modifier = Modifier.padding(4.dp),
-                label = "Edit Profile"
-            )
-            ProfileListItem(
-                modifier = Modifier.padding(4.dp),
-                label = "Change Password"
-            )
 
-            Text(
-                text = "General",
-                style = TextStyle(
-                    color = Color.Black,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                color = Color.LightGray,
-                thickness = 0.5.dp
-            )
-            ProfileListItem(
-                modifier = Modifier.padding(4.dp),
-                label = "Rate App"
-            )
-            ProfileListItem(
-                modifier = Modifier.padding(4.dp),
-                label = "Feedback"
-            )
-            ProfileListItem(
-                modifier = Modifier.padding(4.dp),
-                label = "Privacy Policy"
-            )
-            ProfileListItem(
-                modifier = Modifier.padding(4.dp),
-                label = "Terms of Service"
-            )
-        }
-
-        HorizontalDivider(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            color = Color.LightGray,
-            thickness = 0.5.dp
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = {
-                    viewModel.logout()
-                    navController.navigate(Screen.Auth) {
-                        popUpTo(Screen.Auth.Login) {
-                            inclusive = true
-                        }
-                    }
-                })
-                .padding(horizontal = 16.dp)
-                .height(42.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = "Logout",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Red
-            )
-
-            Icon(
-                imageVector = Icons.Rounded.ChevronRight,
-                contentDescription = "Profile",
-                tint = Color.Red,
+            Column(
                 modifier = Modifier
-                    .size(20.dp)
-            )
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp, vertical = 10.dp)
+            ) {
+                firstMenus.forEach { item ->
+                    ProfileMenuItem(
+                        icon = item.icon,
+                        label = item.title,
+                        onClick = item.onClick
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp, vertical = 20.dp)
+            ) {
+                secondMenus.forEach { item ->
+                    ProfileMenuItem(
+                        icon = item.icon,
+                        label = item.title,
+                        onClick = item.onClick
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp, vertical = 20.dp)
+            ) {
+                ProfileMenuItem(
+                    icon = R.drawable.ic_solar_login_2_bold_duotone,
+                    label = stringResource(id = R.string.logout),
+                    onClick = {
+                        viewModel.logout()
+                        navController.navigate(Screen.Auth.Login) {
+                            popUpTo(Screen.App.Profile) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    },
+                    labelColor = Color.Red
+                )
+            }
+
         }
     }
 }
@@ -285,41 +145,56 @@ private fun HeaderItem(
 }
 
 @Composable
-fun ProfileListItem(
-    modifier: Modifier = Modifier,
+fun ProfileMenuItem(
+    icon: Int,
     label: String,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    labelColor: Color? = null
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(
-                onClick = { onClick() },
-            )
-            .clip(RoundedCornerShape(16.dp))
-    ) {
+    Box {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 4.dp),
+                .clickable(onClick = onClick)
+                .padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = label,
-                style = TextStyle(
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painterResource(icon),
+                    tint = Color.DarkGray,
+                    contentDescription = label,
+                    modifier = Modifier.size(20.dp)
                 )
-            )
+
+                Text(
+                    text = label,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = labelColor ?: Color.Black,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
 
             Icon(
                 imageVector = Icons.Rounded.ChevronRight,
                 contentDescription = "Profile",
-                tint = tertiaryContainerLightHighContrast,
+                tint = Color.Gray,
                 modifier = Modifier.size(20.dp)
             )
         }
     }
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+fun ProfileScreenPreview() {
+    ProfileScreen(
+        navController = NavController(
+            context = LocalContext.current
+        )
+    )
 }
