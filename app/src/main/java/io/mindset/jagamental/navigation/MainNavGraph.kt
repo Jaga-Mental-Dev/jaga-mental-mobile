@@ -36,7 +36,14 @@ fun NavGraphBuilder.mainNavGraph(
         }
 
         composable<Screen.App.Profile> {
-            ProfileScreen(navController, paddingValues)
+            val onLogout = {
+                navController.navigate(Screen.App) {
+                    popUpTo(Screen.App.Profile) {
+                        inclusive = true
+                    }
+                }
+            }
+            ProfileScreen(onLogout, navController)
         }
 
         composable<Screen.App.AddCapture> {
