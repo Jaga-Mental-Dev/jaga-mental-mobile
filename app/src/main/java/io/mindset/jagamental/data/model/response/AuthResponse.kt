@@ -7,6 +7,10 @@ data class AuthResponse(
     @field:SerializedName("data")
     val data: UserResponse? = null,
 
+    //For endpoint \local
+    @field:SerializedName("data")
+    val dataLocal: String? = null,
+
     @field:SerializedName("idToken")
     val idToken: String? = null,
 
@@ -19,14 +23,11 @@ data class AuthResponse(
 
 data class UserResponse(
 
-    @field:SerializedName("gender")
-    val gender: String? = null,
-
-    @field:SerializedName("lon")
-    val lon: Double? = null,
-
     @field:SerializedName("id")
     val id: String? = null,
+
+    @field:SerializedName("gender")
+    val gender: String? = null,
 
     @field:SerializedName("fullname")
     val fullname: String? = null,
@@ -36,6 +37,9 @@ data class UserResponse(
 
     @field:SerializedName("email")
     val email: String? = null,
+
+    @field:SerializedName("lon")
+    val lon: Double? = null,
 
     @field:SerializedName("lat")
     val lat: Double? = null

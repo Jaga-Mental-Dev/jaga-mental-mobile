@@ -82,6 +82,15 @@ class AuthRepository(context: Context) {
         }
     }
 
+    suspend fun getUserIdToken(): String? {
+        return try {
+            auth.currentUser?.getIdToken(true)?.await()?.token
+        } catch (e: Exception) {
+            Log.d("AuthRepository", "getUserIdToken: ${e.message}")
+            null
+        }
+    }
+
     fun signOut() {
         auth.signOut()
         googleSignInClient.signOut()
