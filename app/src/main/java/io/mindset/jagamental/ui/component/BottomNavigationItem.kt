@@ -11,21 +11,21 @@ sealed class BottomNavigationItem(
     val route: Screen,
 ) {
     data object Home : BottomNavigationItem(
-        title = "Home",
+        title = "Dashboard",
         selectedIcon = R.drawable.home_selected ,
         unselectedIcon = R.drawable.home_unselected,
         route = Screen.App.Dashboard
     )
 
     data object Journal : BottomNavigationItem(
-        title = "Journal",
+        title = "Jurnal",
         selectedIcon = R.drawable.activities_selected,
         unselectedIcon = R.drawable.activities_unselected,
         route = Screen.App.Journal
     )
 
     data object Profile : BottomNavigationItem(
-        title = "Profile",
+        title = "Profil",
         selectedIcon = R.drawable.profile_selected,
         unselectedIcon = R.drawable.profile_unselected,
         route = Screen.App.Profile

@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun CalendarHeader(
@@ -40,6 +41,8 @@ fun CalendarHeader(
     var currentDate by remember { mutableStateOf(LocalDate.now()) }
     var selectedDate by remember { mutableStateOf(currentDate) }
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+    val dayFormatter = DateTimeFormatter.ofPattern("EEE", Locale("id", "ID"))
+    val monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale("id", "ID"))
     val formattedSelectedDate = selectedDate.format(dateFormatter)
 
     val datesOfWeek = remember(currentDate) {
@@ -73,8 +76,6 @@ fun CalendarHeader(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
-
                     IconButton(onClick = { currentDate = currentDate.minusWeeks(1) }) {
                         Icon(
                             imageVector = Icons.Default.ChevronLeft,
@@ -83,7 +84,7 @@ fun CalendarHeader(
                         )
                     }
                     Text(
-                        text = currentDate.format(DateTimeFormatter.ofPattern("MMM")),
+                        text = currentDate.format(monthFormatter),
                         style = TextStyle(
                             color = Color.White,
                             fontSize = 16.sp,
@@ -132,7 +133,7 @@ fun CalendarHeader(
                                 verticalArrangement = Arrangement.SpaceAround
                             ) {
                                 Text(
-                                    text = date.dayOfWeek.name.take(3),
+                                    text = date.format(dayFormatter),
                                     modifier = Modifier.align(Alignment.CenterHorizontally),
                                     style = TextStyle(
                                         fontSize = 14.sp,
