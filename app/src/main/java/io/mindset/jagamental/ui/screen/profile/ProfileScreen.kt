@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,11 +15,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,26 +37,31 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import io.mindset.jagamental.R
 import io.mindset.jagamental.navigation.Screen
+import io.mindset.jagamental.ui.component.profile.LogoutConfirmationDialog
 import io.mindset.jagamental.ui.component.profile.ProfileHeader
 import io.mindset.jagamental.utils.LockScreenOrientation
 import io.mindset.jagamental.utils.StatusBarColorHelper
+import io.mindset.jagamental.utils.exceptTop
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(navController: NavController) {
-
+fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
     val viewModel: ProfileViewModel = koinViewModel()
     val user = remember { mutableStateOf(viewModel.currentUser.value) }
     val firstMenus = viewModel.firstMenuItems
     val secondMenus = viewModel.secondMenuItems
 
+    val sheetState = rememberModalBottomSheetState()
+    var showDialog by remember { mutableStateOf(false) }
 
     StatusBarColorHelper(Color.Transparent, useDarkIcon = false)
     LockScreenOrientation()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White),
+            .background(color = Color.White)
+            .padding(paddingValues.exceptTop()),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -65,7 +75,6 @@ fun ProfileScreen(navController: NavController) {
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
         ) {
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -103,43 +112,30 @@ fun ProfileScreen(navController: NavController) {
                     icon = R.drawable.ic_solar_login_2_bold_duotone,
                     label = stringResource(id = R.string.logout),
                     onClick = {
-                        viewModel.logout()
-                        navController.navigate(Screen.Auth.Login) {
-                            popUpTo(Screen.App.Profile) {
-                                inclusive = true
-                            }
-                            launchSingleTop = true
-                        }
+                        showDialog = true
                     },
                     labelColor = Color.Red
                 )
             }
-
         }
     }
-}
 
-@Composable
-private fun HeaderItem(
-    modifier: Modifier,
-    title: String,
-    value: String,
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = title,
-            fontSize = 16.sp,
-            color = Color.White,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            modifier = Modifier,
-            text = value,
-            fontSize = 12.sp,
-            color = Color.LightGray
+    if (showDialog) {
+        LogoutConfirmationDialog(
+            sheetState = sheetState,
+            onConfirm = {
+                viewModel.logout()
+                navController.navigate(Screen.Auth.Login) {
+                    popUpTo(Screen.App.Profile) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+                showDialog = false
+            },
+            onDismis = {
+                showDialog = false
+            }
         )
     }
 }
@@ -195,6 +191,7 @@ fun ProfileScreenPreview() {
     ProfileScreen(
         navController = NavController(
             context = LocalContext.current
-        )
+        ),
+        paddingValues = PaddingValues(0.dp)
     )
 }
