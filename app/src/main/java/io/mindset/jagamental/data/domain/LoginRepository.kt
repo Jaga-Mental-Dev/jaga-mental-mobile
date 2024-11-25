@@ -1,7 +1,5 @@
 package io.mindset.jagamental.data.domain
 
-import io.mindset.jagamental.data.model.request.LoginRequest
-import io.mindset.jagamental.data.model.request.RegisterRequest
 import io.mindset.jagamental.data.model.request.UserRequest
 import io.mindset.jagamental.data.model.response.AuthResponse
 import io.mindset.jagamental.data.remote.ApiService
