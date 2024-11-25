@@ -25,7 +25,7 @@ fun RootScreen() {
     val bottomBarExcludedRoutes = listOf(
         Screen.Auth.Login::class.simpleName,
         Screen.Auth.Register::class.simpleName,
-        Screen.App.AddCapture::class.simpleName,
+        Screen.App.CapturePhotoScreen::class.simpleName,
         Screen.App.ResultPreviewScreen::class.simpleName,
         Screen.App.InputJournalScreen::class.simpleName,
         Screen.App.PhotoResultScreen::class.simpleName
