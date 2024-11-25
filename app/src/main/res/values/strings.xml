@@ -37,4 +37,10 @@
     <string name="mindful_tracker">Mindful Tracker</string>
     <string name="dashboard">Dashboard</string>
     <string name="chatbot">Chatbot</string>
+    <string name="logging_in">Logging in...</string>
+    <string name="signing_up">Signing you up...</string>
+    <string name="create_account">Buat Akun</string>
+    <string name="or_register_using">Or</string>
+    <string name="unknown">Unknown</string>
+    <string name="logout">Logout</string>
 </resources>

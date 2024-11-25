@@ -27,7 +27,9 @@ import androidx.compose.ui.unit.sp
 import io.mindset.jagamental.R
 
 @Composable
-fun DashboardHeader() {
+fun DashboardHeader(
+    userName: String
+) {
     Box(
         modifier =
         Modifier
@@ -63,7 +65,7 @@ fun DashboardHeader() {
             )
 
             Text(
-                text = stringResource(R.string.dummy_name),
+                text = userName,
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,

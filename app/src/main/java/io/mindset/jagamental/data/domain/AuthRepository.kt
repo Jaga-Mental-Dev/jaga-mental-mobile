@@ -12,6 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.userProfileChangeRequest
 import io.mindset.jagamental.R
 import io.mindset.jagamental.data.model.AuthState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -68,10 +69,14 @@ class AuthRepository(context: Context) {
         }
     }
 
-    suspend fun registerWithEmailPassword(email: String, password: String) {
+    suspend fun registerWithEmailPassword(name: String, email: String, password: String) {
         try {
             auth.createUserWithEmailAndPassword(email, password).await()
-            _uiState.value = AuthState.Success(auth.currentUser)
+            val user = auth.currentUser
+            user?.updateProfile(userProfileChangeRequest {
+                displayName = name
+            })?.await()
+            _uiState.value = AuthState.Success(user)
         } catch (e: Exception) {
             _uiState.value = AuthState.Error("Registration failed: ${e.message}")
         }
