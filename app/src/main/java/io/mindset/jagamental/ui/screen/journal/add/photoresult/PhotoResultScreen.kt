@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,12 +32,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import io.mindset.jagamental.R
 import io.mindset.jagamental.ui.component.TopBar
+import io.mindset.jagamental.utils.EmotionHelper
 import io.mindset.jagamental.utils.StatusBarColorHelper
 import io.mindset.jagamental.utils.getBackGroundColorByEmotion
 import java.io.File
@@ -56,8 +60,10 @@ fun PhotoResultScreen(
     }
     val context = LocalContext.current
 
+    val emotionHelper = EmotionHelper()
     val capturedPhoto: ImageBitmap = bitmap.asImageBitmap()
     val pageBgColor = getBackGroundColorByEmotion(emotion)
+    val emotionIcon = emotionHelper.getEmotionIcon(emotion)
 
     StatusBarColorHelper(color = Color.Transparent, useDarkIcon = true)
     Column(
@@ -116,40 +122,45 @@ fun PhotoResultScreen(
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.smiling_face_with_smiling_eyes),
+                        painter = painterResource(emotionIcon),
                         contentDescription = stringResource(R.string.emotion_result),
-                        modifier = Modifier.size(50.dp),
+                        modifier = Modifier.size(80.dp),
                         contentScale = ContentScale.Crop
                     )
+                    Spacer(modifier = Modifier.size(16.dp))
                     Text(
                         modifier = Modifier.padding(top = 8.dp),
                         text = words,
                         color = Color.Black,
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
             }
-        }
-
-        Row {
-            Button(
-                onClick = { },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF194A47),
-                ),
-                shape = MaterialTheme.shapes.medium
-            ) { Text(
-                text = stringResource(R.string.next),
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.White
-            )}
+            Spacer(modifier = Modifier.weight(1f))
+            Row {
+                Button(
+                    onClick = { },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF194A47),
+                    ),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Text(
+                        text = stringResource(R.string.next),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.White
+                    )
+                }
+            }
         }
     }
 }
