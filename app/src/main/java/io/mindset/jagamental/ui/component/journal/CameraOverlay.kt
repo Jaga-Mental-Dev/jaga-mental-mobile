@@ -56,10 +56,10 @@ private fun getScannerPath(
     val center = Offset(size.width / 2, size.height / 2)
     addOval(
         oval = Rect(
-            left = center.x - horizontalPadding * 1.2f,
-            top = center.y - scannerHeight / 2,
-            right = center.x + horizontalPadding * 1.2f,
-            bottom = center.y + scannerHeight / 2
+            left = center.x - horizontalPadding * 1.5f,
+            top = center.y - scannerHeight / 1.5f,
+            right = center.x + horizontalPadding * 1.5f,
+            bottom = center.y + scannerHeight / 1.5f
         )
     )
 }
@@ -67,7 +67,8 @@ private fun getScannerPath(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewOverlayView() {
-    Box(modifier = Modifier.fillMaxSize()
+    Box(modifier = Modifier
+        .fillMaxSize()
         .background(Color.DarkGray)) {
         OverlayView(modifier = Modifier)
     }
