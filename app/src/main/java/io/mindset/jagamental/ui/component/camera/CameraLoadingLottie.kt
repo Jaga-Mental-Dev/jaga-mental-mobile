@@ -24,7 +24,7 @@ import io.mindset.jagamental.R
 
 @Composable
 fun CameraLoadingLottie() {
-    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.camera_loading_lottie))
+    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.camera_capturing))
     Box(
         modifier = Modifier
             .fillMaxSize()
