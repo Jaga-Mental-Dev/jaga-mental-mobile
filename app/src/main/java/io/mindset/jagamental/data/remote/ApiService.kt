@@ -2,7 +2,6 @@ package io.mindset.jagamental.data.remote
 
 import io.mindset.jagamental.data.model.request.AnalyticRequest
 import io.mindset.jagamental.data.model.request.JournalRequest
-import io.mindset.jagamental.data.model.request.LoginRequest
 import io.mindset.jagamental.data.model.request.UserRequest
 import io.mindset.jagamental.data.model.response.AuthResponse
 import io.mindset.jagamental.data.model.response.EmotionAnalyticResponse
@@ -89,18 +88,4 @@ interface ApiService {
     suspend fun doPostAnalytic(
         @Body request: AnalyticRequest
     ): EmotionAnalyticResponse
-
-    //TODO: OUT OF SCOPE
-    //TODO: TO-BE Remove
-    @POST("/auth/login")
-    suspend fun doLogin(
-        @Body request: LoginRequest
-    ): AuthResponse
-
-    @POST("/auth/register")
-    suspend fun doRegister(): AuthResponse
-
-    @GET("/users")
-    suspend fun doGetAllUser(): AuthResponse
-
 }
