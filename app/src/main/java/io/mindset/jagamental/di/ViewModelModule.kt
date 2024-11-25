@@ -21,5 +21,5 @@ val viewModelModule = module {
     viewModel { ProfileViewModel(get()) }
     viewModel { CaptureViewModel() }
     viewModel { PhotoResultViewModel() }
-    viewModel { ResultPreviewViewModel() }
+    viewModel { ResultPreviewViewModel(get()) }
 }
