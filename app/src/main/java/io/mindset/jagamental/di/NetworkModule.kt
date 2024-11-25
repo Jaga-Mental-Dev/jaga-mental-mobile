@@ -6,23 +6,28 @@ import io.mindset.jagamental.data.domain.JournalRepository
 import io.mindset.jagamental.data.domain.LoginRepository
 import io.mindset.jagamental.data.domain.MainRepository
 import io.mindset.jagamental.data.remote.ApiService
+import io.mindset.jagamental.utils.SharedPreferencesHelper
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val apiUrl = "https://example.com/"
+const val apiUrl = "https://jamen-api-616607546235.asia-southeast2.run.app/"
 
 val networkModule = module {
     single {
-        /*val authInterceptor = Interceptor { chain ->
+        val sharedPreferencesHelper = SharedPreferencesHelper(get())
+        val token = sharedPreferencesHelper.getToken()
+
+        val authInterceptor = Interceptor { chain ->
             val req = chain.request()
             val requestHeaders = req.newBuilder()
                 .addHeader("Authorization", "Bearer $token")
                 .build()
             chain.proceed(requestHeaders)
-        }*/
+        }
 
         val loggingInterceptor =
             HttpLoggingInterceptor().apply {
@@ -31,7 +36,7 @@ val networkModule = module {
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(ChuckerInterceptor(get()))
-            //.addInterceptor(authInterceptor)
+            .addInterceptor(authInterceptor)
             .build()
     }
 

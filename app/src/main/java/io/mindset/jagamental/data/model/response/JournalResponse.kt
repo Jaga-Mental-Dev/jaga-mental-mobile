@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class JournalResponse(
 	@field:SerializedName("data")
-	val data: List<JournalDataItem>,
+	val data: List<JournalDataItem>? = null,
 
 	@field:SerializedName("error")
 	val error: Boolean? = null,
@@ -20,8 +20,8 @@ data class JournalDataItem(
 	@field:SerializedName("updated_at")
 	val updatedAt: String? = null,
 
-	@field:SerializedName("selfie")
-	val selfie: String? = null,
+	@field:SerializedName("imageUrl")
+	val imageUrl: String? = null,
 
 	@field:SerializedName("created_at")
 	val createdAt: String? = null,

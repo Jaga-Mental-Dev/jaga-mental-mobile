@@ -1,9 +1,14 @@
 package io.mindset.jagamental.data.model.request
 
+import com.google.gson.annotations.SerializedName
+
 data class UserRequest(
+    @field:SerializedName("fullname")
     val fullname: String? = null,
+
+    @field:SerializedName("gender")
     val gender: String? = null,
-    val lat: Double? = null,
-    val lon: Double? = null,
-    val avatar: String
+
+    @field:SerializedName("avatar")
+    val avatar: String? = null
 )

@@ -1,12 +1,11 @@
 package io.mindset.jagamental.data.remote
 
 import io.mindset.jagamental.data.model.request.AnalyticRequest
-import io.mindset.jagamental.data.model.request.LoginRequest
-import io.mindset.jagamental.data.model.request.RegisterRequest
-import io.mindset.jagamental.data.model.response.AuthResponse
-import io.mindset.jagamental.data.model.response.JournalResponse
+import io.mindset.jagamental.data.model.request.JournalRequest
 import io.mindset.jagamental.data.model.request.UserRequest
-import io.mindset.jagamental.data.model.response.EmotionResponse
+import io.mindset.jagamental.data.model.response.AuthResponse
+import io.mindset.jagamental.data.model.response.EmotionAnalyticResponse
+import io.mindset.jagamental.data.model.response.JournalResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -20,34 +19,14 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
-    @POST("/auth/login")
-    suspend fun doLogin(
-        @Body request: LoginRequest
-    ): AuthResponse
-
-    @POST("/auth/register")
-    @FormUrlEncoded
-    suspend fun doRegister(
-        @Body request: RegisterRequest
-    ): AuthResponse
-
-    @POST("/oauth")
-    @FormUrlEncoded
-    suspend fun doOauth(): AuthResponse
-
-    @GET("/user/{id}")
-    suspend fun doGetUserById(
-        @Path("id") id: String
-    ): AuthResponse
-
+    // Users
     @GET("/user/me")
     suspend fun doGetCurrentUser(): AuthResponse
 
-    @GET("/users")
-    suspend fun doGetAllUser(): AuthResponse
-
     @PUT("/user/{id}")
+    @FormUrlEncoded
     suspend fun doUpdateUser(
+        @Path("id") id: String,
         @Body userRequest: UserRequest
     ): AuthResponse
 
@@ -56,6 +35,19 @@ interface ApiService {
         @Path("id") userId: String
     ): AuthResponse
 
+    @GET("/user/{id}")
+    suspend fun doGetUserById(
+        @Path("id") id: String
+    ): AuthResponse
+
+    // Auth
+    @POST("/oauth")
+    suspend fun doOauth(): AuthResponse
+
+    @POST("/local")
+    suspend fun doLocal(): AuthResponse
+
+    // Journal
     @GET("/journal")
     suspend fun doGetJournalByUserId(
         @Query("title") title: String? = null,
@@ -63,28 +55,22 @@ interface ApiService {
         @Query("emotion") emotion: String? = null
     ): JournalResponse
 
-    @GET("/journal/{id}")
-    suspend fun doJournalById(
-        @Path("id") id: String
-    ): JournalResponse
-
     @Multipart
     @POST("/journal")
     suspend fun doCreateJournal(
-        @Part("title") title: String? = null,
-        @Part("content") content: String? = null,
-        @Part("emotion") emotion: String? = null,
-        @Part selfie: MultipartBody.Part
+        @Part image: MultipartBody.Part
     ): JournalResponse
 
-    @Multipart
+    @FormUrlEncoded
     @PUT("/journal/{id}")
     suspend fun doUpdateJournal(
         @Path("id") id: String,
-        @Part("title") title: String? = null,
-        @Part("content") content: String? = null,
-        @Part("emotion") emotion: String? = null,
-        @Part("selfie") selfie: MultipartBody.Part
+        @Body contentRequest: JournalRequest
+    ): JournalResponse
+
+    @GET("/journal/{id}")
+    suspend fun doJournalById(
+        @Path("id") id: String
     ): JournalResponse
 
     @DELETE("/journal/{id}")
@@ -97,8 +83,9 @@ interface ApiService {
         @Query("date") date: String
     ): JournalResponse
 
-    @POST("/analytic")
+    // Analytic
+    @GET("/analytic")
     suspend fun doPostAnalytic(
         @Body request: AnalyticRequest
-    ): EmotionResponse
+    ): EmotionAnalyticResponse
 }
