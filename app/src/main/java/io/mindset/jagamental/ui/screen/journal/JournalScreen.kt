@@ -19,10 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import io.mindset.jagamental.navigation.Screen
 import io.mindset.jagamental.ui.component.journal.AddJournalButton
 import io.mindset.jagamental.ui.component.journal.CalendarHeader
@@ -117,8 +114,3 @@ fun JournalScreen(navController: NavController, paddingValues: PaddingValues) {
 
 
 
-@Preview
-@Composable
-fun PreviewJournalScreen() {
-    JournalScreen(navController = rememberNavController(), paddingValues = PaddingValues(0.dp))
-}
