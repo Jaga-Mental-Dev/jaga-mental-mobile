@@ -1,5 +1,7 @@
 package io.mindset.jagamental.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import io.mindset.jagamental.data.domain.AuthRepository
 import io.mindset.jagamental.data.domain.JournalRepository
@@ -7,36 +9,33 @@ import io.mindset.jagamental.data.domain.LoginRepository
 import io.mindset.jagamental.data.domain.MainRepository
 import io.mindset.jagamental.data.remote.ApiService
 import io.mindset.jagamental.utils.SharedPreferencesHelper
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
-const val apiUrl = "https://jamen-api-616607546235.asia-southeast2.run.app/"
+const val apiUrl = "https://jamen-api-616607546235.asia-southeast2.run.app/api/"
 
 val networkModule = module {
     single {
-        val sharedPreferencesHelper = SharedPreferencesHelper(get())
-        val token = sharedPreferencesHelper.getToken()
+        val sharedPreferencesHelper: SharedPreferencesHelper = get()
+        val authInterceptor = createAuthInterceptor(sharedPreferencesHelper)
 
-        val authInterceptor = Interceptor { chain ->
-            val req = chain.request()
-            val requestHeaders = req.newBuilder()
-                .addHeader("Authorization", "Bearer $token")
-                .build()
-            chain.proceed(requestHeaders)
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BASIC
         }
 
-        val loggingInterceptor =
-            HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(ChuckerInterceptor(get()))
             .addInterceptor(authInterceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 
@@ -50,9 +49,27 @@ val networkModule = module {
     }
 }
 
+private fun createAuthInterceptor(sharedPreferencesHelper: SharedPreferencesHelper): Interceptor {
+    return Interceptor { chain ->
+        val token = runBlocking { sharedPreferencesHelper.getTokenAsync() }
+        val req = chain.request()
+        val requestHeaders = req.newBuilder()
+            .addHeader("Authorization", "Bearer $token")
+            .build()
+        chain.proceed(requestHeaders)
+    }
+}
+
 val repositoryModule = module {
     single { MainRepository(apiService = get(), context = get()) }
-    single { AuthRepository(context = get()) }
+    single { AuthRepository(get(), get()) }
     single { JournalRepository(apiService = get()) }
     single { LoginRepository(apiService = get()) }
+}
+
+val sharedPreferencesModule = module {
+    single<SharedPreferences> {
+        get<Context>().getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
+    }
+    single { SharedPreferencesHelper(get()) }
 }
