@@ -24,7 +24,7 @@ import io.mindset.jagamental.R
 
 @Composable
 fun AuthLoader(text: String) {
-    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loader))
+    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.login_loading))
     Box(
         modifier = Modifier
             .fillMaxSize()

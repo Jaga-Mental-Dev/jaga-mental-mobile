@@ -29,7 +29,7 @@ sealed class Screen {
         }
 
         @Serializable
-        data object AddCapture: Screen()
+        data object CapturePhotoScreen : Screen()
 
         @Serializable
         data class ResultPreviewScreen(

@@ -8,7 +8,9 @@ import io.mindset.jagamental.data.model.MenuItemProfile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ProfileViewModel(private val authRepository: AuthRepository): ViewModel() {
+class ProfileViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
     val uiState = authRepository.uiState
     val auth = FirebaseAuth.getInstance()
     private val _currentUser = MutableStateFlow(auth.currentUser)
@@ -56,6 +58,7 @@ class ProfileViewModel(private val authRepository: AuthRepository): ViewModel() 
     )
 
     fun logout() {
+        authRepository.resetToken()
         authRepository.signOut()
     }
 }

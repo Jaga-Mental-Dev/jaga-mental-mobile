@@ -48,9 +48,10 @@ fun ResultPreviewScreen(
     val capturedPhoto: ImageBitmap = bitmap.asImageBitmap()
 
     val isLoading = viewModel.isLoading.collectAsState()
-    val emotionResult = viewModel.emotionResult.collectAsState()
-    val words = viewModel.words.collectAsState()
-    val photoUrl = viewModel.photoUrl.collectAsState()
+    val journalData = viewModel.journalData.collectAsState()
+    val emotionResult: String = journalData.value?.emotion.toString()
+    val words = viewModel.suggestion.collectAsState().value
+    val photoUrl: String = journalData.value?.imageUrl.toString()
 
     StatusBarColorHelper(color = Color.Transparent, useDarkIcon = false)
     Box {
@@ -126,17 +127,17 @@ fun ResultPreviewScreen(
             }
         }
 
-        if (emotionResult.value != null && words.value != null && photoUrl.value != null) {
-            LaunchedEffect(key1 = emotionResult.value, key2 = words.value, key3 = photoUrl.value) {
+        if (emotionResult.isNotEmpty() && words.isNotEmpty() && photoUrl.isNotEmpty()) {
+            LaunchedEffect(key1 = emotionResult, key2 = words, key3 = photoUrl) {
                 navController.navigate(
                     Screen.App.PhotoResultScreen(
                         photoUri,
-                        emotionResult.value!!,
-                        words.value!!,
-                        photoUrl.value!!
+                        emotionResult,
+                        words,
+                        photoUrl
                     )
                 ) {
-                    popUpTo(Screen.App.AddCapture) { inclusive = false }
+                    popUpTo(Screen.App.CapturePhotoScreen) { inclusive = true }
                 }
             }
         }

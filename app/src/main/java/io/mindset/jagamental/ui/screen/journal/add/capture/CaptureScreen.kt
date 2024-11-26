@@ -63,7 +63,9 @@ fun CaptureScreen(navController: NavController) {
         remember { LifecycleCameraController(context) }
 
     val onPhotoCaptured: (String) -> Unit = { photoUrl ->
-        navController.navigate(Screen.App.ResultPreviewScreen(photoUrl))
+        navController.navigate(Screen.App.ResultPreviewScreen(photoUrl)) {
+            launchSingleTop = true
+        }
     }
 
     val isLoading = viewModel.isLoading.collectAsState()

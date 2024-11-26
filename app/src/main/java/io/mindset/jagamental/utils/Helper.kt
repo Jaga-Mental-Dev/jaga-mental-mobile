@@ -5,6 +5,9 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.view.View
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -18,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.view.WindowCompat
 
 @Composable
@@ -80,4 +84,12 @@ private fun Context.requireActivity(): Activity {
         context = context.baseContext
     }
     throw IllegalStateException("No activity was present but it is required.")
+}
+
+fun PaddingValues.exceptTop(): PaddingValues {
+    return PaddingValues(
+        start = calculateStartPadding(LayoutDirection.Ltr),
+        end = calculateEndPadding(LayoutDirection.Ltr),
+        bottom = calculateBottomPadding()
+    )
 }

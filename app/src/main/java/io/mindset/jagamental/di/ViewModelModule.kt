@@ -14,12 +14,12 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { MainViewModel(get()) }
-    viewModel { LoginViewModel(get()) }
+    viewModel { LoginViewModel(get(), get()) }
     viewModel { DashboardViewModel(get()) }
-    viewModel { RegisterViewModel(get()) }
+    viewModel { RegisterViewModel(get(), get()) }
     viewModel { RootViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { CaptureViewModel() }
     viewModel { PhotoResultViewModel() }
-    viewModel { ResultPreviewViewModel() }
+    viewModel { ResultPreviewViewModel(get()) }
 }

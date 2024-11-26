@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
 
+
 enum class EmotionRequest(val queryValue: String) {
     sad("sedih"),
     angry("marah"),
@@ -137,5 +138,4 @@ class JournalRepository(private val apiService: ApiService) {
             emit(UiState.Error(e.localizedMessage ?: "Error posting analytic data"))
         }
     }
-
 }

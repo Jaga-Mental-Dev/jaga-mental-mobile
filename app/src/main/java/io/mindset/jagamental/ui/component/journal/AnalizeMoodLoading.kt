@@ -12,8 +12,8 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import io.mindset.jagamental.R
 
 @Composable
-fun AnalyzeMoodLoading(modifier: Modifier = Modifier) {
-    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.camera_loading_lottie))
+fun AnalyzeMoodLoading() {
+    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.camera_capturing))
 
     LottieAnimation(
         modifier = Modifier.size(200.dp),

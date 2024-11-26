@@ -1,11 +1,11 @@
 package io.mindset.jagamental.utils
 
-import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class SharedPreferencesHelper(context: Context) {
-    private val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences("StoryAppPreferences", Context.MODE_PRIVATE)
+class SharedPreferencesHelper(private val sharedPreferences: SharedPreferences) {
 
     companion object {
         private const val TOKEN_KEY = "TOKEN_KEY"
@@ -14,15 +14,24 @@ class SharedPreferencesHelper(context: Context) {
     }
 
     fun saveToken(token: String) {
+        sharedPreferences.edit().remove(TOKEN_KEY).apply()
         sharedPreferences.edit().putString(TOKEN_KEY, token).apply()
     }
 
-    fun getToken(): String? {
-        return sharedPreferences.getString(TOKEN_KEY, null)
+    fun getToken() {
+        sharedPreferences.getString(TOKEN_KEY, "")
+    }
+
+    suspend fun getTokenAsync(): String = withContext(Dispatchers.IO) {
+        val token = sharedPreferences.getString(TOKEN_KEY, "") ?: ""
+        Log.d("SharedPreferencesHelper", "getToken: $token")
+        token
     }
 
     fun clearToken() {
-        sharedPreferences.edit().remove(TOKEN_KEY).apply()
-        sharedPreferences.edit().remove(NAME_KEY).apply()
+        sharedPreferences.edit()
+            .remove(TOKEN_KEY)
+            .remove(NAME_KEY)
+            .apply()
     }
 }

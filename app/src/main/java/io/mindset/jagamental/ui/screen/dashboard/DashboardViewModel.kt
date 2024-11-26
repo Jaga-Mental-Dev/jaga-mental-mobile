@@ -29,10 +29,25 @@ class DashboardViewModel(private val authRepository: AuthRepository): ViewModel(
         // dummy data
         _graphData.value = listOf(
             ChartData(
-                "sad",
+                "Sedih",
                 listOf(2.0, 3.0, 4.0, 0.0, 1.0, 2.0, 3.0),
-                colorHelper.getColorByLabel("sad")
+                colorHelper.getColorByLabel("Sedih")
             ),
+            ChartData(
+                "Senang",
+                listOf(1.0, 3.0, 2.0, 4.0, 2.0, 5.0, 1.0),
+                colorHelper.getColorByLabel("Senang")
+            ),
+            ChartData(
+                "Netral",
+                listOf(3.0, 1.0, 0.0, 2.0, 4.0, 0.0, 1.0),
+                colorHelper.getColorByLabel("Netral")
+            ),
+            ChartData(
+                "Marah",
+                listOf(4.0, 5.0, 3.0, 5.0, 4.0, 5.0, 3.0),
+                colorHelper.getColorByLabel("Marah")
+            )
         )
     }
 

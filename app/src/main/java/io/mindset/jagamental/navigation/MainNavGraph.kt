@@ -30,10 +30,10 @@ fun NavGraphBuilder.mainNavGraph(
         }
 
         composable<Screen.App.Profile> {
-            ProfileScreen(navController)
+            ProfileScreen(navController, paddingValues)
         }
 
-        composable<Screen.App.AddCapture> {
+        composable<Screen.App.CapturePhotoScreen> {
             CaptureScreen(navController)
         }
 
@@ -50,7 +50,13 @@ fun NavGraphBuilder.mainNavGraph(
             val words = backStackEntry.arguments?.getString("words")
             val photoUrl = backStackEntry.arguments?.getString("photoUrl")
             if (photoUri != null && emotion != null && words != null && photoUrl != null) {
-                PhotoResultScreen(photoUri, emotion, words, photoUrl, navController)
+                PhotoResultScreen(
+                    photoUri,
+                    emotion,
+                    words,
+                    photoUrl,
+                    navController
+                )
             }
         }
 

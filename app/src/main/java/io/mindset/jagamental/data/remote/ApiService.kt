@@ -41,7 +41,7 @@ interface ApiService {
     ): AuthResponse
 
     // Auth
-    @POST("/oauth")
+    @POST("/api/auth/oauth")
     suspend fun doOauth(): AuthResponse
 
     @POST("/local")
