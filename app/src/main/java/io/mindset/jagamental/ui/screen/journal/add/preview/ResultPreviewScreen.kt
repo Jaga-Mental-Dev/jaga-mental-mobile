@@ -51,7 +51,7 @@ fun ResultPreviewScreen(
     val journalData = viewModel.journalData.collectAsState()
     val emotionResult: String = journalData.value?.emotion.toString()
     val words = viewModel.suggestion.collectAsState().value
-    val photoUrl: String = journalData.value?.selfie.toString()
+    val photoUrl: String = journalData.value?.imageUrl.toString()
 
     StatusBarColorHelper(color = Color.Transparent, useDarkIcon = false)
     Box {

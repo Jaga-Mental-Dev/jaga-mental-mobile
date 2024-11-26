@@ -50,7 +50,7 @@ class ResultPreviewViewModel(private val journalRepository: JournalRepository) :
         }
     }
 
-    private suspend fun submitPhoto() {
+    private fun submitPhoto() {
         // Implement API call here
 
         //Dummy Response
@@ -58,7 +58,7 @@ class ResultPreviewViewModel(private val journalRepository: JournalRepository) :
 
         val journalData = JournalDataItem(
             emotion = randomEmotion,
-            selfie = "https://picsum.photos/800"
+            imageUrl = "https://picsum.photos/800"
         )
 
         _suggestion.value = emotionHelper.getWordsByEmotion(journalData.emotion.toString())
@@ -66,7 +66,7 @@ class ResultPreviewViewModel(private val journalRepository: JournalRepository) :
 
         Log.d(
             "ResultPreviewViewModel",
-            "Emotion: ${journalData.emotion}\nSuggestion: ${_suggestion.value}\nPhoto URL: ${journalData.selfie}"
+            "Emotion: ${journalData.emotion}\nSuggestion: ${_suggestion.value}\nPhoto URL: ${journalData.imageUrl}"
         )
     }
 }
