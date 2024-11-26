@@ -1,21 +1,26 @@
 [versions]
 accompanistPermissions = "0.36.0"
 accompanistSystemuicontroller = "0.27.0"
+#noinspection AndroidGradlePluginVersion
 agp = "8.6.0"
 cameraxVersion = "1.4.0"
 coilCompose = "3.0.3"
 composeCharts = "0.0.18"
 converterGson = "2.11.0"
 koinAndroidxCompose = "3.4.0"
+#noinspection GradleDependency
 kotlin = "1.9.0"
+#noinspection GradleDependency
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinxCoroutinesAndroid = "1.9.0"
 kotlinxCoroutinesCore = "1.9.0"
+#noinspection GradleDependency,GradleDependency,GradleDependency
 lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.3"
+#noinspection GradleDependency
 composeBom = "2024.04.01"
 loggingInterceptor = "4.12.0"
 lottieCompose = "4.2.0"
@@ -23,13 +28,16 @@ materialIconsExtended = "1.7.5"
 okhttp = "4.12.0"
 playServicesAuth = "21.2.0"
 roomRuntime = "2.6.1"
+#noinspection GradleDependency
 runtimeLivedata = "1.7.4"
+#noinspection GradleDependency
 navigationCompose = "2.8.0-alpha08"
 serialization = "1.6.3"
 library = "4.0.0"
 uiTextGoogleFonts = "1.7.5"
 googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
+#noinspection GradleDependency
 animationCoreAndroid = "1.7.0-alpha08"
 firebaseConfig = "22.0.1"
 
