@@ -1,6 +1,5 @@
 package io.mindset.jagamental.ui.component.auth
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -17,7 +16,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.mindset.jagamental.ui.theme.gray200
@@ -64,17 +62,4 @@ fun RoundedTextField(
         modifier = modifier
             .fillMaxWidth()
     )
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun RoundedTextFieldPreview() {
-    Column {
-        RoundedTextField(
-            value = "test@mail.com",
-            onValueChange = {},
-            label = "Email",
-            placeholder = "Enter your email"
-        )
-    }
 }

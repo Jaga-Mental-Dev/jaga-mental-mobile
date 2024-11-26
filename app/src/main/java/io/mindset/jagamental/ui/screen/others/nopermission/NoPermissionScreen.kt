@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -70,12 +69,4 @@ private fun NoPermissionContent(
             Text(text = "Izinkan Akses Kamera")
         }
     }
-}
-
-@Preview
-@Composable
-private fun Preview_NoPermissionContent() {
-    NoPermissionContent(
-        onRequestPermission = {}
-    )
 }

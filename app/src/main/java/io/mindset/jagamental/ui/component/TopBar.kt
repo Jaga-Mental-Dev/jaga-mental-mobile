@@ -1,3 +1,5 @@
+@file:Suppress("SameParameterValue")
+
 package io.mindset.jagamental.ui.component
 
 import androidx.compose.material.icons.Icons
