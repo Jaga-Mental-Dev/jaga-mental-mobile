@@ -10,21 +10,31 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.userProfileChangeRequest
 import io.mindset.jagamental.R
-import io.mindset.jagamental.data.model.AuthState
+import io.mindset.jagamental.utils.SharedPreferencesHelper
+import io.mindset.jagamental.utils.UiState
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
-class AuthRepository(context: Context) {
+class AuthRepository(
+    context: Context,
+    private val preference: SharedPreferencesHelper
+) {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val googleSignInClient: GoogleSignInClient
 
-    private val _uiState = MutableStateFlow<AuthState>(AuthState.Idle)
+    private val _uiState = MutableStateFlow<UiState<FirebaseUser?>>(UiState.Idle)
     val uiState = _uiState.asStateFlow()
 
     init {
@@ -33,60 +43,93 @@ class AuthRepository(context: Context) {
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(context, gso)
-        Log.d("AuthRepository", "init: ${auth.currentUser}")
     }
 
     fun signInIntent(): Intent = googleSignInClient.signInIntent
 
-    suspend fun handleSignInResult(result: ActivityResult) {
+    fun handleSignInResult(result: ActivityResult): Flow<UiState<Any?>> = flow {
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
         try {
-            val account = task.getResult(ApiException::class.java)!!
-            firebaseAuthWithGoogle(account.idToken!!)
+            val account = task.getResult(ApiException::class.java)
+            emitAll(
+                authenticateWithFirebase(
+                    GoogleAuthProvider.getCredential(
+                        account.idToken,
+                        null
+                    )
+                )
+            )
         } catch (e: ApiException) {
             Log.d("AuthRepository", "handleSignInResult: ${e.message}")
-            _uiState.value = AuthState.Error("Google sign in failed: $e")
+            emit(UiState.Error("Google sign in failed"))
         }
     }
 
-    private suspend fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
+    private fun authenticateWithFirebase(credential: AuthCredential): Flow<UiState<Any?>> = flow {
         try {
             auth.signInWithCredential(credential).await()
-            _uiState.value = AuthState.Success(auth.currentUser)
+            handleUserAuthentication()
+            emit(UiState.Success(auth.currentUser))
         } catch (e: Exception) {
-            Log.d("AuthRepository", "firebaseAuthWithGoogle: ${e.message}")
-            _uiState.value = AuthState.Error("Authentication failed: ${e.message}")
+            Log.d("AuthRepository", "authenticateWithFirebase: ${e.message}")
+            emit(UiState.Error("Invalid Email or Password"))
         }
     }
 
-    suspend fun signInWithEmailPassword(email: String, password: String) {
+    fun signInWithEmailPassword(email: String, password: String): Flow<UiState<Any?>> = flow {
         try {
             auth.signInWithEmailAndPassword(email, password).await()
-            _uiState.value = AuthState.Success(auth.currentUser)
+            handleUserAuthentication()
+            emit(UiState.Success(auth.currentUser))
+        } catch (e: FirebaseAuthException) {
+            Log.e("AuthRepository", "signInWithEmailPassword: ${e.message}", e)
+            emit(UiState.Error("Invalid Email or Password"))
         } catch (e: Exception) {
-            _uiState.value = AuthState.Error("Authentication failed: ${e.message}")
+            Log.e("AuthRepository", "Unexpected error: ${e.message}", e)
+            emit(UiState.Error("An unexpected error occurred"))
         }
     }
 
-    suspend fun registerWithEmailPassword(name: String, email: String, password: String) {
+    fun registerWithEmailPassword(
+        name: String,
+        email: String,
+        password: String
+    ): Flow<UiState<FirebaseUser?>> = flow {
         try {
             auth.createUserWithEmailAndPassword(email, password).await()
             val user = auth.currentUser
-            user?.updateProfile(userProfileChangeRequest {
-                displayName = name
-            })?.await()
-            _uiState.value = AuthState.Success(user)
+            user?.let {
+                it.updateProfile(userProfileChangeRequest {
+                    displayName = name
+                }).await()
+                handleUserAuthentication()
+                emit(UiState.Success(it))
+            } ?: run {
+                emit(UiState.Error("User registration failed"))
+            }
         } catch (e: Exception) {
-            _uiState.value = AuthState.Error("Registration failed: ${e.message}")
+            Log.d("AuthRepository", "registerWithEmailPassword: ${e.message}")
+            emit(UiState.Error("Registration failed: ${e.message}"))
         }
     }
 
-    suspend fun getUserIdToken(): String? {
+    private suspend fun handleUserAuthentication() {
+        val user = auth.currentUser
+        if (user != null) {
+            val token = getIdTokenFromFirebase()
+            token?.let {
+                preference.saveToken(it)
+                Log.d("AuthRepository", "Token saved: $it")
+            }
+        }
+        _uiState.value = UiState.Success(user)
+    }
+
+    private suspend fun getIdTokenFromFirebase(): String? {
         return try {
-            auth.currentUser?.getIdToken(true)?.await()?.token
+            auth.currentUser?.getIdToken(false)?.await()?.token
         } catch (e: Exception) {
-            Log.d("AuthRepository", "getUserIdToken: ${e.message}")
+            Log.e("AuthRepository", "Error getting token: ${e.message}")
             null
         }
     }
@@ -94,6 +137,11 @@ class AuthRepository(context: Context) {
     fun signOut() {
         auth.signOut()
         googleSignInClient.signOut()
-        _uiState.value = AuthState.Idle
+        preference.clearToken()
+        _uiState.value = UiState.Idle
+    }
+
+    fun resetToken() {
+        preference.clearToken()
     }
 }
