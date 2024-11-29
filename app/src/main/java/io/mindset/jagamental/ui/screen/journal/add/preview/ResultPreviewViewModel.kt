@@ -6,37 +6,36 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.mindset.jagamental.data.domain.JournalRepository
-import io.mindset.jagamental.data.model.response.JournalDataItem
+import io.mindset.jagamental.data.model.response.JournalData
 import io.mindset.jagamental.utils.EmotionHelper
+import io.mindset.jagamental.utils.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.URI
 
 class ResultPreviewViewModel(private val journalRepository: JournalRepository) : ViewModel() {
 
-    // To generate random emotion
-    val emotionHelper = EmotionHelper()
-
     private val _photoByte = MutableStateFlow<ByteArray?>(null)
     val photoByte = _photoByte.asStateFlow()
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading = _isLoading.asStateFlow()
-
-    private val _journalData = MutableStateFlow<JournalDataItem?>(null)
-    val journalData = _journalData.asStateFlow()
+    private val _journalState = MutableStateFlow<UiState<JournalData>>(UiState.Idle)
+    val journalState = _journalState.asStateFlow()
 
     private val _suggestion = MutableStateFlow<String>("")
     val suggestion = _suggestion.asStateFlow()
 
+    private val emotionHelper = EmotionHelper()
 
     fun convertToByteArray(fileUri: String) {
-        _isLoading.value = true
+        _journalState.value = UiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val file = File(URI(fileUri))
             val bitmap = BitmapFactory.decodeFile(file.path)
@@ -44,29 +43,39 @@ class ResultPreviewViewModel(private val journalRepository: JournalRepository) :
             bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream)
             _photoByte.value = stream.toByteArray()
             withContext(Dispatchers.Main) {
-                submitPhoto()
-                _isLoading.value = false
+                submitPhoto(file)
             }
         }
     }
 
-    private fun submitPhoto() {
-        // Implement API call here
+    private fun submitPhoto(file: File) {
+        viewModelScope.launch {
+            val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+            submitApi(body)
+        }
+    }
 
-        //Dummy Response
-        val randomEmotion = emotionHelper.getRandomEmotion()
+    suspend fun submitApi(body: MultipartBody.Part) {
+        journalRepository.postCreateJournal(body).collect { response ->
+            Log.d("ResultPreviewViewModel", "submitPhoto: $response")
+            when (response) {
+                is UiState.Success -> {
+                    Log.d("ResultPreviewViewModel", "submitPhoto: ${response.data}")
+                    _journalState.value = UiState.Success<JournalData>(response.data)
+                    val emotion: String = response.data.initialEmotion ?: ""
+                    _suggestion.value = emotionHelper.getWordsByEmotion(emotion)
+                }
 
-        val journalData = JournalDataItem(
-            emotion = randomEmotion,
-            imageUrl = "https://picsum.photos/800"
-        )
+                is UiState.Error -> {
+                    _journalState.value = UiState.Error(response.message)
+                }
 
-        _suggestion.value = emotionHelper.getWordsByEmotion(journalData.emotion.toString())
-        _journalData.value = journalData
-
-        Log.d(
-            "ResultPreviewViewModel",
-            "Emotion: ${journalData.emotion}\nSuggestion: ${_suggestion.value}\nPhoto URL: ${journalData.imageUrl}"
-        )
+                else -> {
+                    Log.d("ResultPreviewViewModel", "submitPhoto: else")
+                    _journalState.value = UiState.Loading
+                }
+            }
+        }
     }
 }
