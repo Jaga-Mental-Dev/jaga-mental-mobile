@@ -1,6 +1,5 @@
 package io.mindset.jagamental.data.remote
 
-import io.mindset.jagamental.data.model.request.AnalyticRequest
 import io.mindset.jagamental.data.model.request.JournalRequest
 import io.mindset.jagamental.data.model.request.UserRequest
 import io.mindset.jagamental.data.model.response.AuthResponse
@@ -84,8 +83,6 @@ interface ApiService {
     ): ListJournalResponse
 
     // Analytic
-    @GET("/analytic")
-    suspend fun doPostAnalytic(
-        @Body request: AnalyticRequest
-    ): EmotionAnalyticResponse
+    @GET("/api/analytic")
+    suspend fun doPostAnalytic(): EmotionAnalyticResponse
 }
