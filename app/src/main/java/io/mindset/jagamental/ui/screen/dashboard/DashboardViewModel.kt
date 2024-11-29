@@ -1,20 +1,23 @@
 package io.mindset.jagamental.ui.screen.dashboard
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import io.mindset.jagamental.data.domain.AuthRepository
+import io.mindset.jagamental.data.domain.JournalRepository
 import io.mindset.jagamental.data.model.ChartData
-import io.mindset.jagamental.utils.ColorHelper
+import io.mindset.jagamental.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class DashboardViewModel(private val authRepository: AuthRepository): ViewModel() {
+class DashboardViewModel(
+    private val journalRepository: JournalRepository
+) : ViewModel() {
 
     val auth = FirebaseAuth.getInstance()
-    private val _graphData = MutableStateFlow<List<ChartData?>>(emptyList())
+    private val _graphData = MutableStateFlow<UiState<List<ChartData>>>(UiState.Loading)
     val graphData = _graphData.asStateFlow()
-    val colorHelper = ColorHelper
 
     private val _user = MutableStateFlow<FirebaseUser?>(null)
     val user = _user.asStateFlow()
@@ -25,30 +28,12 @@ class DashboardViewModel(private val authRepository: AuthRepository): ViewModel(
     }
 
     fun getGraphData() {
-        //TODO: Get data from repository
-        // dummy data
-        _graphData.value = listOf(
-            ChartData(
-                "Sedih",
-                listOf(2.0, 3.0, 4.0, 0.0, 1.0, 2.0, 3.0),
-                colorHelper.getColorByLabel("Sedih")
-            ),
-            ChartData(
-                "Senang",
-                listOf(1.0, 3.0, 2.0, 4.0, 2.0, 5.0, 1.0),
-                colorHelper.getColorByLabel("Senang")
-            ),
-            ChartData(
-                "Netral",
-                listOf(3.0, 1.0, 0.0, 2.0, 4.0, 0.0, 1.0),
-                colorHelper.getColorByLabel("Netral")
-            ),
-            ChartData(
-                "Marah",
-                listOf(4.0, 5.0, 3.0, 5.0, 4.0, 5.0, 3.0),
-                colorHelper.getColorByLabel("Marah")
-            )
-        )
+        _graphData.value = UiState.Loading
+        viewModelScope.launch {
+            journalRepository.postAnalyticData().collect { response ->
+                _graphData.value = response
+            }
+        }
     }
 
     fun getUser() {
