@@ -21,7 +21,7 @@ sealed class BottomNavigationItem(
         title = "Jurnal",
         selectedIcon = R.drawable.activities_selected,
         unselectedIcon = R.drawable.activities_unselected,
-        route = Screen.App.Journal
+        route = Screen.App.MainJournalScreen
     )
 
     data object Profile : BottomNavigationItem(
