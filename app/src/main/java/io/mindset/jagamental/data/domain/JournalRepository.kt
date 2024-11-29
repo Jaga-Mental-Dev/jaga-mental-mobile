@@ -1,9 +1,8 @@
 package io.mindset.jagamental.data.domain
 
 import android.util.Log
-import io.mindset.jagamental.data.model.request.AnalyticRequest
+import io.mindset.jagamental.data.model.ChartData
 import io.mindset.jagamental.data.model.request.JournalRequest
-import io.mindset.jagamental.data.model.response.DataEmotion
 import io.mindset.jagamental.data.model.response.JournalData
 import io.mindset.jagamental.data.remote.ApiService
 import io.mindset.jagamental.utils.UiState
@@ -11,15 +10,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
 
-
-enum class EmotionRequest(val queryValue: String) {
-    sad("sedih"),
-    angry("marah"),
-    neutral("netral"),
-    happy("senang");
-
-    override fun toString(): String = queryValue
-}
 
 class JournalRepository(private val apiService: ApiService) {
     /*Enum implementation
@@ -132,19 +122,19 @@ class JournalRepository(private val apiService: ApiService) {
         }
     }
 
-    fun postAnalyticData(request: AnalyticRequest): Flow<UiState<DataEmotion>> = flow {
+    fun postAnalyticData(): Flow<UiState<List<ChartData>>> = flow {
         emit(UiState.Loading)
         try {
-            val response = apiService.doPostAnalytic(request)
+            val response = apiService.doPostAnalytic()
             if (response.error == true) {
                 emit(UiState.Error(response.message ?: "Unknown error occurred"))
             } else {
                 response.data?.let {
-                    emit(UiState.Success(it))
-                } ?: emit(UiState.Error("Failed to post analytic data"))
+                    emit(UiState.Success(it.filterNotNull()))
+                } ?: emit(UiState.Error("Failed to get analytic data"))
             }
         } catch (e: Exception) {
-            emit(UiState.Error(e.localizedMessage ?: "Error posting analytic data"))
+            emit(UiState.Error(e.localizedMessage ?: "Error getting analytic data"))
         }
     }
 }
