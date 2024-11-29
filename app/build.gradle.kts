@@ -64,6 +64,9 @@ android {
 
 dependencies {
 
+    // Shimmer
+    implementation(libs.compose.shimmer)
+
     // Camera X
     implementation (libs.androidx.camera.core)
     implementation (libs.androidx.camera.camera2)
