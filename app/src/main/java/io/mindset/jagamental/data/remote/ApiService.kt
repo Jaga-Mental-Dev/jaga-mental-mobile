@@ -6,6 +6,8 @@ import io.mindset.jagamental.data.model.request.UserRequest
 import io.mindset.jagamental.data.model.response.AuthResponse
 import io.mindset.jagamental.data.model.response.EmotionAnalyticResponse
 import io.mindset.jagamental.data.model.response.JournalResponse
+import io.mindset.jagamental.data.model.response.ListJournalResponse
+import io.mindset.jagamental.data.model.response.UserResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -21,7 +23,7 @@ import retrofit2.http.Query
 interface ApiService {
     // Users
     @GET("/user/me")
-    suspend fun doGetCurrentUser(): AuthResponse
+    suspend fun doGetCurrentUser(): UserResponse
 
     @PUT("/user/{id}")
     @FormUrlEncoded
@@ -47,7 +49,6 @@ interface ApiService {
     @POST("/local")
     suspend fun doLocal(): AuthResponse
 
-    // Journal
     @GET("/journal")
     suspend fun doGetJournalByUserId(
         @Query("title") title: String? = null,
@@ -56,32 +57,31 @@ interface ApiService {
     ): JournalResponse
 
     @Multipart
-    @POST("/journal")
+    @POST("/api/journal")
     suspend fun doCreateJournal(
         @Part image: MultipartBody.Part
     ): JournalResponse
 
-    @FormUrlEncoded
-    @PUT("/journal/{id}")
+    @PUT("/api/journal/{id}")
     suspend fun doUpdateJournal(
         @Path("id") id: String,
         @Body contentRequest: JournalRequest
     ): JournalResponse
 
-    @GET("/journal/{id}")
+    @GET("/api/journal/{id}")
     suspend fun doJournalById(
         @Path("id") id: String
     ): JournalResponse
 
-    @DELETE("/journal/{id}")
+    @DELETE("/api/journal/{id}")
     suspend fun doDeleteJournal(
         @Path("id") id: String
     ): JournalResponse
 
-    @POST("/journal/date")
+    @POST("/api/journal/date")
     suspend fun doGetJournalByDate(
-        @Query("date") date: String
-    ): JournalResponse
+        @Body request: JournalRequest
+    ): ListJournalResponse
 
     // Analytic
     @GET("/analytic")
