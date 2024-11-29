@@ -1,6 +1,5 @@
 package io.mindset.jagamental.navigation
 
-import androidx.compose.ui.graphics.Color
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -24,9 +23,7 @@ sealed class Screen {
         data object Profile : Screen()
 
         @Serializable
-        data object Journal : Screen(){
-            val systemBarColor = Color(0xFF194A47)
-        }
+        data object MainJournalScreen : Screen()
 
         @Serializable
         data object CapturePhotoScreen : Screen()
@@ -37,14 +34,21 @@ sealed class Screen {
         ): Screen()
 
         @Serializable
-        data object InputJournalScreen: Screen()
+        data class InputJournalScreen(
+            val journalId: String
+        ) : Screen()
 
         @Serializable
         data class PhotoResultScreen(
-            val photoUri: String,
+            val journalId: String,
             val emotion: String,
             val words: String,
             val photoUrl: String
         ): Screen()
+
+        @Serializable
+        data class JournalResultScreen(
+            val journalId: String
+        ) : Screen()
     }
 }
