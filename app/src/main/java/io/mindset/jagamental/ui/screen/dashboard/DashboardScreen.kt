@@ -1,5 +1,6 @@
 package io.mindset.jagamental.ui.screen.dashboard
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -58,6 +59,11 @@ fun DashboardScreen(
 
     val graphData = viewModel.graphData.collectAsState()
     val currentUser = remember { mutableStateOf(viewModel.user.value) }
+    currentUser.value?.getIdToken(true)?.addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            Log.i("DashboardScreen", "User Token: ${task.result.token}")
+        }
+    }
     val userName = currentUser.value?.displayName ?: ""
 
     LaunchedEffect(Unit) {
