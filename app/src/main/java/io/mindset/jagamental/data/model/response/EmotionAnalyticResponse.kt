@@ -1,28 +1,15 @@
 package io.mindset.jagamental.data.model.response
 
 import com.google.gson.annotations.SerializedName
+import io.mindset.jagamental.data.model.ChartData
 
 data class EmotionAnalyticResponse(
 	@field:SerializedName("data")
-	val data: DataEmotion? = null,
+    val data: List<ChartData?>? = null,
 
 	@field:SerializedName("error")
 	val error: Boolean? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null
-)
-
-data class DataEmotion(
-	@field:SerializedName("sedih")
-	val sedih: List<Int>,
-
-	@field:SerializedName("marah")
-	val marah: List<Int>,
-
-	@field:SerializedName("netral")
-	val netral: List<Int>,
-
-	@field:SerializedName("senang")
-	val senang: List<Int>
 )
