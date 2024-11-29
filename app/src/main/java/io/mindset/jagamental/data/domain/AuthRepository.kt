@@ -125,9 +125,9 @@ class AuthRepository(
         _uiState.value = UiState.Success(user)
     }
 
-    private suspend fun getIdTokenFromFirebase(): String? {
+    suspend fun getIdTokenFromFirebase(): String? {
         return try {
-            auth.currentUser?.getIdToken(false)?.await()?.token
+            auth.currentUser?.getIdToken(true)?.await()?.token
         } catch (e: Exception) {
             Log.e("AuthRepository", "Error getting token: ${e.message}")
             null
