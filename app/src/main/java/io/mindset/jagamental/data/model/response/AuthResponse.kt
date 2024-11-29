@@ -4,7 +4,7 @@ package io.mindset.jagamental.data.model.response
 import com.google.gson.annotations.SerializedName
 
 data class AuthResponse(
-    val user: User
+    val error: User
 )
 
 data class User(
