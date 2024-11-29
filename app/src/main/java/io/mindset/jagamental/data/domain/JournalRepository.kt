@@ -1,9 +1,10 @@
 package io.mindset.jagamental.data.domain
 
+import android.util.Log
 import io.mindset.jagamental.data.model.request.AnalyticRequest
 import io.mindset.jagamental.data.model.request.JournalRequest
 import io.mindset.jagamental.data.model.response.DataEmotion
-import io.mindset.jagamental.data.model.response.JournalDataItem
+import io.mindset.jagamental.data.model.response.JournalData
 import io.mindset.jagamental.data.remote.ApiService
 import io.mindset.jagamental.utils.UiState
 import kotlinx.coroutines.flow.Flow
@@ -24,34 +25,35 @@ class JournalRepository(private val apiService: ApiService) {
     /*Enum implementation
     * val selectedEmotion = EmotionRequest.sad.toString()
     * */
-    fun getJournals(
-        title: String? = null,
-        content: String? = null,
-        emotion: String? = null
-    ): Flow<UiState<List<JournalDataItem>?>> = flow {
-        emit(UiState.Loading)
-        try {
-            val response = apiService.doGetJournalByUserId(title, content, emotion)
-            if (response.error == true) {
-                emit(UiState.Error(response.message ?: "Unknown error occurred"))
-            } else {
-                emit(UiState.Success(response.data))
-            }
-        } catch (e: Exception) {
-            emit(UiState.Error(e.localizedMessage ?: "Error fetching journals"))
-        }
-    }
+
+//    fun getJournals(
+//        title: String? = null,
+//        content: String? = null,
+//        emotion: String? = null
+//    ): Flow<UiState<List<JournalData>?>> = flow {
+//        emit(UiState.Loading)
+//        try {
+//            val response = apiService.doGetJournalByUserId(title, content, emotion)
+//            if (response.error == true) {
+//                emit(UiState.Error(response.message ?: "Unknown error occurred"))
+//            } else {
+//                emit(UiState.Success(response.data))
+//            }
+//        } catch (e: Exception) {
+//            emit(UiState.Error(e.localizedMessage ?: "Error fetching journals"))
+//        }
+//    }
 
     fun postCreateJournal(
         selfie: MultipartBody.Part
-    ): Flow<UiState<JournalDataItem>> = flow {
+    ): Flow<UiState<JournalData>> = flow {
         emit(UiState.Loading)
         try {
             val response = apiService.doCreateJournal(selfie)
             if (response.error == true) {
                 emit(UiState.Error(response.message ?: "Unknown error occurred"))
             } else {
-                response.data?.firstOrNull()?.let {
+                response.data?.let {
                     emit(UiState.Success(it))
                 } ?: emit(UiState.Error("Failed to create journal"))
             }
@@ -63,14 +65,16 @@ class JournalRepository(private val apiService: ApiService) {
     fun putUpdateJournal(
         id: String,
         contentJournal: JournalRequest
-    ): Flow<UiState<JournalDataItem>> = flow {
+    ): Flow<UiState<JournalData>> = flow {
         emit(UiState.Loading)
         try {
             val response = apiService.doUpdateJournal(id, contentJournal)
             if (response.error == true) {
+                Log.i("JournalRepository", "Response Update: $response")
                 emit(UiState.Error(response.message ?: "Unknown error occurred"))
             } else {
-                response.data?.firstOrNull()?.let {
+                Log.i("JournalRepository", "Response Update: $response")
+                response.data?.let {
                     emit(UiState.Success(it))
                 } ?: emit(UiState.Error("Failed to update journal"))
             }
@@ -79,14 +83,14 @@ class JournalRepository(private val apiService: ApiService) {
         }
     }
 
-    fun getJournalById(id: String): Flow<UiState<JournalDataItem>> = flow {
+    fun getJournalById(id: String): Flow<UiState<JournalData>> = flow {
         emit(UiState.Loading)
         try {
             val response = apiService.doJournalById(id)
             if (response.error == true) {
                 emit(UiState.Error(response.message ?: "Unknown error occurred"))
             } else {
-                response.data?.firstOrNull()?.let {
+                response.data?.let {
                     emit(UiState.Success(it))
                 } ?: emit(UiState.Error("Journal not found"))
             }
@@ -99,24 +103,29 @@ class JournalRepository(private val apiService: ApiService) {
         emit(UiState.Loading)
         try {
             val response = apiService.doDeleteJournal(id)
-            if (response.error == true) {
+            if (response.error) {
                 emit(UiState.Error(response.message ?: "Unknown error occurred"))
             } else {
-                emit(UiState.Success("Journal deleted successfully"))
+                emit(UiState.Success("MainJournalScreen deleted successfully"))
             }
         } catch (e: Exception) {
             emit(UiState.Error(e.localizedMessage ?: "Error deleting journal"))
         }
     }
 
-    fun getJournalByDate(date: String): Flow<UiState<List<JournalDataItem>?>> = flow {
+    fun getJournalByDate(date: String): Flow<UiState<List<JournalData?>>> = flow {
         emit(UiState.Loading)
         try {
-            val response = apiService.doGetJournalByDate(date)
+            val req: JournalRequest = JournalRequest(
+                date = date
+            )
+            val response = apiService.doGetJournalByDate(req)
             if (response.error == true) {
                 emit(UiState.Error(response.message ?: "Unknown error occurred"))
             } else {
-                emit(UiState.Success(response.data))
+                response.data?.let {
+                    emit(UiState.Success(response.data))
+                }
             }
         } catch (e: Exception) {
             emit(UiState.Error(e.localizedMessage ?: "Error fetching journals by date"))
