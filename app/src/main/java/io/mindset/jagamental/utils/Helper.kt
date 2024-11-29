@@ -60,7 +60,7 @@ fun LazyListState.isScrollingUp(): Boolean {
 }
 
 fun getBackGroundColorByEmotion(emotion: String): Color {
-    return when (emotion) {
+    return when (emotion.lowercase()) {
         "senang" -> Color(0xFFFFF9C4)
         "sedih" -> Color(0xFFBBDEFB)
         "marah" -> Color(0xFFFFCDD2)
