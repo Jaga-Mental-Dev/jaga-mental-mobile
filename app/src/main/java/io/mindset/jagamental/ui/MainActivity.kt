@@ -10,10 +10,12 @@ import io.mindset.jagamental.ui.screen.root.RootScreen
 import io.mindset.jagamental.ui.theme.JagaMentalTheme
 import io.mindset.jagamental.utils.RemoteConfigHelper
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
     val remoteConfig = RemoteConfigHelper()
+    val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,7 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch {
+            viewModel.checkLatestJournalStatus()
             val remoteConfigHelper = RemoteConfigHelper()
             val isUpdated = remoteConfigHelper.fetchAndActivate()
             if (isUpdated) {
