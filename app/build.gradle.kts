@@ -64,6 +64,9 @@ android {
 
 dependencies {
 
+    // Splash
+    implementation(libs.androidx.core.splashscreen)
+
     // Shimmer
     implementation(libs.compose.shimmer)
 
