@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -51,6 +53,7 @@ import io.mindset.jagamental.navigation.Screen
 import io.mindset.jagamental.ui.component.chart.DashLineChart
 import io.mindset.jagamental.ui.component.dashboard.DashboardHeader
 import io.mindset.jagamental.ui.component.dashboard.EmotionCard
+import io.mindset.jagamental.ui.component.dashboard.ProfesionalCard
 import io.mindset.jagamental.utils.StatusBarColorHelper
 import io.mindset.jagamental.utils.UiState
 import org.koin.androidx.compose.koinViewModel
@@ -80,6 +83,7 @@ fun DashboardScreen(
     val showDialog = remember { mutableStateOf(false) }
     val dialogText = remember { mutableStateOf("") }
     val dialogTitle = remember { mutableStateOf("") }
+    val profesionals = viewModel.profesionals.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.getGraphData()
@@ -105,7 +109,9 @@ fun DashboardScreen(
         DashboardHeader(userName)
 
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState()),
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(vertical = 12.dp),
         ) {
             Text(
                 text = stringResource(R.string.dashboard),
@@ -206,7 +212,14 @@ fun DashboardScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .height(73.dp)
-                    .clip(RectangleShape),
+                    .clip(RectangleShape)
+                    .clickable(
+                        onClick = {
+                            navController.navigate(Screen.App.CapturePhotoScreen) {
+                                launchSingleTop = true
+                            }
+                        }
+                    ),
             )
 
             Text(
@@ -238,6 +251,29 @@ fun DashboardScreen(
                 is UiState.Idle -> {}
                 is UiState.Loading -> {
                     ChartLoading()
+                }
+            }
+
+            Text(
+                text = "Profesional Terbaik",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .padding(top = 20.dp),
+            )
+
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(360.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                itemsIndexed(profesionals.value) { index, professional ->
+                    ProfesionalCard(
+                        data = professional,
+                    )
                 }
             }
         }
