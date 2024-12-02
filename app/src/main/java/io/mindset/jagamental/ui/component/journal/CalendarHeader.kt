@@ -36,14 +36,13 @@ import java.util.Locale
 
 @Composable
 fun CalendarHeader(
-    onDateClick: (formattedDate: String) -> Unit
+    onDateClick: (formattedDate: String) -> Unit,
 ) {
     var currentDate by remember { mutableStateOf(LocalDate.now()) }
     var selectedDate by remember { mutableStateOf(currentDate) }
-    val dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val dayFormatter = DateTimeFormatter.ofPattern("EEE", Locale("id", "ID"))
     val monthFormatter = DateTimeFormatter.ofPattern("MMM", Locale("id", "ID"))
-    val formattedSelectedDate = selectedDate.format(dateFormatter)
 
     val datesOfWeek = remember(currentDate) {
         (-3..3).map { currentDate.plusDays(it.toLong()) }
@@ -116,7 +115,7 @@ fun CalendarHeader(
                             .padding(horizontal = 4.dp)
                             .clickable {
                                 selectedDate = date
-                                onDateClick(formattedSelectedDate)
+                                onDateClick(date.format(dateFormatter))
                             },
                     ) {
                         Card(

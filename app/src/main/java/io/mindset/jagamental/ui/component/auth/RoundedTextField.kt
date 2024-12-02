@@ -60,6 +60,6 @@ fun RoundedTextField(
             }
         ),
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     )
 }

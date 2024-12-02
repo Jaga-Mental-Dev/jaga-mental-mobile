@@ -1,6 +1,6 @@
 package io.mindset.jagamental.ui.screen.journal.add.photoresult
 
-import android.graphics.BitmapFactory
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,13 +21,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -39,29 +36,37 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import io.mindset.jagamental.R
+import io.mindset.jagamental.navigation.Screen
 import io.mindset.jagamental.ui.component.TopBar
 import io.mindset.jagamental.utils.EmotionHelper
+import io.mindset.jagamental.utils.HelperComponent
 import io.mindset.jagamental.utils.StatusBarColorHelper
 import io.mindset.jagamental.utils.getBackGroundColorByEmotion
-import java.io.File
-import java.net.URI
+import org.koin.androidx.compose.get
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun PhotoResultScreen(
-    photoUri: String,
+    journalId: String,
     emotion: String,
     words: String,
     photoUrl: String,
     navController: NavController
 ) {
 
-    val bitmap = remember(photoUri) {
-        BitmapFactory.decodeFile(File(URI(photoUri)).path)
-    }
     val context = LocalContext.current
+    Log.d("PhotoResultScreen", "PhotoResultScreen: $photoUrl, $emotion, $words")
+    val viewModel: PhotoResultViewModel = koinViewModel()
+    val helperComponent: HelperComponent = get()
+    helperComponent.BackHandlerHelper(
+        navController = navController,
+        onBackAction = {
+            viewModel.saveJournalStatus(journalId, false)
+            viewModel.deleteJournal(journalId)
+        },
+    )
 
     val emotionHelper = EmotionHelper()
-    val capturedPhoto: ImageBitmap = bitmap.asImageBitmap()
     val pageBgColor = getBackGroundColorByEmotion(emotion)
     val emotionIcon = emotionHelper.getEmotionIcon(emotion)
 
@@ -145,7 +150,16 @@ fun PhotoResultScreen(
             Spacer(modifier = Modifier.weight(1f))
             Row {
                 Button(
-                    onClick = { },
+                    onClick = {
+                        viewModel.saveJournalStatus(journalId, false)
+                        navController.navigate(
+                            Screen.App.InputJournalScreen(
+                                journalId = journalId
+                            )
+                        ) {
+                            launchSingleTop = true
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),

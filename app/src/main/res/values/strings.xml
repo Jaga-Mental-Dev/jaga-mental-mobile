@@ -21,8 +21,8 @@
     <string name="captured_photo">Foto yang diambil</string>
     <string name="photo_result">Hasil Foto</string>
     <string name="back">Kembali</string>
-    <string name="input_step_1_3" tools:ignore="TypographyFractions">1/3</string>
-    <string name="input_step_2_3">2/3</string>
+    <string name="input_step_1_3" tools:ignore="TypographyFractions">1/4</string>
+    <string name="input_step_2_3">2/4</string>
     <string name="camera_capture_icon">Ikon tangkap kamera</string>
     <string name="captured_photo_filename">captured_photo.png</string>
     <string name="place_your_face_inside_the_shape">Posisikan wajahmu di dalam garis bentuk</string>

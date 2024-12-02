@@ -25,10 +25,16 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.view.WindowCompat
 
 @Composable
-fun StatusBarColorHelper(color: Color = Color.White, useDarkIcon: Boolean = true, view: View = LocalView.current) {
+fun StatusBarColorHelper(
+    color: Color = Color.White,
+    useDarkIcon: Boolean = true,
+    view: View = LocalView.current,
+    navBarColor: Color = Color.Transparent
+) {
     val window = (view.context as Activity).window
     window.statusBarColor = color.toArgb()
     WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = useDarkIcon
+    window.navigationBarColor = navBarColor.toArgb()
 }
 
 @Composable
@@ -54,14 +60,14 @@ fun LazyListState.isScrollingUp(): Boolean {
 }
 
 fun getBackGroundColorByEmotion(emotion: String): Color {
-    return when (emotion) {
-        "happy" -> Color(0xFFFFF9C4)
-        "sad" -> Color(0xFFBBDEFB)
-        "angry" -> Color(0xFFFFCDD2)
+    return when (emotion.lowercase()) {
+        "senang" -> Color(0xFFFFF9C4)
+        "sedih" -> Color(0xFFBBDEFB)
+        "marah" -> Color(0xFFFFCDD2)
         "surprised" -> Color(0xFFFFF176)
         "disgusted" -> Color(0xFFDCEDC8)
         "fearful" -> Color(0xFFFFE082)
-        "neutral" -> Color(0xFFEEEEEE)
+        "netral" -> Color(0xFFEEEEEE)
         else -> Color(0xFFFAFAFA)
     }
 }

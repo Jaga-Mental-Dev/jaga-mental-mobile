@@ -1,7 +1,6 @@
 package io.mindset.jagamental.ui.screen.journal
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,8 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -26,30 +28,20 @@ import io.mindset.jagamental.ui.component.journal.CalendarHeader
 import io.mindset.jagamental.ui.component.journal.EmptyJournal
 import io.mindset.jagamental.ui.component.journal.JournalListItem
 import io.mindset.jagamental.utils.StatusBarColorHelper
+import io.mindset.jagamental.utils.UiState
 import io.mindset.jagamental.utils.isScrollingUp
-import kotlin.random.Random
-
-data class JournalItem(
-    val title: String,
-    val content: String,
-)
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun JournalScreen(navController: NavController, paddingValues: PaddingValues) {
+    val viewModel: JournalViewModel = koinViewModel()
+    val journalState by viewModel.journalState.collectAsState()
 
-    fun generateRandomJournalCount(): Int {
-        return Random.nextInt(1, 10)
-    }
+    val listState = rememberLazyListState()
+    val selectedDate = remember { mutableStateOf("") }
+    val isJournalEmpty = remember { mutableStateOf(false) }
 
     val systemUiColor = Color(0xFF194A47)
-    val randomJournalCount = remember { mutableIntStateOf(0) }
-    val listState = rememberLazyListState()
-    val journalsMock = List(randomJournalCount.intValue) { index ->
-        JournalItem(
-            title = "Journal ${index + 1}", content = "This is the content of journal ${index + 1}"
-        )
-    }
-    val isJournalEmpty = remember { mutableStateOf(journalsMock.isEmpty()) }
 
     Box(
         modifier = Modifier
@@ -62,43 +54,75 @@ fun JournalScreen(navController: NavController, paddingValues: PaddingValues) {
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Top,
         ) {
-            CalendarHeader(onDateClick = { formattedDate ->
-                Log.d("JournalScreen", "Selected date: $formattedDate")
-                randomJournalCount.intValue = generateRandomJournalCount()
-                isJournalEmpty.value = randomJournalCount.intValue == 0
+            CalendarHeader(onDateClick = { date ->
+                selectedDate.value = date
+                Log.d("JournalScreen", "Selected date: $date")
+                viewModel.resetState()
+                viewModel.getJournalsByDate(date)
             })
 
-            if (isJournalEmpty.value) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    EmptyJournal(onClick = { navController.navigate(Screen.App.CapturePhotoScreen) })
-                }
-            } else {
-                LazyColumn(
-                    state = listState,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    items(journalsMock) { journal ->
-                        JournalListItem(
-                            title = journal.title,
-                            content = journal.content,
-                            onItemClick = {
-                                Toast.makeText(
-                                    navController.context,
-                                    "Journal ${journal.title} clicked!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        )
+            when (val state = journalState) {
+                is UiState.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
                     }
+                }
+
+                is UiState.Success -> {
+                    val journals = state.data ?: emptyList()
+
+                    if (journals.isEmpty()) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            isJournalEmpty.value = true
+                            EmptyJournal(onClick = { navController.navigate(Screen.App.CapturePhotoScreen) })
+                        }
+                    } else {
+                        isJournalEmpty.value = false
+                        LazyColumn(
+                            state = listState,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(journals) { journal ->
+                                JournalListItem(
+                                    title = journal?.title ?: "No Title",
+                                    content = journal?.content ?: "No Content",
+                                    onItemClick = {
+                                        navController.navigate(
+                                            Screen.App.JournalResultScreen(
+                                                journal?.id.toString(),
+                                            )
+                                        ) {
+                                            launchSingleTop = true
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+
+                is UiState.Error -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = "Error: ${state.message}", color = Color.Red)
+                    }
+                }
+
+                UiState.Idle -> {
+                    // Initial state, do nothing
                 }
             }
         }
 
-        val showButton = journalsMock.isNotEmpty()
-
+        val showButton = !isJournalEmpty.value
         if (showButton) {
             AddJournalButton(
                 onclick = {
@@ -111,6 +135,3 @@ fun JournalScreen(navController: NavController, paddingValues: PaddingValues) {
     }
     StatusBarColorHelper(systemUiColor, useDarkIcon = false)
 }
-
-
-

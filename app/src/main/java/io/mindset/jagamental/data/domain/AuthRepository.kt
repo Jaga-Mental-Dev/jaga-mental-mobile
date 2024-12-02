@@ -72,7 +72,7 @@ class AuthRepository(
             emit(UiState.Success(auth.currentUser))
         } catch (e: Exception) {
             Log.d("AuthRepository", "authenticateWithFirebase: ${e.message}")
-            emit(UiState.Error("Invalid Email or Password"))
+            emit(UiState.Error("Terjadi Kesalahan"))
         }
     }
 
@@ -83,7 +83,7 @@ class AuthRepository(
             emit(UiState.Success(auth.currentUser))
         } catch (e: FirebaseAuthException) {
             Log.e("AuthRepository", "signInWithEmailPassword: ${e.message}", e)
-            emit(UiState.Error("Invalid Email or Password"))
+            emit(UiState.Error("Terjadi Kesalahan"))
         } catch (e: Exception) {
             Log.e("AuthRepository", "Unexpected error: ${e.message}", e)
             emit(UiState.Error("An unexpected error occurred"))
@@ -125,9 +125,9 @@ class AuthRepository(
         _uiState.value = UiState.Success(user)
     }
 
-    private suspend fun getIdTokenFromFirebase(): String? {
+    suspend fun getIdTokenFromFirebase(): String? {
         return try {
-            auth.currentUser?.getIdToken(false)?.await()?.token
+            auth.currentUser?.getIdToken(true)?.await()?.token
         } catch (e: Exception) {
             Log.e("AuthRepository", "Error getting token: ${e.message}")
             null

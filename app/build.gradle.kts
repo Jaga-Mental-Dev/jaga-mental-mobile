@@ -64,6 +64,12 @@ android {
 
 dependencies {
 
+    // Splash
+    implementation(libs.androidx.core.splashscreen)
+
+    // Shimmer
+    implementation(libs.compose.shimmer)
+
     // Camera X
     implementation (libs.androidx.camera.core)
     implementation (libs.androidx.camera.camera2)

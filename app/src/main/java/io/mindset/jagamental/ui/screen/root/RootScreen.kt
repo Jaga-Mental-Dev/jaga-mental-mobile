@@ -22,16 +22,13 @@ fun RootScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    val bottomBarExcludedRoutes = listOf(
-        Screen.Auth.Login::class.simpleName,
-        Screen.Auth.Register::class.simpleName,
-        Screen.App.CapturePhotoScreen::class.simpleName,
-        Screen.App.ResultPreviewScreen::class.simpleName,
-        Screen.App.InputJournalScreen::class.simpleName,
-        Screen.App.PhotoResultScreen::class.simpleName
+    val includedRoutes = listOf(
+        Screen.App.Dashboard::class.simpleName,
+        Screen.App.Profile::class.simpleName,
+        Screen.App.MainJournalScreen::class.simpleName
     )
 
-    val isIncludeRoute = bottomBarExcludedRoutes.none {
+    val isIncludeRoute = includedRoutes.any {
         it?.let { it1 -> navBackStackEntry?.destination?.route?.contains(it1) } == true
     }
 

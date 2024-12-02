@@ -22,8 +22,8 @@ const val apiUrl = "https://jamen-api-616607546235.asia-southeast2.run.app/api/"
 
 val networkModule = module {
     single {
-        val sharedPreferencesHelper: SharedPreferencesHelper = get()
-        val authInterceptor = createAuthInterceptor(sharedPreferencesHelper)
+        val authRepository: AuthRepository = get()
+        val authInterceptor = createAuthInterceptor(authRepository)
 
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BASIC
@@ -49,9 +49,9 @@ val networkModule = module {
     }
 }
 
-private fun createAuthInterceptor(sharedPreferencesHelper: SharedPreferencesHelper): Interceptor {
+private fun createAuthInterceptor(authRepository: AuthRepository): Interceptor {
     return Interceptor { chain ->
-        val token = runBlocking { sharedPreferencesHelper.getTokenAsync() }
+        val token = runBlocking { authRepository.getIdTokenFromFirebase() }
         val req = chain.request()
         val requestHeaders = req.newBuilder()
             .addHeader("Authorization", "Bearer $token")

@@ -18,17 +18,17 @@ import ir.ehsannarmani.compose_charts.models.Line
 
 @Composable
 fun DashLineChart(
-    graphData: List<ChartData?>,
+    graphData: List<ChartData>,
     modifier: Modifier = Modifier
 ) {
     LineChart(
         modifier = modifier,
         data = graphData.map {
-            val gradientColor = ColorHelper.getGradientColorsByLabel(it?.emotion ?: "")
+            val gradientColor = ColorHelper.getGradientColorsByLabel(it.emotion)
             Line(
-                label = it?.emotion ?: "",
-                values = it?.values ?: emptyList(),
-                color = SolidColor(ColorHelper.getColorByLabel(it?.emotion ?: "")),
+                label = it.emotion,
+                values = it.values,
+                color = SolidColor(ColorHelper.getColorByLabel(it.emotion)),
                 firstGradientFillColor = gradientColor.first,
                 secondGradientFillColor = gradientColor.second,
                 strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),

@@ -9,8 +9,28 @@ class SharedPreferencesHelper(private val sharedPreferences: SharedPreferences) 
 
     companion object {
         private const val TOKEN_KEY = "TOKEN_KEY"
-        private const val NAME_KEY = "NAME_KEY"
+        private const val LATEST_CREATED_JOURNAL_ID = "LATEST_CREATED_JOURNAL_ID"
+        private const val IS_COMPLETED_JOURNAL_CREATION = "IS_COMPLETED_JOURNAL_CREATION"
+    }
 
+    fun saveLatestCreatedJournalId(journalId: String) {
+        sharedPreferences.edit()
+            .putString(LATEST_CREATED_JOURNAL_ID, journalId)
+            .apply()
+    }
+
+    fun getLatestCreatedJournalId(): String? {
+        return sharedPreferences.getString(LATEST_CREATED_JOURNAL_ID, null) ?: ""
+    }
+
+    fun saveIsCompletedLatestJournalCreation(isCompleted: Boolean) {
+        sharedPreferences.edit()
+            .putBoolean(IS_COMPLETED_JOURNAL_CREATION, isCompleted)
+            .apply()
+    }
+
+    fun isCompletedLatestJournalCreation(): Boolean {
+        return sharedPreferences.getBoolean(IS_COMPLETED_JOURNAL_CREATION, false)
     }
 
     fun saveToken(token: String) {
@@ -31,7 +51,6 @@ class SharedPreferencesHelper(private val sharedPreferences: SharedPreferences) 
     fun clearToken() {
         sharedPreferences.edit()
             .remove(TOKEN_KEY)
-            .remove(NAME_KEY)
             .apply()
     }
 }

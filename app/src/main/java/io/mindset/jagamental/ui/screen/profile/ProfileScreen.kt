@@ -1,5 +1,7 @@
 package io.mindset.jagamental.ui.screen.profile
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import io.mindset.jagamental.R
+import io.mindset.jagamental.data.model.MenuItemProfile
 import io.mindset.jagamental.navigation.Screen
 import io.mindset.jagamental.ui.component.profile.LogoutConfirmationDialog
 import io.mindset.jagamental.ui.component.profile.ProfileHeader
@@ -47,8 +51,55 @@ import org.koin.androidx.compose.koinViewModel
 fun ProfileScreen(navController: NavController, paddingValues: PaddingValues) {
     val viewModel: ProfileViewModel = koinViewModel()
     val user = remember { mutableStateOf(viewModel.currentUser.value) }
-    val firstMenus = viewModel.firstMenuItems
-    val secondMenus = viewModel.secondMenuItems
+    val context = LocalContext.current
+
+    val firstMenus = listOf(
+        MenuItemProfile(
+            icon = R.drawable.ic_phone_calling_bold_duotone,
+            title = "Contact Us",
+            onClick = { }
+        ),
+        MenuItemProfile(
+            icon = R.drawable.ic_solar_star_circle_bold_duotone,
+            title = "Rate Jaga Mental App",
+            onClick = {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("market://details?id=${context.packageName}")
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+
+                context.startActivity(intent)
+            }
+        ),
+        MenuItemProfile(
+            icon = R.drawable.chatbot_unselected,
+            title = "Submit Your Feedback",
+            onClick = { }
+        ),
+        MenuItemProfile(
+            icon = R.drawable.ic_solar_question_circle_bold_duotone,
+            title = "FAQ",
+            onClick = { }
+        ),
+    )
+
+    val secondMenus = listOf(
+        MenuItemProfile(
+            icon = R.drawable.ic_mdi_instagram,
+            title = "Follow Us on Instagram",
+            onClick = { }
+        ),
+        MenuItemProfile(
+            icon = R.drawable.ic_ri_twitter_x_line,
+            title = "Follow Us on X",
+            onClick = { }
+        ),
+        MenuItemProfile(
+            icon = R.drawable.ic_ic_baseline_facebook,
+            title = "Follow Us on Facebook",
+            onClick = { }
+        )
+    )
 
     val sheetState = rememberModalBottomSheetState()
     var showDialog by remember { mutableStateOf(false) }

@@ -13,7 +13,8 @@ class MainApplication : Application() {
                 networkModule,
                 viewModelModule,
                 repositoryModule,
-                sharedPreferencesModule
+                sharedPreferencesModule,
+                utilsModule
             )
         }
     }
