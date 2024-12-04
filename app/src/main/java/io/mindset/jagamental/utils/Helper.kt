@@ -23,6 +23,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.view.WindowCompat
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun StatusBarColorHelper(
@@ -78,7 +81,8 @@ fun LockScreenOrientation() {
     DisposableEffect(context) {
         context.requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
         onDispose {
-            context.requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            context.requireActivity().requestedOrientation =
+                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 }
@@ -98,4 +102,23 @@ fun PaddingValues.exceptTop(): PaddingValues {
         end = calculateEndPadding(LayoutDirection.Ltr),
         bottom = calculateBottomPadding()
     )
+}
+
+fun LocalDateTime.formatRelative(): String {
+    val now = LocalDateTime.now()
+    val duration = ChronoUnit.MILLIS.between(this, now)
+
+    val seconds = TimeUnit.MILLISECONDS.toSeconds(duration)
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(duration)
+    val hours = TimeUnit.MILLISECONDS.toHours(duration)
+    val days = TimeUnit.MILLISECONDS.toDays(duration)
+
+    return when {
+        seconds < 60 -> "Baru saja"
+        minutes < 60 -> "$minutes menit yang lalu"
+        hours < 24 -> "$hours jam yang lalu"
+        days == 1L -> "Kemarin"
+        days < 7 -> "$days hari yang lalu"
+        else -> "Lebih dari seminggu yang lalu"
+    }
 }
