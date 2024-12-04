@@ -86,7 +86,7 @@ fun PhotoResultScreen(
                 action = {
                     Box(
                         modifier = Modifier.padding(horizontal = 12.dp)
-                    ){
+                    ) {
                         Row {
                             Text(stringResource(R.string.input_step_2_3))
                         }
