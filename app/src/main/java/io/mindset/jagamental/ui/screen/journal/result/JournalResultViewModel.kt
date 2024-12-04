@@ -23,9 +23,11 @@ class JournalResultViewModel(
     private val _professionals = MutableStateFlow<List<ProfesionalProfile>>(emptyList())
     val professionals = _professionals.asStateFlow()
 
+
     init {
         getProfessionals()
     }
+
 
     fun getJournalById(journalId: String) {
         _journalState.value = UiState.Loading
@@ -34,12 +36,6 @@ class JournalResultViewModel(
                 Log.i("InputJournalViewModel", "Response GetById: $response")
                 _journalState.value = response
             }
-        }
-    }
-
-    fun getCurrentUser() {
-        viewModelScope.launch {
-
         }
     }
 
