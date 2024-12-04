@@ -39,7 +39,7 @@ fun TopBar(
                     onBack()
                 }
             ) {
-                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back Action")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back Action")
             }
         },
         actions = {
