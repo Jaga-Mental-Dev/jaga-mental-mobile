@@ -17,7 +17,6 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ApiService {
     // Users
@@ -48,12 +47,8 @@ interface ApiService {
     @POST("/local")
     suspend fun doLocal(): AuthResponse
 
-    @GET("/journal")
-    suspend fun doGetJournalByUserId(
-        @Query("title") title: String? = null,
-        @Query("content") content: String? = null,
-        @Query("emotion") emotion: String? = null
-    ): JournalResponse
+    @GET("/api/journal")
+    suspend fun doGetJournalByUserId(): ListJournalResponse
 
     @Multipart
     @POST("/api/journal")
