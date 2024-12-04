@@ -16,23 +16,21 @@ class JournalRepository(private val apiService: ApiService) {
     * val selectedEmotion = EmotionRequest.sad.toString()
     * */
 
-//    fun getJournals(
-//        title: String? = null,
-//        content: String? = null,
-//        emotion: String? = null
-//    ): Flow<UiState<List<JournalData>?>> = flow {
-//        emit(UiState.Loading)
-//        try {
-//            val response = apiService.doGetJournalByUserId(title, content, emotion)
-//            if (response.error == true) {
-//                emit(UiState.Error(response.message ?: "Unknown error occurred"))
-//            } else {
-//                emit(UiState.Success(response.data))
-//            }
-//        } catch (e: Exception) {
-//            emit(UiState.Error(e.localizedMessage ?: "Error fetching journals"))
-//        }
-//    }
+    fun getJournals(): Flow<UiState<List<JournalData?>>> = flow {
+        emit(UiState.Loading)
+        try {
+            val response = apiService.doGetJournalByUserId()
+            if (response.error == true) {
+                emit(UiState.Error(response.message ?: "Unknown error occurred"))
+            } else {
+                response.data?.let {
+                    emit(UiState.Success(it))
+                } ?: emit(UiState.Error("Failed to fetch journals"))
+            }
+        } catch (e: Exception) {
+            emit(UiState.Error(e.localizedMessage ?: "Error fetching journals"))
+        }
+    }
 
     fun postCreateJournal(
         selfie: MultipartBody.Part
