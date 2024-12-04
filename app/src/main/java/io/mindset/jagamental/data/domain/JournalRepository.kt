@@ -141,44 +141,12 @@ class JournalRepository(private val apiService: ApiService) {
     fun getProfessionals(): Flow<ProState<List<ProfessionalProfile?>>> = flow {
         emit(ProState.Loading)
         try {
-            val response = listOf(
-                ProfessionalProfile(
-                    name = "Dr. Arya Pratama",
-                    avatar = "https://example.com/avatar1.jpg",
-                    city = "Jakarta",
-                    specialist = "Psikolog Klinis",
-                    phone = "+62 812 3456 7890"
-                ),
-                ProfessionalProfile(
-                    name = "Dr. Rani Kusuma",
-                    avatar = "https://example.com/avatar2.jpg",
-                    city = "Bandung",
-                    specialist = "Psikiater",
-                    phone = "+62 811 9876 5432"
-                ),
-                ProfessionalProfile(
-                    name = "Dr. Bagas Rahardjo",
-                    avatar = "https://example.com/avatar3.jpg",
-                    city = "Surabaya",
-                    specialist = "Konselor",
-                    phone = "+62 812 2222 3333"
-                ),
-                ProfessionalProfile(
-                    name = "Dr. Wulan Sari",
-                    avatar = "https://example.com/avatar4.jpg",
-                    city = "Yogyakarta",
-                    specialist = "Psikolog Anak",
-                    phone = "+62 813 4567 8901"
-                ),
-                ProfessionalProfile(
-                    name = "Dr. Bimo Anindito",
-                    avatar = "https://example.com/avatar5.jpg",
-                    city = "Bali",
-                    specialist = "Terapi Perilaku",
-                    phone = "+62 814 5678 9012"
-                )
-            )
-            emit(ProState.Success(response))
+            val response = apiService.doGetProfessional()
+            if (response.error == true) {
+                emit(ProState.Error(response.message))
+            } else {
+                emit(ProState.Success(response.data))
+            }
         } catch (e: Exception) {
             emit(ProState.Error(e.localizedMessage ?: "Error getting professionals"))
         }
