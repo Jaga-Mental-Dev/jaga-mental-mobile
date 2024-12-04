@@ -1,6 +1,12 @@
 package io.mindset.jagamental.ui.screen.journal
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +20,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
+import io.mindset.jagamental.data.model.response.JournalData
 import io.mindset.jagamental.navigation.Screen
 import io.mindset.jagamental.ui.component.journal.AddJournalButton
 import io.mindset.jagamental.ui.component.journal.CalendarHeader
@@ -30,8 +38,10 @@ import io.mindset.jagamental.ui.component.journal.JournalListItem
 import io.mindset.jagamental.utils.StatusBarColorHelper
 import io.mindset.jagamental.utils.UiState
 import io.mindset.jagamental.utils.isScrollingUp
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun JournalScreen(navController: NavController, paddingValues: PaddingValues) {
     val viewModel: JournalViewModel = koinViewModel()
@@ -88,21 +98,30 @@ fun JournalScreen(navController: NavController, paddingValues: PaddingValues) {
                             state = listState,
                             modifier = Modifier.fillMaxSize()
                         ) {
-                            items(journals) { journal ->
-                                Log.i("JournalScreen", "Journal: $journal")
-                                JournalListItem(
-                                    title = journal?.title ?: "No Title",
-                                    content = journal?.content ?: "No Content",
-                                    onItemClick = {
-                                        navController.navigate(
-                                            Screen.App.JournalResultScreen(
-                                                journal?.id.toString(),
-                                            )
-                                        ) {
-                                            launchSingleTop = true
+                            items(journals, key = { it?.id!! }) { journal ->
+                                var visible = remember { mutableStateOf(false) }
+
+                                LaunchedEffect(journal?.id) {
+                                    delay(100 * journals.indexOf(journal).toLong())
+                                    visible.value = true
+                                }
+
+                                AnimatedVisibility(
+                                    visible = visible.value,
+                                    enter = fadeIn() + expandHorizontally(),
+                                    exit = fadeOut() + slideOutHorizontally(),
+                                ) {
+                                    JournalListItem(
+                                        journal = journal ?: JournalData(),
+                                        onItemClick = {
+                                            navController.navigate(
+                                                Screen.App.JournalResultScreen(journal?.id.toString())
+                                            ) {
+                                                launchSingleTop = true
+                                            }
                                         }
-                                    }
-                                )
+                                    )
+                                }
                             }
                         }
                     }
