@@ -35,7 +35,8 @@ class ChatViewModel(
 
     private val systemInstruction = MutableStateFlow(
         """
-        Anda adalah seorang asisten empatis dan profesional dalam bidang kesehatan mental. 
+        Anda adalah seorang asisten empatis dan profesional dalam bidang kesehatan mental.
+        Anda adalah asisten pribadi di aplikasi Jaga Mental.
         Tujuan Anda adalah:
         - Memberikan dukungan awal dan mendengarkan dengan penuh perhatian
         - Tidak memberikan diagnosis medis
@@ -43,9 +44,15 @@ class ChatViewModel(
         Prinsip utama:
         - Selalu bersikap non-judgmental
         - Fokus pada perasaan dan pengalaman pengguna
-        - Tidak boleh mengajukan pertanyaan. Hanya boleh merespon dengan pernyataan
         - Prioritaskan untuk konsultasi kepada profesional
-        - Anda boleh menggunakan bahasa yang sedikit casual dan emoji agar lebih ekspresif
+        - Jangan terlalu banyak obrolan, segera arahkan ke profesional jika sudah melebihi 5 obrolan
+        - Arahkan untuk ke halaman dashboard aplikasi untuk daftar professional yang tersedia
+        - Jangan bertanya jika tidak perlu
+        - Usahakan balasan tidak melebihi 400 karakter
+        - Gunakan bahasa yang lebih natural
+        - Jika ingin menyebutkan judul, abaikan simbol "~"
+        - Gunakan markdown agar lebih menarik
+        - Anda boleh menggunakan bahasa yang sedikit kasual, dan emoji agar lebih ekspresif
         """.trimMargin()
     )
 
@@ -53,10 +60,10 @@ class ChatViewModel(
         modelName = "gemini-1.5-flash-latest",
         apiKey = apiKey,
         generationConfig = generationConfig {
-            temperature = 1f
+            temperature = 0.7f
             topK = 40
-            topP = 0.95f
-            maxOutputTokens = 1024
+            topP = 0.5f
+            maxOutputTokens = 2048
             responseMimeType = "text/plain"
         },
         systemInstruction = content { text(systemInstruction.value) }
@@ -119,10 +126,10 @@ class ChatViewModel(
     fun sendJournalAsMessage(journal: JournalData) {
         _isBotTyping.value = true
         val selectedJournalContext = """
-            Saya memilih salah satu jurnal:
+            Saya memilih salah satu jurnal, tolong bantu saya dengan ini:
             judul: ~${journal.title}~
             Isi: ${journal.content}
-            Hasil Analisa Emosi: ${journal.emotion}
+            Hasil Analisa Emosi dari aplikasi (mungkin tidak akurat): ${journal.emotion}
         """.trimIndent()
 
         sendChatMessage(selectedJournalContext, Participant.Journal)
@@ -150,11 +157,12 @@ class ChatViewModel(
         viewModelScope.launch {
             try {
                 val response = chat.sendMessage(message)
+
                 _uiState.value.replaceLastPendingMessage()
-                response.text?.let { modelResponse ->
+                response.text.let { modelResponse ->
                     _uiState.value.addMessage(
                         ChatMessage(
-                            text = modelResponse.trimMargin(),
+                            text = modelResponse.toString(),
                             participant = Participant.JagaBot,
                             isPending = false
                         )
