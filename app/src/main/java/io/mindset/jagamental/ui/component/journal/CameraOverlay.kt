@@ -43,12 +43,11 @@ fun OverlayView(
 }
 
 
-
 private fun getScannerPath(
     size: Size,
     scannerHeight: Float,
     horizontalPadding: Float
- ) = Path().apply {
+) = Path().apply {
     val center = Offset(size.width / 2, size.height / 2)
     addOval(
         oval = Rect(
