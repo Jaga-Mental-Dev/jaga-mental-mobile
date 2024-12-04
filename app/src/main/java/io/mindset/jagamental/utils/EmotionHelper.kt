@@ -61,11 +61,6 @@ class EmotionHelper() {
         } ?: "Emosi tidak ditemukan. Coba pilih emosi lain."
     }
 
-    fun getRandomEmotion(): String {
-        val emotions = listOf("marah", "netral", "sedih", "senang")
-        return emotions[Random.nextInt(emotions.size)]
-    }
-
     fun getEmotionIcon(emotion: String): Int {
         return when (emotion.lowercase()) {
             "marah" -> R.drawable.emotion_marah
