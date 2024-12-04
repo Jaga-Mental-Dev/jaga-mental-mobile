@@ -1,7 +1,6 @@
 package io.mindset.jagamental.ui.screen.chatbot
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,10 +38,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextMotion
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import dev.jeziellago.compose.markdowntext.MarkdownText
+import io.mindset.jagamental.R
 import io.mindset.jagamental.data.model.ChatMessage
 import io.mindset.jagamental.data.model.Participant
 import io.mindset.jagamental.ui.component.chatbot.JournalPickerSheet
@@ -139,8 +142,7 @@ fun ChatbotScreen(
                 .fillMaxSize()
         ) {
             ChatList(
-                modifier = modifier
-                    .background(Color.White),
+                modifier = modifier,
                 chatUiState.messages,
                 listState
             )
@@ -257,8 +259,10 @@ fun ChatBubbleItem(
                 modifier = Modifier.widthIn(max = maxWidth * 0.9f)
             ) {
                 chatMessage.text?.let {
-                    Text(
-                        text = if (isJournalMessage) {
+                    MarkdownText(
+                        isTextSelectable = true,
+                        markdown =
+                        if (isJournalMessage) {
                             val regex = Regex("~(.*?)~")
                             val matchResult = regex.find(it)
                             val title = matchResult?.groups?.get(1)?.value ?: "Tidak ada judul"
@@ -267,7 +271,13 @@ fun ChatBubbleItem(
                             it
                         },
                         modifier = Modifier.padding(16.dp),
-                        color = if (isJournalMessage) Color.LightGray else Color.White
+                        fontResource = R.font.inter_medium,
+                        style = TextStyle(
+                            color = if (isJournalMessage) Color.LightGray else Color.White,
+                            lineHeight = 25.sp,
+                            fontSize = 16.sp,
+                            textMotion = TextMotion.Animated
+                        )
                     )
                 }
             }
