@@ -6,7 +6,6 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import io.mindset.jagamental.data.domain.AuthRepository
 import io.mindset.jagamental.data.domain.JournalRepository
 import io.mindset.jagamental.data.domain.LoginRepository
-import io.mindset.jagamental.data.domain.MainRepository
 import io.mindset.jagamental.data.remote.ApiService
 import io.mindset.jagamental.utils.SharedPreferencesHelper
 import kotlinx.coroutines.runBlocking
@@ -61,7 +60,6 @@ private fun createAuthInterceptor(authRepository: AuthRepository): Interceptor {
 }
 
 val repositoryModule = module {
-    single { MainRepository(apiService = get(), context = get()) }
     single { AuthRepository(get(), get()) }
     single { JournalRepository(apiService = get()) }
     single { LoginRepository(apiService = get()) }

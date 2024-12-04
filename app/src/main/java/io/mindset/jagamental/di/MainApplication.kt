@@ -14,7 +14,7 @@ class MainApplication : Application() {
                 viewModelModule,
                 repositoryModule,
                 sharedPreferencesModule,
-                utilsModule
+                utilsModule,
             )
         }
     }
