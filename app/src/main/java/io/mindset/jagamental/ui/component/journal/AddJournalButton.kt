@@ -14,11 +14,19 @@ import androidx.compose.ui.unit.dp
 import io.mindset.jagamental.R
 
 @Composable
-fun AddJournalButton(onclick: () -> Unit, modifier: Modifier = Modifier, isExpanded: Boolean = false) {
+fun AddJournalButton(
+    onclick: () -> Unit,
+    modifier: Modifier = Modifier,
+    isExpanded: Boolean = false
+) {
     ExtendedFloatingActionButton(
         onClick = onclick,
         icon = {
-            Icon(painter = painterResource(R.drawable.pencil), contentDescription = null, Modifier.size(16.dp))
+            Icon(
+                painter = painterResource(R.drawable.pencil),
+                contentDescription = null,
+                Modifier.size(16.dp)
+            )
         },
         text = {
             Text(text = "Tulis Jurnal Baru")
