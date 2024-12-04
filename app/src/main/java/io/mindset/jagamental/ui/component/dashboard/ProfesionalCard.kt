@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -39,7 +40,6 @@ import io.mindset.jagamental.ui.theme.primaryColor
 @Composable
 fun ProfesionalCard(
     data: ProfessionalProfile,
-    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     Card(
@@ -83,6 +83,8 @@ fun ProfesionalCard(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color.Gray,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             Spacer(Modifier.size(8.dp))
