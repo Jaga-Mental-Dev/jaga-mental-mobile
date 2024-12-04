@@ -4,12 +4,14 @@ import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import io.mindset.jagamental.data.model.ChartData
 import io.mindset.jagamental.utils.ColorHelper
 import ir.ehsannarmani.compose_charts.LineChart
 import ir.ehsannarmani.compose_charts.models.AnimationMode
+import ir.ehsannarmani.compose_charts.models.DotProperties
 import ir.ehsannarmani.compose_charts.models.DrawStyle
 import ir.ehsannarmani.compose_charts.models.GridProperties
 import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
@@ -26,14 +28,20 @@ fun DashLineChart(
         data = graphData.map {
             val gradientColor = ColorHelper.getGradientColorsByLabel(it.emotion)
             Line(
-                label = it.emotion,
+                label = it.emotion.replaceFirstChar { it.uppercase() },
                 values = it.values,
                 color = SolidColor(ColorHelper.getColorByLabel(it.emotion)),
                 firstGradientFillColor = gradientColor.first,
                 secondGradientFillColor = gradientColor.second,
-                strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
-                gradientAnimationDelay = 1000,
+                strokeAnimationSpec = tween(500, easing = EaseInOutCubic),
+                gradientAnimationDelay = 0,
                 drawStyle = DrawStyle.Stroke(width = 2.dp),
+                dotProperties = DotProperties(
+                    enabled = true,
+                    radius = 0.dp,
+                    strokeWidth = 3.dp,
+                    strokeColor = SolidColor(Color.Gray)
+                )
             )
         },
         animationMode = AnimationMode.Together(delayBuilder = { it * 500L }),
@@ -44,7 +52,7 @@ fun DashLineChart(
         ),
         labelProperties = LabelProperties(
             enabled = true,
-            labels = listOf("Sun", "Mon", "Wed", "Thru", "Fri", "Sat")
-        ),
+            labels = listOf("Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab")
+        )
     )
 }
