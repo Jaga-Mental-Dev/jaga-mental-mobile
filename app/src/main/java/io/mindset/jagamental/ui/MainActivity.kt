@@ -32,12 +32,11 @@ class MainActivity : ComponentActivity() {
             val remoteConfigHelper = RemoteConfigHelper()
             val isUpdated = remoteConfigHelper.fetchAndActivate()
             if (isUpdated) {
-                Log.d("RemoteConfig", "Remote Config Updated")
+                Log.i("RemoteConfig", "Remote Config Updated")
             } else {
-                Log.d("RemoteConfig", "Remote Config Not Updated")
+                Log.i("RemoteConfig", "Remote Config Not Updated")
             }
+            remoteConfigHelper.listenForUpdates()
         }
-
     }
-
 }
