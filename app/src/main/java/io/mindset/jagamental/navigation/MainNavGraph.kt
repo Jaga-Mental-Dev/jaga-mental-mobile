@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import io.mindset.jagamental.ui.screen.chatbot.ChatbotScreen
 import io.mindset.jagamental.ui.screen.dashboard.DashboardScreen
 import io.mindset.jagamental.ui.screen.journal.JournalScreen
 import io.mindset.jagamental.ui.screen.journal.add.capture.CaptureScreen
@@ -83,6 +84,12 @@ fun NavGraphBuilder.mainNavGraph(
             } else {
                 JournalResultScreen(journalId, navController)
             }
+        }
+
+        composable<Screen.App.ChatBotScreen> {
+            ChatbotScreen(
+                navController = navController,
+            )
         }
     }
 }
