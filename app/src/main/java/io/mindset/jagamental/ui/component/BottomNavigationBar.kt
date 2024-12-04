@@ -1,6 +1,7 @@
 package io.mindset.jagamental.ui.component
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateContentSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -33,15 +34,17 @@ fun BottomNavigationBar(navController: NavController) {
 
     NavigationBar(
         containerColor = Color.White,
-        modifier = Modifier.drawBehind {
-            val borderHeight = 2.dp.toPx()
-            drawLine(
-                color = Color(0xFFE9EAEB),
-                start = Offset(0f, 0f),
-                end = Offset(size.width, 0f),
-                strokeWidth = borderHeight
-            )
-        },
+        modifier = Modifier
+            .drawBehind {
+                val borderHeight = 2.dp.toPx()
+                drawLine(
+                    color = Color(0xFFE9EAEB),
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = borderHeight
+                )
+            }
+            .animateContentSize(),
     ) {
 
         items.forEach { item ->
