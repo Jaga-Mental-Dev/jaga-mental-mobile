@@ -49,9 +49,12 @@ import coil3.compose.AsyncImage
 import io.mindset.jagamental.R
 import io.mindset.jagamental.navigation.Screen
 import io.mindset.jagamental.ui.component.dashboard.ProfesionalCard
+import io.mindset.jagamental.ui.component.util.ProfessionalPlaceholder
+import io.mindset.jagamental.ui.screen.dashboard.ChartError
 import io.mindset.jagamental.ui.theme.primaryColor
 import io.mindset.jagamental.utils.EmotionHelper
 import io.mindset.jagamental.utils.LockScreenOrientation
+import io.mindset.jagamental.utils.ProState
 import io.mindset.jagamental.utils.StatusBarColorHelper
 import io.mindset.jagamental.utils.UiState
 import org.koin.androidx.compose.koinViewModel
@@ -64,7 +67,7 @@ fun JournalResultScreen(
     val journalState = viewModel.journalState.collectAsState()
     val scrollState = rememberScrollState()
     val placeHolderImage = "https://placehold.co/600x400?text=Oops!"
-    val professionals = viewModel.professionals.collectAsState()
+    val professionals = viewModel.profesionals.collectAsState()
 
     BackHandler {
         navController.navigate(Screen.App.MainJournalScreen) {
@@ -251,14 +254,34 @@ fun JournalResultScreen(
                         )
                         Spacer(Modifier.size(12.dp))
 
-                        LazyRow(
-                            modifier = Modifier.height(360.dp),
-                            contentPadding = PaddingValues(8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            itemsIndexed(professionals.value) { index, professional ->
-                                ProfesionalCard(professional)
+                        when (val state = professionals.value) {
+                            is ProState.Success -> {
+                                LazyRow(
+                                    modifier = Modifier.height(360.dp),
+                                    contentPadding = PaddingValues(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    itemsIndexed(state.data) { index, professional ->
+                                        professional?.let {
+                                            ProfesionalCard(it)
+                                        }
+                                    }
+                                }
+                            }
+
+                            is ProState.Loading -> {
+                                ProfessionalPlaceholder()
+                            }
+
+                            is ProState.Error -> {
+                                ChartError(
+                                    onRetry = { viewModel.getProfessionals() }
+                                )
+                            }
+
+                            else -> {
+                                Log.i("JournalResultScreen", "Error: Unknown state")
                             }
                         }
                     }

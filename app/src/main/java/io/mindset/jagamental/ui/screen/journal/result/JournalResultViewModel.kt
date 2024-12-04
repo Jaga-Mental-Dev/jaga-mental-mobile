@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.mindset.jagamental.data.domain.JournalRepository
-import io.mindset.jagamental.data.model.ProfesionalProfile
+import io.mindset.jagamental.data.model.ProfessionalProfile
 import io.mindset.jagamental.data.model.response.JournalData
+import io.mindset.jagamental.utils.ProState
 import io.mindset.jagamental.utils.SharedPreferencesHelper
 import io.mindset.jagamental.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,8 +21,9 @@ class JournalResultViewModel(
     private val _journalState = MutableStateFlow<UiState<JournalData?>>(UiState.Idle)
     val journalState = _journalState.asStateFlow()
 
-    private val _professionals = MutableStateFlow<List<ProfesionalProfile>>(emptyList())
-    val professionals = _professionals.asStateFlow()
+    private val _professionals =
+        MutableStateFlow<ProState<List<ProfessionalProfile?>>>(ProState.Loading)
+    val profesionals = _professionals.asStateFlow()
 
 
     init {
@@ -45,21 +47,11 @@ class JournalResultViewModel(
     }
 
     fun getProfessionals() {
-        _professionals.value = listOf(
-            ProfesionalProfile(
-                "Dr. John Doe",
-                "https://i.pravatar.cc/300?u=johndoe",
-                "Jakarta",
-                "Psikolog",
-                "628123456789",
-            ),
-            ProfesionalProfile(
-                "Dr. Jane Smith",
-                "https://i.pravatar.cc/300?u=3",
-                "Surabaya",
-                "Psikolog",
-                "62812345678"
-            )
-        )
+        _professionals.value = ProState.Loading
+        viewModelScope.launch {
+            journalRepository.getProfessionals().collect { response ->
+                _professionals.value = response
+            }
+        }
     }
 }
