@@ -1,6 +1,6 @@
 package io.mindset.jagamental.data.model
 
-data class ProfesionalProfile(
+data class ProfessionalProfile(
     val name: String,
     val avatar: String,
     val city: String,
