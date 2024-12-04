@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,21 +8,20 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
 android {
-//    signingConfigs {
-//        create("release") {
-//            storeFile = file("C:\\Users\\galih\\.android\\keystore\\release_keystore.jks")
-//            storePassword = "android"
-//            keyAlias = "release"
-//            keyPassword = "android"
-//        }
-//    }
+
     namespace = "io.mindset.jagamental"
     compileSdk = 34
 
     defaultConfig {
         applicationId = "io.mindset.jagamental"
-        minSdk = 29
+        minSdk = 26
         //noinspection OldTargetApi
         targetSdk = 34
         versionCode = 5
@@ -30,6 +31,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField(
+            "String",
+            "GEMINI_API_KEY",
+            "\"${localProperties["GEMINI_API_KEY"]}\""
+        )
     }
 
     buildTypes {
@@ -39,7 +46,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-//            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -51,6 +57,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -64,6 +71,9 @@ android {
 
 dependencies {
 
+    // Gemini
+    implementation(libs.generativeai)
+
     // Splash
     implementation(libs.androidx.core.splashscreen)
 
@@ -71,10 +81,10 @@ dependencies {
     implementation(libs.compose.shimmer)
 
     // Camera X
-    implementation (libs.androidx.camera.core)
-    implementation (libs.androidx.camera.camera2)
-    implementation (libs.androidx.camera.view)
-    implementation (libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.lifecycle)
     implementation(libs.accompanist.permissions)
 
     // Lottie
@@ -88,7 +98,7 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
 
     //Chart
-    implementation (libs.compose.charts)
+    implementation(libs.compose.charts)
 
     // Firebase & Gms
     implementation(libs.firebase.auth)
@@ -150,8 +160,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    debugImplementation (libs.library)
-    releaseImplementation (libs.library.no.op)
+    debugImplementation(libs.library)
+    releaseImplementation(libs.library.no.op)
 
-    implementation (libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.ui.text.google.fonts)
 }

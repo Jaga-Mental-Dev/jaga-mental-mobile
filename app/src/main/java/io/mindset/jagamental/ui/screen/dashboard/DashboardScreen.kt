@@ -133,9 +133,12 @@ fun DashboardScreen(
                         .clip(RoundedCornerShape(8.dp))
                         .border(1.dp, Color(0xFFE8EDED), shape = RoundedCornerShape(8.dp))
                         .clickable(onClick = {
-                            showDialog.value = true
-                            dialogTitle.value = "Coming Soon"
-                            dialogText.value = "Sabar ya, fitur ini masih dalam pengembangan."
+//                            showDialog.value = true
+//                            dialogTitle.value = "Coming Soon"
+//                            dialogText.value = "Sabar ya, fitur ini masih dalam pengembangan."
+                            navController.navigate(Screen.App.ChatBotScreen) {
+                                launchSingleTop = true
+                            }
                         }),
                 ) {
                     Column(

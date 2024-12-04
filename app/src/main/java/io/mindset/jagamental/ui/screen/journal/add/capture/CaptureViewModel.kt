@@ -47,7 +47,7 @@ class CaptureViewModel : ViewModel() {
                         .toBitmap()
                         .rotateBitmap(image.imageInfo.rotationDegrees)
 
-                    val resizedBitmap = resizeBitmap(correctedBitmap, 800, 800) // Resize the bitmap
+                    val resizedBitmap = resizeBitmap(correctedBitmap, 800, 800)
 
                     val photoUri = saveBitmapToUri(context, resizedBitmap)
                     _fileUri.value = photoUri

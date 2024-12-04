@@ -14,11 +14,9 @@ import io.mindset.jagamental.navigation.RootNavGraph
 import io.mindset.jagamental.navigation.Screen
 import io.mindset.jagamental.ui.component.BottomNavigationBar
 import io.mindset.jagamental.ui.component.util.BackActionHandler
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RootScreen() {
-    val viewModel: RootViewModel = koinViewModel()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 

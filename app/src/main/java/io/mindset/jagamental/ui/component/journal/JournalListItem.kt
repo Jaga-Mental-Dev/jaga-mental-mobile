@@ -55,9 +55,11 @@ fun JournalListItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    Icon( painter = painterResource(id = R.drawable.ic_solar_document),
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_solar_document),
                         contentDescription = "Account Circle",
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier
+                            .size(24.dp)
                             .background(Color(0xFFD1DBDA), shape = RoundedCornerShape(8.dp))
                             .padding(4.dp),
                     )

@@ -31,7 +31,7 @@ sealed class Screen {
         @Serializable
         data class ResultPreviewScreen(
             val photoUri: String
-        ): Screen()
+        ) : Screen()
 
         @Serializable
         data class InputJournalScreen(
@@ -44,11 +44,14 @@ sealed class Screen {
             val emotion: String,
             val words: String,
             val photoUrl: String
-        ): Screen()
+        ) : Screen()
 
         @Serializable
         data class JournalResultScreen(
             val journalId: String
         ) : Screen()
+
+        @Serializable
+        data object ChatBotScreen : Screen()
     }
 }

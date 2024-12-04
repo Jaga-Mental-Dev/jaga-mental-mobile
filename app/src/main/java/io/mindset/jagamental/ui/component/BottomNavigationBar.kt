@@ -31,7 +31,6 @@ fun BottomNavigationBar(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route?.substringAfterLast('.')
 
-
     NavigationBar(
         containerColor = Color.White,
         modifier = Modifier.drawBehind {

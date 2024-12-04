@@ -1,6 +1,7 @@
 package io.mindset.jagamental.di
 
 import io.mindset.jagamental.ui.MainViewModel
+import io.mindset.jagamental.ui.screen.chatbot.ChatViewModel
 import io.mindset.jagamental.ui.screen.dashboard.DashboardViewModel
 import io.mindset.jagamental.ui.screen.journal.JournalViewModel
 import io.mindset.jagamental.ui.screen.journal.add.capture.CaptureViewModel
@@ -20,7 +21,7 @@ val viewModelModule = module {
     viewModel { LoginViewModel(get(), get()) }
     viewModel { DashboardViewModel(get()) }
     viewModel { RegisterViewModel(get()) }
-    viewModel { RootViewModel(get()) }
+    viewModel { RootViewModel() }
     viewModel { ProfileViewModel(get()) }
     viewModel { CaptureViewModel() }
     viewModel { PhotoResultViewModel(get(), get()) }
@@ -28,4 +29,5 @@ val viewModelModule = module {
     viewModel { JournalViewModel(get()) }
     viewModel { InputJournalViewModel(get(), get()) }
     viewModel { JournalResultViewModel(get(), get()) }
+    viewModel { ChatViewModel(get()) }
 }

@@ -12,7 +12,7 @@ sealed class BottomNavigationItem(
 ) {
     data object Home : BottomNavigationItem(
         title = "Dashboard",
-        selectedIcon = R.drawable.home_selected ,
+        selectedIcon = R.drawable.home_selected,
         unselectedIcon = R.drawable.home_unselected,
         route = Screen.App.Dashboard
     )
