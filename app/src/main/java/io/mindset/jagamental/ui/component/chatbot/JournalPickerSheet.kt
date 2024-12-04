@@ -102,8 +102,7 @@ fun JournalPickerSheet(
             LazyColumn {
                 itemsIndexed(filteredJournals) { _, journal ->
                     JournalListItem(
-                        title = journal.title.toString(),
-                        content = journal.content.toString(),
+                        journal = journal,
                         onItemClick = {
                             scope.launch {
                                 onJournalSelected(journal)
