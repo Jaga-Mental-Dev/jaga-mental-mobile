@@ -44,6 +44,7 @@ firebaseAuth = "23.1.0"
 animationCoreAndroid = "1.7.0-alpha08"
 firebaseConfig = "22.0.1"
 generativeai = "0.9.0"
+firebaseAnalytics = "22.1.2"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -98,6 +99,7 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 androidx-animation-core-android = { group = "androidx.compose.animation", name = "animation-core-android", version.ref = "animationCoreAndroid" }
 firebase-config = { group = "com.google.firebase", name = "firebase-config", version.ref = "firebaseConfig" }
 generativeai = { module = "com.google.ai.client.generativeai:generativeai", version.ref = "generativeai" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
