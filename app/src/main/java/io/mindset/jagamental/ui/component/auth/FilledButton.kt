@@ -13,7 +13,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun FilledButton(modifier: Modifier = Modifier,name: String, onClick: () -> Unit, enabled: Boolean = true) {
+fun FilledButton(
+    modifier: Modifier = Modifier,
+    name: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
     Button(
         onClick = onClick,
         modifier = modifier
