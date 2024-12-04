@@ -71,6 +71,9 @@ android {
 
 dependencies {
 
+    // Markdown
+    implementation(libs.compose.markdown)
+
     // Gemini
     implementation(libs.generativeai)
 
