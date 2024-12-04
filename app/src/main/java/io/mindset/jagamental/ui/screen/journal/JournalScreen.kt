@@ -56,7 +56,7 @@ fun JournalScreen(navController: NavController, paddingValues: PaddingValues) {
         ) {
             CalendarHeader(onDateClick = { date ->
                 selectedDate.value = date
-                Log.d("JournalScreen", "Selected date: $date")
+                Log.i("JournalScreen", "Selected date: $date")
                 viewModel.resetState()
                 viewModel.getJournalsByDate(date)
             })
@@ -89,6 +89,7 @@ fun JournalScreen(navController: NavController, paddingValues: PaddingValues) {
                             modifier = Modifier.fillMaxSize()
                         ) {
                             items(journals) { journal ->
+                                Log.i("JournalScreen", "Journal: $journal")
                                 JournalListItem(
                                     title = journal?.title ?: "No Title",
                                     content = journal?.content ?: "No Content",
