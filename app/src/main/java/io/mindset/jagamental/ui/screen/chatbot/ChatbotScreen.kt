@@ -258,8 +258,16 @@ fun ChatBubbleItem(
             ) {
                 chatMessage.text?.let {
                     Text(
-                        text = if (isJournalMessage) "📝 Jurnal Record" else it,
-                        modifier = Modifier.padding(16.dp)
+                        text = if (isJournalMessage) {
+                            val regex = Regex("~(.*?)~")
+                            val matchResult = regex.find(it)
+                            val title = matchResult?.groups?.get(1)?.value ?: "Tidak ada judul"
+                            "📝 Kamu Mengirim Jurnal - $title"
+                        } else {
+                            it
+                        },
+                        modifier = Modifier.padding(16.dp),
+                        color = if (isJournalMessage) Color.LightGray else Color.White
                     )
                 }
             }

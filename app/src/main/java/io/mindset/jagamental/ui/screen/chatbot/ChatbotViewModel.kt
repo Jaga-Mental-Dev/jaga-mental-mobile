@@ -8,12 +8,12 @@ import com.google.ai.client.generativeai.type.asTextOrNull
 import com.google.ai.client.generativeai.type.content
 import com.google.ai.client.generativeai.type.generationConfig
 import com.google.firebase.auth.FirebaseAuth
-import io.mindset.jagamental.BuildConfig
 import io.mindset.jagamental.data.domain.JournalRepository
 import io.mindset.jagamental.data.model.ChatMessage
 import io.mindset.jagamental.data.model.Participant
 import io.mindset.jagamental.data.model.response.JournalData
 import io.mindset.jagamental.utils.ChatUiState
+import io.mindset.jagamental.utils.RemoteConfigHelper
 import io.mindset.jagamental.utils.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,6 +23,10 @@ import kotlinx.coroutines.launch
 class ChatViewModel(
     private val journalRepository: JournalRepository
 ) : ViewModel() {
+
+    val remoteConfigHelper = RemoteConfigHelper()
+    val apiKey = remoteConfigHelper.getString("gemini_api_key")
+
     private val _isBotTyping = MutableStateFlow(true)
     val isBotTyping = _isBotTyping.asStateFlow()
 
@@ -41,12 +45,13 @@ class ChatViewModel(
         - Fokus pada perasaan dan pengalaman pengguna
         - Tidak boleh mengajukan pertanyaan. Hanya boleh merespon dengan pernyataan
         - Prioritaskan untuk konsultasi kepada profesional
+        - Anda boleh menggunakan bahasa yang sedikit casual dan emoji agar lebih ekspresif
         """.trimMargin()
     )
 
     private val generativeModel = GenerativeModel(
         modelName = "gemini-1.5-flash-latest",
-        apiKey = BuildConfig.GEMINI_API_KEY,
+        apiKey = apiKey,
         generationConfig = generationConfig {
             temperature = 1f
             topK = 40
@@ -74,6 +79,19 @@ class ChatViewModel(
     init {
         _isBotTyping.value = true
         initMessage()
+        updateRemoteConfig()
+        Log.i("ChatViewModel", "apiKey: $apiKey")
+    }
+
+    fun updateRemoteConfig() {
+        viewModelScope.launch {
+            val updated = remoteConfigHelper.fetchAndActivate()
+            if (updated) {
+                Log.i("ChatViewModel", "updateRemoteConfig: Updated")
+            } else {
+                Log.i("ChatViewModel", "updateRemoteConfig: Not Updated")
+            }
+        }
     }
 
     fun getAllJournal() {
@@ -102,7 +120,7 @@ class ChatViewModel(
         _isBotTyping.value = true
         val selectedJournalContext = """
             Saya memilih salah satu jurnal:
-            Judul: ${journal.title}
+            judul: ~${journal.title}~
             Isi: ${journal.content}
             Hasil Analisa Emosi: ${journal.emotion}
         """.trimIndent()
@@ -111,6 +129,7 @@ class ChatViewModel(
     }
 
     fun sendMessage(userMessage: String, isDisplayed: Boolean = true) {
+        _isBotTyping.value = true
         sendChatMessage(userMessage, Participant.Saya, isDisplayed)
     }
 
