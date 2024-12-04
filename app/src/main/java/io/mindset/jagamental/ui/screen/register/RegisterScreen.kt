@@ -25,16 +25,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,7 +57,6 @@ import io.mindset.jagamental.ui.screen.login.isValidPassword
 import io.mindset.jagamental.ui.theme.tertiaryContainerLightHighContrast
 import io.mindset.jagamental.utils.StatusBarColorHelper
 import io.mindset.jagamental.utils.UiState
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -339,22 +334,6 @@ fun RegisterScreen(navController: NavHostController) {
                         }
                     }
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun DisplaySnackBar(message: String) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        SnackbarHost(hostState = snackbarHostState)
-
-        LaunchedEffect(message) {
-            coroutineScope.launch {
-                snackbarHostState.showSnackbar(message)
             }
         }
     }
