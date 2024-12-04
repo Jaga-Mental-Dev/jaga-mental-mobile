@@ -31,6 +31,7 @@ import java.time.LocalDateTime
 
 @Composable
 fun JournalListItem(
+    modifier: Modifier = Modifier,
     journal: JournalData,
     onItemClick: () -> Unit
 ) {
