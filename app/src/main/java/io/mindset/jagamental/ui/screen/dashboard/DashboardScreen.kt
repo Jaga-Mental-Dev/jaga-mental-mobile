@@ -54,6 +54,8 @@ import io.mindset.jagamental.ui.component.chart.DashLineChart
 import io.mindset.jagamental.ui.component.dashboard.DashboardHeader
 import io.mindset.jagamental.ui.component.dashboard.EmotionCard
 import io.mindset.jagamental.ui.component.dashboard.ProfesionalCard
+import io.mindset.jagamental.ui.component.util.ProfessionalPlaceholder
+import io.mindset.jagamental.utils.ProState
 import io.mindset.jagamental.utils.StatusBarColorHelper
 import io.mindset.jagamental.utils.UiState
 import org.koin.androidx.compose.koinViewModel
@@ -133,9 +135,6 @@ fun DashboardScreen(
                         .clip(RoundedCornerShape(8.dp))
                         .border(1.dp, Color(0xFFE8EDED), shape = RoundedCornerShape(8.dp))
                         .clickable(onClick = {
-//                            showDialog.value = true
-//                            dialogTitle.value = "Coming Soon"
-//                            dialogText.value = "Sabar ya, fitur ini masih dalam pengembangan."
                             navController.navigate(Screen.App.ChatBotScreen) {
                                 launchSingleTop = true
                             }
@@ -266,19 +265,36 @@ fun DashboardScreen(
                     .padding(top = 20.dp),
             )
 
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(360.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                itemsIndexed(profesionals.value) { index, professional ->
-                    ProfesionalCard(
-                        data = professional,
+            when (val state = profesionals.value) {
+                is ProState.Success -> {
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(360.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        itemsIndexed(state.data) { index, professional ->
+                            professional?.let {
+                                ProfesionalCard(
+                                    data = it,
+                                )
+                            }
+                        }
+                    }
+                }
+
+                is ProState.Loading -> {
+                    ProfessionalPlaceholder()
+                }
+
+                else -> {
+                    ChartError(
+                        onRetry = { viewModel.getProfessionals() }
                     )
                 }
             }
+
         }
     }
 }

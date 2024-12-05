@@ -6,6 +6,7 @@ import io.mindset.jagamental.data.model.response.AuthResponse
 import io.mindset.jagamental.data.model.response.EmotionAnalyticResponse
 import io.mindset.jagamental.data.model.response.JournalResponse
 import io.mindset.jagamental.data.model.response.ListJournalResponse
+import io.mindset.jagamental.data.model.response.ProfessionalResponse
 import io.mindset.jagamental.data.model.response.UserResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
@@ -80,4 +81,8 @@ interface ApiService {
     // Analytic
     @GET("/api/analytic")
     suspend fun doPostAnalytic(): EmotionAnalyticResponse
+
+    // Professional
+    @GET("/api/professionals")
+    suspend fun doGetProfessional(): ProfessionalResponse
 }

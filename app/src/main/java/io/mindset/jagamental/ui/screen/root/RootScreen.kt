@@ -32,6 +32,7 @@ fun RootScreen() {
 
     BackActionHandler(navController = navController)
     Scaffold(
+        containerColor = Color.White,
         modifier = Modifier.background(color = Color.White),
         bottomBar = {
             AnimatedVisibility(

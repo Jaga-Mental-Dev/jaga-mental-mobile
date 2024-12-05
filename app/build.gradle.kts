@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    //noinspection GradleDependency
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     alias(libs.plugins.google.gms.google.services)
 }
@@ -24,8 +25,8 @@ android {
         minSdk = 26
         //noinspection OldTargetApi
         targetSdk = 34
-        versionCode = 5
-        versionName = "1.0"
+        versionCode = 12
+        versionName = "1.0.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -71,6 +72,9 @@ android {
 
 dependencies {
 
+    // Markdown
+    implementation(libs.compose.markdown)
+
     // Gemini
     implementation(libs.generativeai)
 
@@ -115,6 +119,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.animation.core.android)
     implementation(libs.firebase.config)
+    implementation(libs.firebase.analytics)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)

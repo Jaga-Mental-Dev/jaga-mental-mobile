@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <defaults>
     <entry>
-        <key>dashboard_chart_enabled</key>
-        <value>true</value>
+        <key>gemini_api_key</key>
+        <value>AIzaSyBFlortP6RRl9lzCykZjo_dWsG5G9JL2j4</value>
     </entry>
     <entry>
         <key>sample</key>
         <value>Sample</value>
+    </entry>
+    <entry>
+        <key>dashboard_chart_enabled</key>
+        <value>true</value>
     </entry>
 </defaults>

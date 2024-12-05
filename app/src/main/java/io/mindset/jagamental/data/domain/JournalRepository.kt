@@ -2,9 +2,11 @@ package io.mindset.jagamental.data.domain
 
 import android.util.Log
 import io.mindset.jagamental.data.model.ChartData
+import io.mindset.jagamental.data.model.ProfessionalProfile
 import io.mindset.jagamental.data.model.request.JournalRequest
 import io.mindset.jagamental.data.model.response.JournalData
 import io.mindset.jagamental.data.remote.ApiService
+import io.mindset.jagamental.utils.ProState
 import io.mindset.jagamental.utils.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -133,6 +135,20 @@ class JournalRepository(private val apiService: ApiService) {
             }
         } catch (e: Exception) {
             emit(UiState.Error(e.localizedMessage ?: "Error getting analytic data"))
+        }
+    }
+
+    fun getProfessionals(): Flow<ProState<List<ProfessionalProfile?>>> = flow {
+        emit(ProState.Loading)
+        try {
+            val response = apiService.doGetProfessional()
+            if (response.error == true) {
+                emit(ProState.Error(response.message))
+            } else {
+                emit(ProState.Success(response.data))
+            }
+        } catch (e: Exception) {
+            emit(ProState.Error(e.localizedMessage ?: "Error getting professionals"))
         }
     }
 }

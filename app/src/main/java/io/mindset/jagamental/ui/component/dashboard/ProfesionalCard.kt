@@ -2,6 +2,7 @@ package io.mindset.jagamental.ui.component.dashboard
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -25,17 +26,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import io.mindset.jagamental.data.model.ProfesionalProfile
+import io.mindset.jagamental.R
+import io.mindset.jagamental.data.model.ProfessionalProfile
 import io.mindset.jagamental.ui.theme.primaryColor
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProfesionalCard(
-    data: ProfesionalProfile
+    data: ProfessionalProfile,
 ) {
     val context = LocalContext.current
     Card(
@@ -52,12 +56,22 @@ fun ProfesionalCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .size(200.dp)
+                    .background(
+                        Color.LightGray.copy(0.3f), RoundedCornerShape(
+                            topStart = 8.dp,
+                            topEnd = 8.dp,
+                            bottomStart = 0.dp,
+                            bottomEnd = 0.dp
+                        )
+                    )
                     .clip(RoundedCornerShape(8.dp)),
                 model = data.avatar,
+                placeholder = painterResource(R.drawable.profile_unselected),
+                error = painterResource(R.drawable.profile_unselected),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
-
+            Spacer(Modifier.size(4.dp))
             Text(
                 text = data.name,
                 fontSize = 16.sp,
@@ -69,6 +83,8 @@ fun ProfesionalCard(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color.Gray,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             Spacer(Modifier.size(8.dp))
